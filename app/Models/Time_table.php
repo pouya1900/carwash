@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Time_table extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        "carwash_id",
+        "reservation_id",
+        "start",
+        "end",
+        "label",
+    ];
 }

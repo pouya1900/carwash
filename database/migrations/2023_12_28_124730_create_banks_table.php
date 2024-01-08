@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('banks', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('carwash_id');
+            $table->string('name');
+            $table->string('card');
+            $table->string('shaba');
             $table->timestamps();
         });
     }

@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Activation extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        "mobile",
+        "code",
+        "attempt",
+        "attempt_at",
+        "completed_at",
+        "expired_at",
+    ];
 }

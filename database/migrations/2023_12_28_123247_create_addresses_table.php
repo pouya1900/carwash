@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,6 +12,17 @@ return new class extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('user_id');
+            $table->string('state');
+            $table->string('city');
+            $table->string('area');
+            $table->string('block');
+            $table->string('street');
+            $table->string('lat');
+            $table->string('long');
+            $table->string('description');
+            $table->string('pluck');
+            $table->string('floor');
             $table->timestamps();
         });
     }

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,6 +12,11 @@ return new class extends Migration
     {
         Schema::create('scores', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('reservation_id');
+            $table->unsignedInteger('carwash_id');
+            $table->tinyInteger('rate');
+            $table->text('comment')->nullable();
+            $table->text('reply')->nullable();
             $table->timestamps();
         });
     }

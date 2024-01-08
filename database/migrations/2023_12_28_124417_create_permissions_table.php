@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->comment('نام دسترسی به انگلیسی که برنامه با آن کار می کند.');
+            $table->string('title')->comment('عنوان دسترسی');
             $table->timestamps();
         });
     }

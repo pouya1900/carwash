@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Payment extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        "reservation_id",
+        "user_id",
+        "wallet",
+        "cash",
+        "total",
+        "coupon_code",
+        "status",
+    ];
 }

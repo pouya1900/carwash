@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Score extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        "reservation_id",
+        "carwash_id",
+        "rate",
+        "comment",
+        "reply",
+
+    ];
 }

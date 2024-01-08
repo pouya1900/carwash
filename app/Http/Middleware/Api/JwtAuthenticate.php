@@ -25,29 +25,26 @@ class JwtAuthenticate
         try {
 
             if (empty($token = $request->header('Authorization'))) {
-                throw new AppException(trans('messages.auth.apiTokenRequired'), config('responseCode.unauthorized'), config('responseCode.jwtFail'));
+                return $this->sendError(trans('messages.auth.apiTokenRequired'));
             }
 
             $credentials = JWT::decode($token, config('global.jwt.secretKey'), [config('global.jwt.cryptoMethod')]);
 
 
-
             if (
-                empty($user = $this->user->with('profile')->find($credentials->sub))
+                empty($user = $this->user->find($credentials->sub))
                 || $user->token !== $token
             ) {
-                throw new AppException(trans('messages.auth.apiTokenInvalid'), config('responseCode.unauthorized'), config('responseCode.jwtFail'));
+                return $this->sendError(trans('messages.auth.apiTokenInvalid'));
             }
             $request->user = $user;
 
         } catch (ExpiredException $e) {
-            throw new AppException(trans('messages.auth.apiTokenExpired'), config('responseCode.unauthorized'), config('responseCode.jwtFail'));
+            return $this->sendError(trans('messages.auth.apiTokenExpired'));
+        } catch (\Exception $e) {
+            return $this->sendError(trans('messages.auth.apiTokenInvalid'));
         }
-        catch (\Exception $e){
 
-            throw new AppException(trans('messages.auth.apiTokenInvalid'), config('responseCode.unauthorized'), config('responseCode.jwtFail'));
-        }
-	    
         return $next($request);
     }
 }

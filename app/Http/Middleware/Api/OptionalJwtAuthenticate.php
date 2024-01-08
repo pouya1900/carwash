@@ -12,6 +12,7 @@ use Firebase\JWT\ExpiredException;
 class OptionalJwtAuthenticate
 {
     use ResponseUtilsTrait;
+
     protected $user;
 
     public function __construct(User $user)
@@ -31,14 +32,14 @@ class OptionalJwtAuthenticate
                 empty($user = $this->user->find($credentials->sub))
                 || $user->token !== $token
             ) {
-                return $this->sendError(trans('apiMessages.auth.apiTokenInvalid'), config('responseCode.unauthorized'), config('responseCode.jwtFail'));
+                return $this->sendError(trans('apiMessages.auth.apiTokenInvalid'));
             }
             $request->user = $user;
 
         } catch (ExpiredException $e) {
-            return $this->sendError(trans('apiMessages.auth.apiTokenExpired'), config('responseCode.unauthorized'), config('responseCode.jwtFail'));
+            return $this->sendError(trans('apiMessages.auth.apiTokenExpired'));
         } catch (Exception $e) {
-            return $this->sendError(trans('apiMessages.auth.apiTokenInvalid'), config('responseCode.unauthorized'), config('responseCode.jwtFail'));
+            return $this->sendError(trans('apiMessages.auth.apiTokenInvalid'));
         }
 
         return $next($request);

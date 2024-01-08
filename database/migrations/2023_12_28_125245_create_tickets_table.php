@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
+            $table->string('ticketable_type')->comment('تعیین مدل ارسال کننده تیکت (کاربر ، کارواش)');
+            $table->unsignedInteger('ticketable_id')->comment('تعیین رکورد');
+            $table->string('title')->comment('عنوان تیکت پشتیبانی');
+            $table->enum('status', ['pending', 'answered', 'closed'])->default('pending');
             $table->timestamps();
         });
     }

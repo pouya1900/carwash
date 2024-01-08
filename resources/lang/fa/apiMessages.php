@@ -19,14 +19,17 @@ return [
 
         'activationCodeSent'         => 'کد فعالسازی برای شما ارسال گردید.',
         'activationCodeInvalid'      => 'کد فعالسازی نامعتبر می باشد.',
+        'activationCodeExpired'      => 'کد فعالسازی منقضی شده است.',
         'roleDuplicated'             => 'این کاربر در حال حاضر به عنوان  :role ثبت نام کرده است.',
         'activationCodeFail'         => 'بروز خطا در ایجاد کد فعالسازی',
         'activationCodeSendFail'     => 'بروز خطا در ارسال کد فعالسازی',
         'activationCodeWaitTimeFail' => 'محدودیت ' . ':time' . ' ثانیه ای برای ارسال کد فعالسازی',
 
-        'otpBlock'         => 'درخواست کاربر بلاک شده است. لطفا دقایقی دیگر تلاش کنید',
-        'existUsername'    => 'نام کاربری موجود می باشد',
-        'notExistUsername' => 'نام کاربری در دسترس می باشد',
+        'otpBlock'           => 'درخواست کاربر بلاک شده است. لطفا دقایقی دیگر تلاش کنید',
+        'login_type_invalid' => 'نوع کاربر نامعتبر است.',
+        'existUsername'      => 'نام کاربری موجود می باشد',
+        'notExistUsername'   => 'نام کاربری در دسترس می باشد',
+        'alreadyLoggedIn'    => 'کاربر قبلا وارد شده است.',
 
         'notPermission' => 'برای دسترسی به این قسمت حساب خود را ارتقا دهید.',
     ],

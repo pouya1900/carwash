@@ -14,8 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
-        'passwords' => 'users',
+        'guard' => 'user',
     ],
 
     /*
@@ -36,9 +35,17 @@ return [
     */
 
     'guards' => [
-        'web' => [
-            'driver' => 'session',
+        'user'    => [
+            'driver'   => 'jwt',
             'provider' => 'users',
+        ],
+        'carwash' => [
+            'driver'   => 'jwt',
+            'provider' => 'carwashes',
+        ],
+        'web'     => [
+            'driver'   => 'session',
+            'provider' => 'admins',
         ],
     ],
 
@@ -60,9 +67,17 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'users'     => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model'  => App\Models\User::class,
+        ],
+        'carwashes' => [
+            'driver' => 'eloquent',
+            'model'  => App\Models\Carwash::class,
+        ],
+        'admins'    => [
+            'driver' => 'eloquent',
+            'model'  => App\Models\Administrator::class,
         ],
 
         // 'users' => [
@@ -93,8 +108,8 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
-            'table' => 'password_reset_tokens',
-            'expire' => 60,
+            'table'    => 'password_reset_tokens',
+            'expire'   => 60,
             'throttle' => 60,
         ],
     ],

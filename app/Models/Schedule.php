@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Schedule extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        "carwash_id",
+        "day0",
+        "day1",
+        "day2",
+        "day3",
+        "day4",
+        "day5",
+        "day6",
+    ];
 }
