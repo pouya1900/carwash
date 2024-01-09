@@ -17,4 +17,14 @@ class Deposit extends Model
         "message",
     ];
 
+    public function carwash()
+    {
+        return $this->belongsTo(Carwash::class, "carwash_id");
+    }
+
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class, "bank_id");
+    }
+
 }

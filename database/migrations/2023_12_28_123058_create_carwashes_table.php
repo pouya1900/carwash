@@ -16,8 +16,8 @@ return new class extends Migration {
             $table->string("lat")->nullable();
             $table->string("long")->nullable();
             $table->string("address")->nullable();
-            $table->string("city")->nullable();
-            $table->string("state")->nullable();
+            $table->unsignedInteger("city_id")->nullable();
+            $table->unsignedInteger("state_id")->nullable();
             $table->string('mobile')->unique();
             $table->string('uuid')->nullable();
             $table->string('platform')->nullable();

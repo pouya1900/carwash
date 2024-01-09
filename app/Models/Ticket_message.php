@@ -15,4 +15,20 @@ class Ticket_message extends Model
         "sender",
         "text",
     ];
+
+    public function ticket()
+    {
+        return $this->belongsTo(Ticket::class, 'ticket_id');
+    }
+
+    public function administrator()
+    {
+        return $this->belongsTo(Administrator::class, 'admin_id');
+    }
+
+    public function media()
+    {
+        return $this->morphMany(Media::class, 'mediable');
+    }
+
 }

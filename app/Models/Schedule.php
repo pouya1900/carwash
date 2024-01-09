@@ -19,4 +19,9 @@ class Schedule extends Model
         "day5",
         "day6",
     ];
+
+    public function carwash()
+    {
+        return $this->belongsTo(Carwash::class, "carwash_id");
+    }
 }

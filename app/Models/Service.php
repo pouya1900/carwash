@@ -19,4 +19,10 @@ class Service extends Model
         "price",
         "discount",
     ];
+
+    public function carwash()
+    {
+        return $this->belongsTo(Carwash::class, "carwash_id");
+    }
+
 }

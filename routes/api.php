@@ -21,4 +21,7 @@ Route::group(['prefix' => 'auth',], function () {
 
 });
 
+Route::get('home', 'HomeController@index');
+
+
 

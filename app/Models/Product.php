@@ -16,4 +16,9 @@ class Product extends Model
         "price",
     ];
 
+    public function carwash()
+    {
+        return $this->belongsTo(Carwash::class, "carwash_id");
+    }
+
 }

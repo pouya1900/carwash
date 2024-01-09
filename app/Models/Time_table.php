@@ -16,4 +16,15 @@ class Time_table extends Model
         "end",
         "label",
     ];
+
+    public function carwash()
+    {
+        return $this->belongsTo(Carwash::class, 'carwash_id');
+    }
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class, 'reservation_id');
+    }
+
 }

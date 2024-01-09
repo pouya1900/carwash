@@ -17,4 +17,15 @@ class Score extends Model
         "reply",
 
     ];
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class, "reservation_id");
+    }
+
+    public function carwash()
+    {
+        return $this->belongsTo(Carwash::class, "carwash_id");
+    }
+
 }

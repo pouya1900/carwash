@@ -18,4 +18,15 @@ class Payment extends Model
         "coupon_code",
         "status",
     ];
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class, "reservation_id");
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, "user_id");
+    }
+
 }

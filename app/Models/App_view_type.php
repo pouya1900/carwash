@@ -5,18 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Type extends Model
+class App_view_type extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         "title",
-        "description",
+        "title_fa",
+        "content",
     ];
 
-    public function cars()
+    public function app_views()
     {
-        return $this->hasMany(Car::class, "type_id");
+        return $this->hasMany(App_view::class, 'type_id');
     }
 
 }

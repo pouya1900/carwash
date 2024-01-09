@@ -15,4 +15,15 @@ class Bank extends Model
         "card",
         "shaba",
     ];
+
+    public function carwash()
+    {
+        return $this->belongsTo(Carwash::class, "carwash_id");
+    }
+
+    public function deposits()
+    {
+        return $this->hasMany(Deposit::class, "bank_id");
+    }
+
 }

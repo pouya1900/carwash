@@ -15,4 +15,16 @@ class Ticket extends Model
         "title",
         "status",
     ];
+
+
+    public function ticketable()
+    {
+        return $this->morphTo('ticketable');
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Ticket_message::class, 'ticket_id');
+    }
+
 }

@@ -11,8 +11,8 @@ class Address extends Model
 
     protected $fillable = [
         "user_id",
-        "state",
-        "city",
+        "state_id",
+        "city_id",
         "area",
         "block",
         "street",
@@ -22,4 +22,21 @@ class Address extends Model
         "pluck",
         "floor",
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(Address::class, "user_id");
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class, "city_id");
+    }
+
+    public function state()
+    {
+        return $this->belongsTo(State::class, "state_id");
+    }
+
+
 }
