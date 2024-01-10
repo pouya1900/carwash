@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\AppViewResource;
 use App\Models\App_view;
+use App\Traits\ResponseUtilsTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {
+    use ResponseUtilsTrait;
 
     private Request $request;
 

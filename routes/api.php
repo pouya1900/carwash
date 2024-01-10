@@ -23,5 +23,13 @@ Route::group(['prefix' => 'auth',], function () {
 
 Route::get('home', 'HomeController@index');
 
+Route::group(['prefix' => 'user', 'middleware' => "jwtAuth"], function () {
+    Route::get('/', 'UsersController@show');
+    Route::post('/update', 'UsersController@update');
+    Route::get('/balance/increase', 'UsersController@increaseBalance');
+    Route::get('/reservations', 'UsersController@reservations');
+
+});
+
 
 

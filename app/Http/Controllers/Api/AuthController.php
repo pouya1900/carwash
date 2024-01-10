@@ -47,11 +47,11 @@ class AuthController extends Controller
         if ($activation) {
 
             if ($activation->attempt == 3 && $activation->attempt_at > Carbon::now()->subMinutes(30)) {
-                return $this->sendError(trans('apiMessages.auth.otpBlock'));
+                return $this->sendError(trans('messages.auth.otpBlock'));
             }
 
             if ($activation->created_at > Carbon::now()->subMinutes(2)) {
-                return $this->sendError(trans('apiMessages.auth.activationCodeWaitTimeFail', ["time" => 120]));
+                return $this->sendError(trans('messages.auth.activationCodeWaitTimeFail', ["time" => 120]));
             }
 
             $activation->delete();
@@ -73,7 +73,7 @@ class AuthController extends Controller
             'code'           => $code,
         ];
 
-        return $this->sendResponse($data, trans('apiMessages.auth.activationCodeSent'));
+        return $this->sendResponse($data, trans('messages.auth.activationCodeSent'));
 
     }
 
@@ -103,7 +103,7 @@ class AuthController extends Controller
             }
 
             if (auth('user')->check()) {
-                return $this->sendError(trans('apiMessages.auth.alreadyLoggedIn'));
+                return $this->sendError(trans('messages.auth.alreadyLoggedIn'));
             }
         } else {
             if (auth('user')->check()) {
@@ -111,7 +111,7 @@ class AuthController extends Controller
             }
 
             if (auth('carwash')->check()) {
-                return $this->sendError(trans('apiMessages.auth.alreadyLoggedIn'));
+                return $this->sendError(trans('messages.auth.alreadyLoggedIn'));
             }
         }
 
@@ -122,15 +122,15 @@ class AuthController extends Controller
         $activation = Activation::where('mobile', $mobile)->first();
 
         if (!$activation) {
-            return $this->sendError(trans('apiMessages.auth.activationCodeInvalid'));
+            return $this->sendError(trans('messages.auth.activationCodeInvalid'));
         }
 
         if ($activation->attempt == 3) {
-            return $this->sendError(trans('apiMessages.auth.otpBlock'));
+            return $this->sendError(trans('messages.auth.otpBlock'));
         }
 
         if ($activation->expired_at < Carbon::now()) {
-            return $this->sendError(trans('apiMessages.auth.activationCodeExpired'));
+            return $this->sendError(trans('messages.auth.activationCodeExpired'));
 
         }
 
@@ -141,7 +141,7 @@ class AuthController extends Controller
 
 
         if ($activation->code != $code) {
-            return $this->sendError(trans('apiMessages.auth.activationCodeInvalid'));
+            return $this->sendError(trans('messages.auth.activationCodeInvalid'));
         }
 
         if ($type == "user") {
@@ -187,7 +187,7 @@ class AuthController extends Controller
         auth("user")->logout();
         auth("carwash")->logout();
 
-        return $this->sendResponse([], trans("apiMessages.auth.logOutSuccess"));
+        return $this->sendResponse([], trans("messages.auth.logOutSuccess"));
     }
 
     /**

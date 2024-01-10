@@ -15,7 +15,7 @@ class ForceUpdateMiddleware
             empty($buildNumber = $request->header('build-number'))
             || $buildNumber !== env('APP_BUILD_NUMBER')
         ) {
-            return $this->sendError(trans('apiMessages.auth.forceUpdateRequire'));
+            return $this->sendError(trans('messages.auth.forceUpdateRequire'));
         }
         return $next($request);
     }

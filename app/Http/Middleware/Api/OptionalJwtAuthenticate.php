@@ -32,14 +32,14 @@ class OptionalJwtAuthenticate
                 empty($user = $this->user->find($credentials->sub))
                 || $user->token !== $token
             ) {
-                return $this->sendError(trans('apiMessages.auth.apiTokenInvalid'));
+                return $this->sendError(trans('messages.auth.apiTokenInvalid'));
             }
             $request->user = $user;
 
         } catch (ExpiredException $e) {
-            return $this->sendError(trans('apiMessages.auth.apiTokenExpired'));
+            return $this->sendError(trans('messages.auth.apiTokenExpired'));
         } catch (Exception $e) {
-            return $this->sendError(trans('apiMessages.auth.apiTokenInvalid'));
+            return $this->sendError(trans('messages.auth.apiTokenInvalid'));
         }
 
         return $next($request);

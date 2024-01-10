@@ -41,7 +41,7 @@ class AppViewResource extends JsonResource
         if ($this->type->content == "carwash") {
             $return['carwashes'] = CarwashResource::collection($this->carwashes()->paginate($request->number));
         } else if ($this->type->content == "product") {
-            $return['ads'] = ProductResource::collection($this->products()->paginate($request->number));
+            $return['products'] = ProductResource::collection($this->products()->paginate($request->number));
         }
 
 

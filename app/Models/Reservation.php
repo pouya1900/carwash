@@ -32,4 +32,14 @@ class Reservation extends Model
         return $this->belongsTo(Address::class, "address_id");
     }
 
+    public function services()
+    {
+        return $this->morphedByMany(Lock_service::class, "reservationable");
+    }
+
+    public function products()
+    {
+        return $this->morphedByMany(Lock_product::class, "reservationable");
+    }
+
 }

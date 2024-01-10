@@ -21,7 +21,10 @@ class ProductResource extends JsonResource
             'title'       => $this->title,
             'description' => $this->description ?? '',
             'price'       => intval($this->price) ?? 0,
-            'carwash'     => 0,
+            'carwash'     => [
+                "id"    => $this->carwash->id,
+                "title" => $this->carwash->title,
+            ],
             'logo'        => $this->logo,
             'createdAt'   => $this->created_at->format('Y-m-d H:i:s'),
         ];

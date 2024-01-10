@@ -22,7 +22,7 @@ class UserResource extends JsonResource
             'lastName'  => $this->last_name ?? '',
             'fullName'  => $this->full_name ?? '',
             'username'  => $this->username ?? '',
-            'image'     => $this->avatar,
+            'image'     => $this->avatar["path"],
             'balance'   => $this->balance ?? 0,
         ];
     }

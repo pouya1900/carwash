@@ -20,7 +20,7 @@ trait ResponseUtilsTrait
      */
     public function sendError(string $message = ''): JsonResponse
     {
-        $message = $message ?? trans('apiMessages.response.failed');
+        $message = $message ?? trans('messages.response.failed');
         $httpCode = 200;
         $status = 1;
 
@@ -46,7 +46,7 @@ trait ResponseUtilsTrait
      */
     public function sendResponse(array $data = [], string $message = ''): JsonResponse
     {
-        $message = $message ?? trans('apiMessages.response.success');
+        $message = $message ?? trans('messages.response.success');
         $httpCode = 200;
         $status = 0;
 

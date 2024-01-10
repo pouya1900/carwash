@@ -14,11 +14,11 @@ class AppSecretMiddleware
 
         if (
             empty($secretKey = $request->header('secret-key'))) {
-            return $this->sendError(trans('apiMessages.auth.appSecretRequiredMessage'));
+            return $this->sendError(trans('messages.auth.appSecretRequiredMessage'));
         }
 
         if ($secretKey !== env('APP_SECRET_KEY')) {
-            return $this->sendError(trans('apiMessages.auth.appSecretFailMessage'));
+            return $this->sendError(trans('messages.auth.appSecretFailMessage'));
         }
 
         return $next($request);

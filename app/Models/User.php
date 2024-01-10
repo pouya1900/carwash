@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -71,5 +72,35 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Payment::class, "user_id");
     }
+
+    public function tickets()
+    {
+        return $this->morphMany(Ticket::class, 'ticketable');
+    }
+
+    public function media()
+    {
+        return $this->morphMany(Media::class, 'mediable');
+    }
+    public function getAvatarAttribute()
+    {
+        $image = $this->media()->where('model_type', 'avatar')
+            ->first();
+
+        if (!empty($image)) {
+            $path = Storage::disk("assetsStorage")->url('') . 'avatar/';
+            return ["path" => $path . $image->title, "model" => $image];
+        }
+        $path = Storage::disk("assetsStorage")->url('') . 'siteContent/';
+
+        return ["path" => $path . "ic_no_avatar.png", "model" => null];
+
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->first_name . " " . $this->last_name;
+    }
+
 
 }
