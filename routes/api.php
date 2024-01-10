@@ -13,21 +13,29 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::group(['prefix' => 'auth',], function () {
+Route::group(['prefix' => 'auth', "namespace" => "Auth"], function () {
 
     Route::post('send-otp', 'AuthController@send_otp');
     Route::post('login', 'AuthController@login');
     Route::get('logout', 'AuthController@logout');
 
 });
+Route::group(['prefix' => 'home', "namespace" => "Home"], function () {
+    Route::get('/', 'HomeController@index');
+});
 
-Route::get('home', 'HomeController@index');
-
-Route::group(['prefix' => 'user', 'middleware' => "jwtAuth"], function () {
+Route::group(['prefix' => 'user', 'middleware' => "jwtAuth", "namespace" => "User"], function () {
     Route::get('/', 'UsersController@show');
     Route::post('/update', 'UsersController@update');
     Route::get('/balance/increase', 'UsersController@increaseBalance');
     Route::get('/reservations', 'UsersController@reservations');
+
+    Route::get('/reservations', 'ReservationController@reservations');
+
+    Route::get('/addresses', 'AddressController@index');
+    Route::post('/addresses/store', 'AddressController@store');
+    Route::post('/addresses/update/{address}', 'AddressController@update');
+    Route::get('/addresses/delete/{address}', 'AddressController@delete');
 
 });
 

@@ -12,6 +12,7 @@ return [
         'deletedModelFail'      => 'حذف رکورد ناموفق بود. لطفا مجددا تلاش نمایید یا با پشتیبانی سایت تماس بگیرید.',
         'trashedModelSuccess'   => 'رکورد موردنظر با موفقیت به سطل زباله منتقل شد.',
         'unTrashedModelSuccess' => 'رکورد موردنظر با موفقیت بازیابی شد.',
+        "illegalAccess"         => "شما دسترسی برای تغییر این رکورد را ندارید.",
     ],
     'log'  => [
         'createdModelSuccessLog'      => 'success [create]',

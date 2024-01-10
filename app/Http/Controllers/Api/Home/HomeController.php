@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Home;
 
 use App\Http\Resources\AppViewResource;
 use App\Models\App_view;
@@ -11,13 +11,6 @@ use App\Http\Controllers\Controller;
 class HomeController extends Controller
 {
     use ResponseUtilsTrait;
-
-    private Request $request;
-
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
 
     public function index()
     {

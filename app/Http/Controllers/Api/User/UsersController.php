@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\UpdateUserRequest;
@@ -13,13 +13,6 @@ use Illuminate\Http\Request;
 class UsersController extends Controller
 {
     use ResponseUtilsTrait;
-
-    private Request $request;
-
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
 
     public function show()
     {
@@ -67,19 +60,6 @@ class UsersController extends Controller
 
             return $this->sendResponse([
                 "link" => "https://paymentpageexample",
-            ]);
-        } catch (\Exception) {
-            return $this->sendError(trans('messages.response.failed'));
-        }
-    }
-
-    public function reservations()
-    {
-        try {
-            $user = $this->request->user;
-
-            return $this->sendResponse([
-                "reservations" => ReservationResource::collection($user->reservations),
             ]);
         } catch (\Exception) {
             return $this->sendError(trans('messages.response.failed'));

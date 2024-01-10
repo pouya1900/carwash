@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Auth;
 
 use App\Events\SendOtpEvent;
 use App\Http\Controllers\Controller;
@@ -16,19 +16,6 @@ use Illuminate\Support\Facades\Event;
 class AuthController extends Controller
 {
     use ResponseUtilsTrait;
-
-    /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-
-    private Request $request;
-
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
 
 
     public function send_otp()
