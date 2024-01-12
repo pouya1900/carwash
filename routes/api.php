@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+
+Route::group(['prefix' => 'other', "namespace" => "Other"], function () {
+    Route::post('upload', 'MediaController@storeImage');
+});
+
 Route::group(['prefix' => 'auth', "namespace" => "Auth"], function () {
 
     Route::post('send-otp', 'AuthController@send_otp');
@@ -36,6 +42,12 @@ Route::group(['prefix' => 'user', 'middleware' => "jwtAuth", "namespace" => "Use
     Route::post('/addresses/store', 'AddressController@store');
     Route::post('/addresses/update/{address}', 'AddressController@update');
     Route::get('/addresses/delete/{address}', 'AddressController@delete');
+
+    Route::get('/cars', 'CarController@index');
+    Route::post('/cars/store', 'CarController@store');
+    Route::post('/cars/update/{car}', 'CarController@update');
+    Route::get('/cars/delete/{car}', 'CarController@delete');
+
 
 });
 
