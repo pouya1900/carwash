@@ -29,6 +29,7 @@ Route::group(['prefix' => 'other', "namespace" => "Other"], function () {
 
 Route::group(['prefix' => 'carwashes', "namespace" => "Reservation"], function () {
     Route::get('/', 'CarwashController@index');
+    Route::get('/show/{carwash}', 'CarwashController@show');
     Route::get('services/{carwash}', 'CarwashController@services');
     Route::get('products', 'CarwashController@products');
 });

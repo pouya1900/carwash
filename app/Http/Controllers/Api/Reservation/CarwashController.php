@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Reservation;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CarwashFullResource;
 use App\Http\Resources\CarwashResource;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\ServiceResource;
@@ -35,6 +36,20 @@ class CarwashController extends Controller
         }
 
     }
+
+    public function show(Carwash $carwash)
+    {
+        try {
+
+            return $this->sendResponse([
+                "carwash" => new CarwashFullResource($carwash),
+            ]);
+        } catch (\Exception $e) {
+            return $this->sendError(trans('messages.response.failed'));
+        }
+
+    }
+
 
     public function products()
     {
