@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
@@ -56,11 +57,16 @@ class Car extends Model
 
         if (!empty($image)) {
             $path = Storage::disk("assetsStorage")->url('') . 'carImage/';
-            return ["path" => $path . $image->title, "model" => $image];
-        }
-        $path = Storage::disk("assetsStorage")->url('') . 'siteContent/';
 
-        return ["path" => $path . "ic_no_product.png", "model" => null];
+            $image_model = Helper::getImageModel($path, $image->title);
+
+            return ["paths" => $image_model, "model" => $image];
+        }
+
+        $path = Storage::disk("assetsStorage")->url('') . 'siteContent/';
+        $image_model = Helper::getImageModel($path, "ic_no_product.png", 1);
+
+        return ["paths" => $image_model, "model" => null];
 
     }
 

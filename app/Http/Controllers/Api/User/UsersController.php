@@ -8,11 +8,12 @@ use App\Http\Requests\UserRequest;
 use App\Http\Resources\ReservationResource;
 use App\Http\Resources\UserResource;
 use App\Traits\ResponseUtilsTrait;
+use App\Traits\UploadUtilsTrait;
 use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
-    use ResponseUtilsTrait;
+    use ResponseUtilsTrait,UploadUtilsTrait;
 
     public function show()
     {
@@ -34,6 +35,9 @@ class UsersController extends Controller
                 'last_name'  => $request->input("last_name"),
                 'email'      => $request->input("email"),
             ]);
+
+            $images_id = [$request->input("image_id")];
+            $this->updateImages($user, 'avatar', "assetsStorage", $images_id);
 
             return $this->sendResponse([
                 "user" => new UserResource($user),

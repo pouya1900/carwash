@@ -32,7 +32,7 @@ class AppViewResource extends JsonResource
             'action'             => $this->action,
             'actionColor'        => $this->action_color,
             'needSpace'          => $this->need_space ? 1 : 0,
-            'backgroundImage'    => $this->background["path"],
+            'backgroundImage'    => new ImageResource($this->background),
             'backgroundColor'    => $this->background_color,
             'hasBackgroundImage' => $this->background['model'] ? 1 : 0,
             'createdAt'          => $this->created_at->format('Y-m-d H:i:s'),

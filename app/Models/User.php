@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Helper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -82,6 +83,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->morphMany(Media::class, 'mediable');
     }
+
     public function getAvatarAttribute()
     {
         $image = $this->media()->where('model_type', 'avatar')
@@ -89,12 +91,14 @@ class User extends Authenticatable implements JWTSubject
 
         if (!empty($image)) {
             $path = Storage::disk("assetsStorage")->url('') . 'avatar/';
-            return ["path" => $path . $image->title, "model" => $image];
+
+            $image_model = Helper::getImageModel($path, $image->title);
+            return ["paths" => $image_model, "model" => $image];
         }
         $path = Storage::disk("assetsStorage")->url('') . 'siteContent/';
+        $image_model = Helper::getImageModel($path, "ic_no_avatar.png", 1);
 
-        return ["path" => $path . "ic_no_avatar.png", "model" => null];
-
+        return ["paths" => $image_model, "model" => null];
     }
 
     public function getFullNameAttribute()

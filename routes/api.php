@@ -19,6 +19,14 @@ Route::group(['prefix' => 'other', "namespace" => "Other"], function () {
     Route::post('upload', 'MediaController@storeImage');
 });
 
+Route::group(['prefix' => 'other', "namespace" => "Other"], function () {
+    Route::post('upload', 'MediaController@storeImage');
+    Route::get('types', 'CarPropertyController@types');
+    Route::get('brands', 'CarPropertyController@brands');
+    Route::get('models', 'CarPropertyController@models');
+    Route::get('colors', 'CarPropertyController@colors');
+});
+
 Route::group(['prefix' => 'auth', "namespace" => "Auth"], function () {
 
     Route::post('send-otp', 'AuthController@send_otp');
@@ -47,7 +55,6 @@ Route::group(['prefix' => 'user', 'middleware' => "jwtAuth", "namespace" => "Use
     Route::post('/cars/store', 'CarController@store');
     Route::post('/cars/update/{car}', 'CarController@update');
     Route::get('/cars/delete/{car}', 'CarController@delete');
-
 
 });
 

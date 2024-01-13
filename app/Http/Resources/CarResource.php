@@ -21,8 +21,8 @@ class CarResource extends JsonResource
                 "title" => $this->type->title,
             ],
             "brand" => [
-                "id"    => $this->brand->id,
-                "title" => $this->brand->title,
+                "id"    => $this->model->brand->id,
+                "title" => $this->model->brand->title,
             ],
             "model" => [
                 "id"    => $this->model->id,
@@ -33,6 +33,7 @@ class CarResource extends JsonResource
                 "title" => $this->color->title,
             ],
             "year"  => $this->year,
+            "image" => new ImageResource($this->image),
 
         ];
     }
