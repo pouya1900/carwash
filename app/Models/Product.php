@@ -23,6 +23,11 @@ class Product extends Model
         return $this->belongsTo(Carwash::class, "carwash_id");
     }
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class, "category_id");
+    }
+
     public function media()
     {
         return $this->morphMany(Media::class, 'mediable');

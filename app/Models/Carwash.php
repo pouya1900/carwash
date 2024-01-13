@@ -61,6 +61,11 @@ class Carwash extends Authenticatable implements JWTSubject
         return $this->hasMany(Product::class, "carwash_id");
     }
 
+    public function services()
+    {
+        return $this->hasMany(Service::class, "carwash_id");
+    }
+
     public function schedule()
     {
         return $this->hasOne(Schedule::class, "carwash_id");

@@ -25,6 +25,10 @@ class ProductResource extends JsonResource
                 "id"    => $this->carwash->id,
                 "title" => $this->carwash->title,
             ],
+            'category'    => [
+                "id"    => $this->category->id,
+                "title" => $this->category->title,
+            ],
             'logo'        => new ImageResource($this->logo),
             'images'      => ImageResource::collection($this->images),
             'createdAt'   => $this->created_at->format('Y-m-d H:i:s'),

@@ -27,6 +27,11 @@ Route::group(['prefix' => 'other', "namespace" => "Other"], function () {
     Route::get('colors', 'CarPropertyController@colors');
 });
 
+Route::group(['prefix' => 'carwash', "namespace" => "Reservation"], function () {
+    Route::get('services/{carwash}', 'CarwashController@services');
+    Route::get('products', 'CarwashController@products');
+});
+
 Route::group(['prefix' => 'auth', "namespace" => "Auth"], function () {
 
     Route::post('send-otp', 'AuthController@send_otp');
