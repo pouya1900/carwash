@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Reservation;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CarwashResource;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\ServiceResource;
 use App\Models\Carwash;
@@ -11,6 +12,29 @@ use Illuminate\Http\Request;
 
 class CarwashController extends Controller
 {
+
+    public function index()
+    {
+        try {
+            $per_page = $this->getPerPage();
+
+            $carwashes = Carwash::paginate($per_page);
+
+            return $this->sendResponse([
+                "carwashes"  => CarwashResource::collection($carwashes),
+                'pagination' => [
+                    "totalItems"      => $carwashes->total(),
+                    "perPage"         => $carwashes->perPage(),
+                    "nextPageUrl"     => $carwashes->nextPageUrl(),
+                    "previousPageUrl" => $carwashes->previousPageUrl(),
+                    "lastPageUrl"     => $carwashes->url($carwashes->lastPage()),
+                ],
+            ]);
+        } catch (\Exception $e) {
+            return $this->sendError(trans('messages.response.failed'));
+        }
+
+    }
 
     public function products()
     {

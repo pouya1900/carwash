@@ -26,6 +26,7 @@ class CarwashResource extends JsonResource
             "payment"      => $this->payment ?? "",
             "status"       => $this->status ?? "",
             "type"         => $this->type ?? "",
+            "logo"         => new ImageResource($this->logo),
         ];
     }
 }

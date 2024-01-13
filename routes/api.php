@@ -27,7 +27,8 @@ Route::group(['prefix' => 'other', "namespace" => "Other"], function () {
     Route::get('colors', 'CarPropertyController@colors');
 });
 
-Route::group(['prefix' => 'carwash', "namespace" => "Reservation"], function () {
+Route::group(['prefix' => 'carwashes', "namespace" => "Reservation"], function () {
+    Route::get('/', 'CarwashController@index');
     Route::get('services/{carwash}', 'CarwashController@services');
     Route::get('products', 'CarwashController@products');
 });
