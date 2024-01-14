@@ -52,6 +52,10 @@ trait UploadUtilsTrait
 
     public function updateImages($model, $model_type, $disk, $images_id)
     {
+        if (!$images_id) {
+            $images_id = [];
+        }
+
         $delete_images = $model->media()->where("model_type", $model_type)->whereNotIn("id", $images_id)->get();
 
         $new_images = Media::whereIn("id", $images_id)->whereNull("mediable_id")->get();

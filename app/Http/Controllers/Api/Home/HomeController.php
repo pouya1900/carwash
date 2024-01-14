@@ -14,18 +14,17 @@ class HomeController extends Controller
 
     public function index()
     {
-        $number = $this->request->number;
+        try {
+            $number = $this->request->number;
+            $app_views = App_view::where("status", "active")->get();
 
-
-        $app_views = App_view::where("status", "active")->get();
-
-        $app_views->number = $number;
-
-
-        return $this->sendResponse([
-            'views' => AppViewResource::collection($app_views),
-        ]);
-
+            $app_views->number = $number;
+            return $this->sendResponse([
+                'views' => AppViewResource::collection($app_views),
+            ]);
+        } catch (\Exception $e) {
+            return $this->sendError(trans('messages.response.failed'));
+        }
     }
 
 }

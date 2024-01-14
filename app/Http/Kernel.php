@@ -70,6 +70,7 @@ class Kernel extends HttpKernel
         'verified'         => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'optionalJwtAuth'  => \App\Http\Middleware\Api\OptionalJwtAuthenticate::class,
         'jwtAuth'          => \App\Http\Middleware\Api\JwtAuthenticate::class,
+        'jwtCarwashAuth'          => \App\Http\Middleware\Api\JwtCarwashAuthenticate::class,
         'permission'       => \App\Http\Middleware\Api\PermissionMiddleware::class,
         'hasPermission'    => \App\Http\Middleware\CheckPermission::class,
 

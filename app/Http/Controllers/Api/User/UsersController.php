@@ -13,16 +13,18 @@ use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
-    use ResponseUtilsTrait,UploadUtilsTrait;
+    use ResponseUtilsTrait, UploadUtilsTrait;
 
     public function show()
     {
-        $user = $this->request->user;
-
-        return $this->sendResponse([
-            "user" => new UserResource($user),
-        ]);
-
+        try {
+            $user = $this->request->user;
+            return $this->sendResponse([
+                "user" => new UserResource($user),
+            ]);
+        } catch (\Exception) {
+            return $this->sendError(trans('messages.response.failed'));
+        }
     }
 
     public function update(UpdateUserRequest $request)

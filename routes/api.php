@@ -49,7 +49,6 @@ Route::group(['prefix' => 'user', 'middleware' => "jwtAuth", "namespace" => "Use
     Route::get('/', 'UsersController@show');
     Route::post('/update', 'UsersController@update');
     Route::get('/balance/increase', 'UsersController@increaseBalance');
-    Route::get('/reservations', 'UsersController@reservations');
 
     Route::get('/reservations', 'ReservationController@reservations');
 
@@ -62,6 +61,26 @@ Route::group(['prefix' => 'user', 'middleware' => "jwtAuth", "namespace" => "Use
     Route::post('/cars/store', 'CarController@store');
     Route::post('/cars/update/{car}', 'CarController@update');
     Route::get('/cars/delete/{car}', 'CarController@delete');
+
+});
+
+
+Route::group(['prefix' => 'carwash', 'middleware' => "jwtCarwashAuth", "namespace" => "Carwash"], function () {
+    Route::get('/', 'CarwashController@show');
+    Route::post('/update', 'CarwashController@update');
+
+    Route::get('/reservations', 'ReservationController@reservations');
+
+    Route::get('/services', 'ServiceController@index');
+    Route::post('/services/store', 'ServiceController@store');
+    Route::post('/services/update/{service}', 'ServiceController@update');
+    Route::get('/services/delete/{service}', 'ServiceController@delete');
+
+    Route::get('/products', 'productController@index');
+    Route::post('/products/store', 'productController@store');
+    Route::post('/products/update/{product}', 'productController@update');
+    Route::get('/products/delete/{product}', 'productController@delete');
+
 
 });
 
