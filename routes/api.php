@@ -76,10 +76,10 @@ Route::group(['prefix' => 'carwash', 'middleware' => "jwtCarwashAuth", "namespac
     Route::post('/services/update/{service}', 'ServiceController@update');
     Route::get('/services/delete/{service}', 'ServiceController@delete');
 
-    Route::get('/products', 'productController@index');
-    Route::post('/products/store', 'productController@store');
-    Route::post('/products/update/{product}', 'productController@update');
-    Route::get('/products/delete/{product}', 'productController@delete');
+    Route::get('/products', 'ProductController@index');
+    Route::post('/products/store', 'ProductController@store');
+    Route::post('/products/update/{product}', 'ProductController@update');
+    Route::get('/products/delete/{product}', 'ProductController@delete');
 
 
 });

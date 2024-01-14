@@ -16,7 +16,7 @@ class HomeController extends Controller
     {
         try {
             $number = $this->request->number;
-            $app_views = App_view::where("status", "active")->get();
+            $app_views = App_view::where("status", "active")->orderBy("order", "asc")->get();
 
             $app_views->number = $number;
             return $this->sendResponse([
