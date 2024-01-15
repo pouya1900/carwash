@@ -84,6 +84,16 @@ class User extends Authenticatable implements JWTSubject
         return $this->morphMany(Media::class, 'mediable');
     }
 
+    public function likes()
+    {
+        return $this->hasMany(Like::class, "user_id");
+    }
+
+    public function bookmarks()
+    {
+        return $this->hasMany(Bookmark::class, "user_id");
+    }
+
     public function getAvatarAttribute()
     {
         $image = $this->media()->where('model_type', 'avatar')

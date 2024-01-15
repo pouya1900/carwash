@@ -27,6 +27,8 @@ return new class extends Migration {
             $table->enum("payment", ["cash", "online"])->default("online");
             $table->enum("status", ["pending", "accepted"])->default("pending");
             $table->enum("type", ["manual", "automatic", "semi_automatic"])->default("manual");
+            $table->tinyInteger("certified")->default(0);
+            $table->tinyInteger("promoted")->default(0);
             $table->timestamps();
         });
     }

@@ -15,26 +15,26 @@ class CarResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id"    => $this->id,
-            "type"  => [
+            "id"        => $this->id,
+            "type"      => [
                 "id"    => $this->type->id,
                 "title" => $this->type->title,
             ],
-            "brand" => [
+            "brand"     => [
                 "id"    => $this->model->brand->id,
                 "title" => $this->model->brand->title,
             ],
-            "model" => [
+            "model"     => [
                 "id"    => $this->model->id,
                 "title" => $this->model->title,
             ],
-            "color" => [
+            "color"     => [
                 "id"    => $this->color->id,
                 "title" => $this->color->title,
             ],
-            "year"  => $this->year,
-            "image" => new ImageResource($this->image),
-
+            "year"      => $this->year,
+            "image"     => new ImageResource($this->image),
+            'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
         ];
     }
 }

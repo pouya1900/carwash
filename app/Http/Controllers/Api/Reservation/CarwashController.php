@@ -91,7 +91,7 @@ class CarwashController extends Controller
             $services = $carwash->services()->paginate($per_page);
 
             return $this->sendResponse([
-                "products"   => ServiceResource::collection($services),
+                "services"   => ServiceResource::collection($services),
                 'pagination' => [
                     "totalItems"      => $services->total(),
                     "perPage"         => $services->perPage(),

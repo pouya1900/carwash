@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -12,7 +13,7 @@ class CarwashResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array
+    public function toArray($request): array
     {
         return [
             "id"           => $this->id,
@@ -27,6 +28,12 @@ class CarwashResource extends JsonResource
             "status"       => $this->status ?? "",
             "type"         => $this->type ?? "",
             "logo"         => new ImageResource($this->logo),
+            'createdAt'    => $this->created_at?->format('Y-m-d H:i:s'),
+            "isPromoted"   => $this->promoted ? 1 : 0,
+            "isCertified"  => $this->certified ? 1 : 0,
+            "isNew"        => Carbon::now()->subDays(5) < $this->created_at ? 1 : 0,
+            "isLike"       => $request->user && $this->likes()->where("user_id", $request->user->id)->first() ? 1 : 0,
+            "isBookmark"   => $request->user && $this->bookmarks()->where("user_id", $request->user->id)->first() ? 1 : 0,
         ];
     }
 }

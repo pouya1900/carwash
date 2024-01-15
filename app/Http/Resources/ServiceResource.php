@@ -26,6 +26,7 @@ class ServiceResource extends JsonResource
             "status"      => $this->status,
             "price"       => $this->price,
             "discount"    => $this->discount,
+            'createdAt'   => $this->created_at?->format('Y-m-d H:i:s'),
         ];
     }
 }

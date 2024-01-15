@@ -31,6 +31,8 @@ class Carwash extends Authenticatable implements JWTSubject
         "payment",
         "status",
         "type",
+        "certified",
+        "promoted",
     ];
 
     /**
@@ -87,6 +89,7 @@ class Carwash extends Authenticatable implements JWTSubject
     {
         return $this->morphMany(Media::class, 'mediable');
     }
+
     public function getLogoAttribute()
     {
         $image = $this->media()->where('model_type', 'carwashLogo')
@@ -122,5 +125,19 @@ class Carwash extends Authenticatable implements JWTSubject
         return $exist_images;
     }
 
+    public function likes()
+    {
+        return $this->morphMany(Like::class, "likeable");
+    }
+
+    public function bookmarks()
+    {
+        return $this->morphMany(Bookmark::class, "bookmarkable");
+    }
+
+    public function scores()
+    {
+        return $this->morphMany(Score::class, "scorable");
+    }
 
 }

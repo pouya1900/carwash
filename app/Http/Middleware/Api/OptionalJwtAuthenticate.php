@@ -15,30 +15,20 @@ class OptionalJwtAuthenticate
 
     protected $user;
 
-    public function __construct(User $user)
+    public function __construct()
     {
-        $this->user = $user;
     }
 
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next)
     {
         try {
-            if (empty($token = $request->header('Authorization'))) {
-                return $next($request);
+
+
+            if (!empty($user = auth("user")->user())) {
+                $request->user = $user;
             }
 
-            $credentials = JWT::decode($token, config('global.jwt.secretKey'), [config('global.jwt.cryptoMethod')]);
-            if (
-                empty($user = $this->user->find($credentials->sub))
-                || $user->token !== $token
-            ) {
-                return $this->sendError(trans('messages.auth.apiTokenInvalid'));
-            }
-            $request->user = $user;
-
-        } catch (ExpiredException $e) {
-            return $this->sendError(trans('messages.auth.apiTokenExpired'));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $this->sendError(trans('messages.auth.apiTokenInvalid'));
         }
 

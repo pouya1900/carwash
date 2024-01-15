@@ -11,6 +11,7 @@ class Lock_product extends Model
 
     protected $fillable = [
         "carwash_id",
+        "product_id",
         "title",
         "description",
         "price",

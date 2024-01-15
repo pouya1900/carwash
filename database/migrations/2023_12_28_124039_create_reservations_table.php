@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->unsignedInteger('carwash_id');
             $table->enum('status', ["created", "approved"])->default('created');
             $table->unsignedInteger('price');
-            $table->unsignedInteger('address_id');
+            $table->unsignedInteger('address_id')->nullable();
             $table->timestamps();
         });
     }

@@ -27,7 +27,7 @@ Route::group(['prefix' => 'other', "namespace" => "Other"], function () {
     Route::get('colors', 'CarPropertyController@colors');
 });
 
-Route::group(['prefix' => 'carwashes', "namespace" => "Reservation"], function () {
+Route::group(['prefix' => 'carwashes', "namespace" => "Reservation", 'middleware' => "optionalJwtAuth"], function () {
     Route::get('/', 'CarwashController@index');
     Route::get('/show/{carwash}', 'CarwashController@show');
     Route::get('services/{carwash}', 'CarwashController@services');
@@ -41,7 +41,7 @@ Route::group(['prefix' => 'auth', "namespace" => "Auth"], function () {
     Route::get('logout', 'AuthController@logout');
 
 });
-Route::group(['prefix' => 'home', "namespace" => "Home"], function () {
+Route::group(['prefix' => 'home', "namespace" => "Home", 'middleware' => "optionalJwtAuth"], function () {
     Route::get('/', 'HomeController@index');
 });
 
@@ -61,6 +61,11 @@ Route::group(['prefix' => 'user', 'middleware' => "jwtAuth", "namespace" => "Use
     Route::post('/cars/store', 'CarController@store');
     Route::post('/cars/update/{car}', 'CarController@update');
     Route::get('/cars/delete/{car}', 'CarController@delete');
+
+    Route::get('/like/product/{product}', 'ActionController@like_product');
+    Route::get('/like/carwash/{carwash}', 'ActionController@like_carwash');
+    Route::get('/bookmark/product/{product}', 'ActionController@bookmark_product');
+    Route::get('/bookmark/carwash/{carwash}', 'ActionController@bookmark_carwash');
 
 });
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -30,6 +31,12 @@ class CarwashFullResource extends JsonResource
             "images"       => ImageResource::collection($this->images),
             "services"     => ServiceResource::collection($this->services),
             "products"     => ProductResource::collection($this->products),
+            'createdAt'    => $this->created_at?->format('Y-m-d H:i:s'),
+            "isPromoted"   => $this->promoted ? 1 : 0,
+            "isCertified"  => $this->certified ? 1 : 0,
+            "isNew"        => Carbon::now()->subDays(5) < $this->created_at ? 1 : 0,
+            "isLike"       => $request->user && $this->likes()->where("user_id", $request->user->id)->first() ? 1 : 0,
+            "isBookmark"   => $request->user && $this->bookmarks()->where("user_id", $request->user->id)->first() ? 1 : 0,
         ];
     }
 }

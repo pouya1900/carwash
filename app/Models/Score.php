@@ -11,7 +11,8 @@ class Score extends Model
 
     protected $fillable = [
         "reservation_id",
-        "carwash_id",
+        "scorable_id",
+        "scorable_type",
         "rate",
         "comment",
         "reply",
@@ -23,9 +24,9 @@ class Score extends Model
         return $this->belongsTo(Reservation::class, "reservation_id");
     }
 
-    public function carwash()
+    public function scorable()
     {
-        return $this->belongsTo(Carwash::class, "carwash_id");
+        return $this->morphTo("scorable");
     }
 
 }

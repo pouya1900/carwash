@@ -42,4 +42,9 @@ class Reservation extends Model
         return $this->morphedByMany(Lock_product::class, "reservationable");
     }
 
+    public function scores()
+    {
+        return $this->hasMany(Score::class, "reservation_id");
+    }
+
 }

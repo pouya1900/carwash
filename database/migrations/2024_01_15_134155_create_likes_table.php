@@ -10,14 +10,11 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('scores', function (Blueprint $table) {
+        Schema::create('likes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('reservation_id');
-            $table->unsignedInteger("scorable_id");
-            $table->string("scorable_type");
-            $table->tinyInteger('rate');
-            $table->text('comment')->nullable();
-            $table->text('reply')->nullable();
+            $table->unsignedInteger("user_id");
+            $table->unsignedInteger("likeable_id");
+            $table->string("likeable_type");
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('scores');
+        Schema::dropIfExists('likes');
     }
 };

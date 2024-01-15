@@ -24,6 +24,7 @@ class UserResource extends JsonResource
             'username'  => $this->username ?? '',
             "image"     => new ImageResource($this->avatar),
             'balance'   => $this->balance ?? 0,
+            'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
         ];
     }
 }

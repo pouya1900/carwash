@@ -68,4 +68,42 @@ class Product extends Model
 
         return $exist_images;
     }
+
+
+    public function likes()
+    {
+        return $this->morphMany(Like::class, "likeable");
+    }
+
+    public function bookmarks()
+    {
+        return $this->morphMany(Bookmark::class, "bookmarkable");
+    }
+
+    public function scores()
+    {
+        return $this->morphMany(Score::class, "scorable");
+    }
+
+    public function getIsBestSellerAttribute()
+    {
+        $lock_products = Lock_product::selectRaw("count(*) as count , product_id")->orderBy("count", "desc")->groupBy("product_id")->limit(5)->get();
+
+        $z = $lock_products->filter(function ($item) {
+            return $item->product_id == $this->id;
+        })->first();
+
+        return $z ? 1 : 0;
+    }
+
+    public function getIsRatedAttribute()
+    {
+        $top_score_products = Score::selectRaw("avg(rate) as avg , scorable_id")->where("scorable_type", Product::class)->orderBy("avg", "desc")->groupBy("scorable_id")->limit(5)->get();
+        $z = $top_score_products->filter(function ($item) {
+            return $item->scorable_id == $this->id;
+        })->first();
+
+        return $z ? 1 : 0;
+    }
+
 }

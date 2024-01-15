@@ -35,7 +35,7 @@ class AppViewResource extends JsonResource
             'backgroundImage'    => new ImageResource($this->background),
             'backgroundColor'    => $this->background_color,
             'hasBackgroundImage' => $this->background['model'] ? 1 : 0,
-            'createdAt'          => $this->created_at->format('Y-m-d H:i:s'),
+            'createdAt'          => $this->created_at?->format('Y-m-d H:i:s'),
         ];
 
         if ($this->type->content == "carwash") {
