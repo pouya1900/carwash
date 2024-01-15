@@ -32,6 +32,11 @@ Route::group(['prefix' => 'carwashes', "namespace" => "Reservation", 'middleware
     Route::get('/show/{carwash}', 'CarwashController@show');
     Route::get('services/{carwash}', 'CarwashController@services');
     Route::get('products', 'CarwashController@products');
+    Route::get('times', 'CarwashController@times');
+
+    Route::get('products/show/{product}', 'CarwashController@product_show');
+    Route::get('services/show/{service}', 'CarwashController@service_show');
+
 });
 
 Route::group(['prefix' => 'auth', "namespace" => "Auth"], function () {
@@ -66,6 +71,11 @@ Route::group(['prefix' => 'user', 'middleware' => "jwtAuth", "namespace" => "Use
     Route::get('/like/carwash/{carwash}', 'ActionController@like_carwash');
     Route::get('/bookmark/product/{product}', 'ActionController@bookmark_product');
     Route::get('/bookmark/carwash/{carwash}', 'ActionController@bookmark_carwash');
+
+    Route::get('/tickets', 'TicketController@index');
+    Route::get('/tickets/show/{ticket}', 'TicketController@show');
+    Route::post('/tickets/store', 'TicketController@store');
+    Route::post('/tickets/update/{ticket}', 'TicketController@update');
 
 });
 

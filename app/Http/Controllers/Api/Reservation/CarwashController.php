@@ -9,6 +9,7 @@ use App\Http\Resources\ProductResource;
 use App\Http\Resources\ServiceResource;
 use App\Models\Carwash;
 use App\Models\Product;
+use App\Models\Service;
 use Illuminate\Http\Request;
 
 class CarwashController extends Controller
@@ -103,6 +104,36 @@ class CarwashController extends Controller
         } catch (\Exception $e) {
             return $this->sendError(trans('messages.response.failed'));
         }
+    }
+
+    public function product_show(Product $product)
+    {
+        try {
+
+            return $this->sendResponse([
+                "product" => new ProductResource($product),
+            ]);
+        } catch (\Exception $e) {
+            return $this->sendError(trans('messages.response.failed'));
+        }
+
+    }
+
+    public function service_show(Service $service)
+    {
+        try {
+            return $this->sendResponse([
+                "service" => new ServiceResource($service),
+            ]);
+        } catch (\Exception $e) {
+            return $this->sendError(trans('messages.response.failed'));
+        }
+
+    }
+
+    public function times(Carwash $carwash)
+    {
+
     }
 
 }
