@@ -54,6 +54,7 @@ Route::group(['prefix' => 'user', 'middleware' => "jwtAuth", "namespace" => "Use
     Route::get('/', 'UsersController@show');
     Route::post('/update', 'UsersController@update');
     Route::get('/balance/increase', 'UsersController@increaseBalance');
+    Route::get('/payment/verify/', 'UsersController@verifyPayment')->name("verifyPayment");
 
     Route::get('/reservations', 'ReservationController@reservations');
 

@@ -7,6 +7,8 @@ use App\Http\Requests\Api\UpdateUserRequest;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\ReservationResource;
 use App\Http\Resources\UserResource;
+use App\Services\Payment\Payment;
+use App\Services\Payment\Zarinpal;
 use App\Traits\ResponseUtilsTrait;
 use App\Traits\UploadUtilsTrait;
 use Illuminate\Http\Request;
@@ -60,16 +62,20 @@ class UsersController extends Controller
                 return $this->sendError(trans('messages.payment.amountInvalid'));
             }
 
+            $payment = new Payment(new Zarinpal());
 
-//            payment
-//            payment
-
+            $response = $payment->createPayment();
             return $this->sendResponse([
                 "link" => "https://paymentpageexample",
             ]);
         } catch (\Exception) {
             return $this->sendError(trans('messages.response.failed'));
         }
+    }
+
+    public function verifyPayment()
+    {
+        dd($this->request->all());
     }
 
 }
