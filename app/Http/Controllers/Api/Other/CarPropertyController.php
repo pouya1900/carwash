@@ -18,6 +18,27 @@ class CarPropertyController extends Controller
 {
     use ResponseUtilsTrait;
 
+    public function carProperty()
+    {
+        try {
+
+            $types = Type::all();
+            $brands = Brand::all();
+            $models = Car_model::all();
+            $colors = Color::all();
+
+            return $this->sendResponse([
+                "types"  => TypeResource::collection($types),
+                "brands" => BrandResource::collection($brands),
+                "models" => ModelResource::collection($models),
+                "colors" => ColorResource::collection($colors),
+            ]);
+        } catch (\Exception $e) {
+            return $this->sendError(trans('messages.response.failed'));
+        }
+
+    }
+
     public function types()
     {
         try {

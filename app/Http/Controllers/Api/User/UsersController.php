@@ -78,4 +78,18 @@ class UsersController extends Controller
         dd($this->request->all());
     }
 
+    public function inactive()
+    {
+        try {
+            $user = $this->request->user;
+            $user->update([
+                "inactive",
+            ]);
+            auth("user")->logout();
+            return $this->sendResponse([], trans("messages.auth.logOutSuccess"));
+        } catch (\Exception) {
+            return $this->sendError(trans('messages.response.failed'));
+        }
+    }
+
 }
