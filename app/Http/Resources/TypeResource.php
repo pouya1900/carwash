@@ -17,6 +17,7 @@ class TypeResource extends JsonResource
         return [
             "id"    => $this->id,
             "title" => $this->title,
+            "logo"  => new ImageResource($this->logo),
         ];
     }
 }

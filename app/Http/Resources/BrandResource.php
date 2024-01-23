@@ -18,6 +18,7 @@ class BrandResource extends JsonResource
             "id"    => $this->id,
             "title" => $this->title,
             "model" => ModelResource::collection($this->models),
+            "logo"  => new ImageResource($this->logo),
         ];
     }
 }

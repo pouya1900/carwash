@@ -18,6 +18,7 @@ class ModelResource extends JsonResource
             "id"    => $this->id,
             "title" => $this->title,
             "brand" => $this->brand->title,
+            "logo"  => new ImageResource($this->logo),
         ];
     }
 }
