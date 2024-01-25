@@ -18,6 +18,7 @@ class Car extends Model
         "model_id",
         "color_id",
         "year",
+        "is_default",
     ];
 
     public function user()

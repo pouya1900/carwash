@@ -48,13 +48,14 @@ class CarController extends Controller
         try {
             $user = $this->request->user;
 
-            $car = $user->cars()->create([
-                "type_id"  => $request->input("type_id"),
-                "model_id" => $request->input("model_id"),
-                "color_id" => $request->input("color_id"),
-                "year"     => $request->input("year"),
-            ]);
 
+            $car = $user->cars()->create([
+                "type_id"    => $request->input("type_id"),
+                "model_id"   => $request->input("model_id"),
+                "color_id"   => $request->input("color_id"),
+                "year"       => $request->input("year"),
+                "is_default" => !$user->cars->count() ? 1 : 0,
+            ]);
 
             $images_id = [$request->input("image_id")];
             $this->updateImages($car, 'carImage', "assetsStorage", $images_id);
@@ -77,11 +78,18 @@ class CarController extends Controller
                 return $this->sendError(trans('messages.crud.illegalAccess'));
             }
 
+            if ($request->input("is_default") && !$car->is_default) {
+                $user->cars()->update([
+                    "is_default" => 0,
+                ]);
+            }
+
             $car->update([
-                "type_id"  => $request->input("type_id"),
-                "model_id" => $request->input("model_id"),
-                "color_id" => $request->input("color_id"),
-                "year"     => $request->input("year"),
+                "type_id"    => $request->input("type_id"),
+                "model_id"   => $request->input("model_id"),
+                "color_id"   => $request->input("color_id"),
+                "year"       => $request->input("year"),
+                "is_default" => $request->input("is_default"),
             ]);
 
 
@@ -104,6 +112,12 @@ class CarController extends Controller
 
             if ($user->id != $car->user->id) {
                 return $this->sendError(trans('messages.crud.illegalAccess'));
+            }
+
+            if ($car->is_default) {
+                $user->cars()->first()->update([
+                    "is_default" => 1,
+                ]);
             }
 
             $car->media()->delete();

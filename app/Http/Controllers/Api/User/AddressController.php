@@ -53,6 +53,7 @@ class AddressController extends Controller
                 "description" => $request->input("description") ?? "",
                 "pluck"       => $request->input("pluck") ?? "",
                 "floor"       => $request->input("floor") ?? "",
+                "is_default"  => !$user->addresses->count() ? 1 : 0,
             ]);
 
             return $this->sendResponse([
@@ -68,9 +69,14 @@ class AddressController extends Controller
     {
         try {
             $user = $this->request->user;
-
             if ($user->id != $address->user->id) {
                 return $this->sendError(trans('messages.crud.illegalAccess'));
+            }
+
+            if ($request->input("is_default") && !$address->is_default) {
+                $user->addresses()->update([
+                    "is_default" => 0,
+                ]);
             }
 
             $address->update([
@@ -84,12 +90,14 @@ class AddressController extends Controller
                 "description" => $request->input("description") ?? "",
                 "pluck"       => $request->input("pluck") ?? "",
                 "floor"       => $request->input("floor") ?? "",
+                "is_default"  => $request->input("is_default"),
             ]);
 
             return $this->sendResponse([
                 "address" => new AddressResource($address),
             ], trans("messages.crud.updatedModelSuccess"));
         } catch (\Exception $e) {
+            dd($e);
             return $this->sendError(trans('messages.response.failed'));
         }
     }
@@ -102,6 +110,12 @@ class AddressController extends Controller
 
             if ($user->id != $address->user->id) {
                 return $this->sendError(trans('messages.crud.illegalAccess'));
+            }
+
+            if ($address->is_default) {
+                $user->addresses()->first()->update([
+                    "is_default" => 1,
+                ]);
             }
 
             $address->delete();

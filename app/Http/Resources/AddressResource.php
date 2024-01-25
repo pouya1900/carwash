@@ -25,6 +25,7 @@ class AddressResource extends JsonResource
             "description" => $this->description ?? "",
             "pluck"       => $this->pluck ?? "",
             "floor"       => $this->floor ?? "",
+            "default"     => $this->is_default ? 1 : 0,
             'createdAt'   => $this->created_at?->format('Y-m-d H:i:s'),
         ];
     }

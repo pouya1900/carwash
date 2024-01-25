@@ -21,11 +21,12 @@ class Address extends Model
         "description",
         "pluck",
         "floor",
+        "is_default",
     ];
 
     public function user()
     {
-        return $this->belongsTo(Address::class, "user_id");
+        return $this->belongsTo(User::class, "user_id");
     }
 
     public function city()

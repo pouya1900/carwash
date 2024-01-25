@@ -34,6 +34,7 @@ class CarResource extends JsonResource
             ],
             "year"      => $this->year,
             "image"     => new ImageResource($this->image),
+            "default"   => $this->is_default ? 1 : 0,
             'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
         ];
     }
