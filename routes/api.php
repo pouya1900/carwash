@@ -34,7 +34,7 @@ Route::group(['prefix' => 'carwashes', "namespace" => "Reservation", 'middleware
     Route::get('/show/{carwash}', 'CarwashController@show');
     Route::get('services/{carwash}', 'CarwashController@services');
     Route::get('products', 'CarwashController@products');
-    Route::get('times', 'CarwashController@times');
+    Route::get('times/{carwash}', 'CarwashController@times');
 
     Route::get('products/show/{product}', 'CarwashController@product_show');
     Route::get('services/show/{service}', 'CarwashController@service_show');
@@ -89,6 +89,12 @@ Route::group(['prefix' => 'carwash', 'middleware' => "jwtCarwashAuth", "namespac
     Route::post('/update', 'CarwashController@update');
 
     Route::get('/reservations', 'ReservationController@reservations');
+
+    Route::post('/schedule', 'CarwashController@schedule');
+
+    Route::get('/discounts', 'DiscountController@index');
+    Route::post('/discounts/store', 'DiscountController@store');
+    Route::get('/discounts/delete/{discount}', 'DiscountController@delete');
 
     Route::get('/services', 'ServiceController@index');
     Route::post('/services/store', 'ServiceController@store');

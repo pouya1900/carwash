@@ -28,6 +28,8 @@ class CarwashResource extends JsonResource
             "status"       => $this->status ?? "",
             "type"         => $this->type ?? "",
             "logo"         => new ImageResource($this->logo),
+            "services"     => ServiceResource::collection($this->services),
+            "products"     => ProductResource::collection($this->products),
             'createdAt'    => $this->created_at?->format('Y-m-d H:i:s'),
             "isPromoted"   => $this->promoted ? 1 : 0,
             "isCertified"  => $this->certified ? 1 : 0,

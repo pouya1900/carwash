@@ -140,4 +140,15 @@ class Carwash extends Authenticatable implements JWTSubject
         return $this->morphMany(Score::class, "scorable");
     }
 
+
+    public function times()
+    {
+        return $this->hasMany(Time_table::class, 'carwash_id');
+    }
+
+    public function discounts()
+    {
+        return $this->hasMany(Discount::class, "carwash_id");
+    }
+
 }

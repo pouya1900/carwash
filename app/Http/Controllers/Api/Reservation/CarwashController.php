@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Reservation;
 
+use App\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CarwashFullResource;
 use App\Http\Resources\CarwashResource;
@@ -133,7 +134,15 @@ class CarwashController extends Controller
 
     public function times(Carwash $carwash)
     {
+        try {
+            $free_times = Helper::getFreeTimes($carwash);
 
+            return $this->sendResponse([
+                "free" => $free_times,
+            ]);
+        } catch (\Exception $e) {
+            return $this->sendError(trans('messages.response.failed'));
+        }
     }
 
 }

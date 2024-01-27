@@ -57,4 +57,31 @@ class CarwashController extends Controller
             return $this->sendError(trans('messages.response.failed'));
         }
     }
+
+    public function schedule()
+    {
+        try {
+            $days = $this->request->input("days");
+            $carwash = $this->request->carwash;
+
+            if (!$schedule = $carwash->schedule) {
+                $schedule = $carwash->schedule()->create();
+            }
+
+            $schedule->update([
+                "day0" => $days[0] ? json_encode($days[0]) : "",
+                "day1" => $days[1] ? json_encode($days[1]) : "",
+                "day2" => $days[2] ? json_encode($days[2]) : "",
+                "day3" => $days[3] ? json_encode($days[3]) : "",
+                "day4" => $days[4] ? json_encode($days[4]) : "",
+                "day5" => $days[5] ? json_encode($days[5]) : "",
+                "day6" => $days[6] ? json_encode($days[6]) : "",
+            ]);
+
+            return $this->sendResponse([], trans("messages.crud.updatedModelSuccess"));
+        } catch (\Exception $e) {
+            return $this->sendError(trans('messages.response.failed'));
+        }
+    }
+
 }
