@@ -90,7 +90,10 @@ Route::group(['prefix' => 'carwash', 'middleware' => "jwtCarwashAuth", "namespac
 
     Route::get('/reservations', 'ReservationController@reservations');
 
-    Route::post('/schedule', 'CarwashController@schedule');
+    Route::post('/schedule', 'TimeController@schedule');
+    Route::get('/times', 'TimeController@index');
+    Route::post('/times/update', 'TimeController@update');
+    Route::get('/times/delete/{time}', 'TimeController@delete');
 
     Route::post('/message', 'CarwashController@message');
 

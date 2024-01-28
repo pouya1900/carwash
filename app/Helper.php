@@ -44,8 +44,10 @@ class Helper
                     foreach ($schedule_day["times"] as $item) {
                         for ($j = $item[0]; $j < $item[1]; $j++) {
                             $start = Carbon::now()->addDays($i)->startOfDay()->addHours($j);
-                            $used_times = $carwash->times()->where("start", $start)->get();
-                            if ($used_times->count() < $number && $start > Carbon::now()) {
+                            $used_times = $carwash->times()->whereNotNull("reservation_id")->where("start", $start)->get();
+                            $off = $carwash->times()->whereNull("reservation_id")->where("start", "<=", $start)->where("end", ">", $start)->first();
+
+                            if (!$off && $used_times->count() < $number && $start > Carbon::now()) {
                                 $discount = $carwash->discounts()->where("start", "<=", $start)->where("end", ">", $start)->first();
                                 $free_times[$i]['times'][] = [
                                     "time"     => [$j, $j + 1],
