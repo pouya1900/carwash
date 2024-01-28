@@ -63,5 +63,19 @@ class Helper
 
     }
 
+    public static function getDistance($lat1, $long1, $lat2, $long2)
+    {
+        $rad = M_PI / 180;
+        $radius = 6371; //earth radius in kilometers
+        $distance = acos(sin($lat2 * $rad) * sin($lat1 * $rad) + cos($lat2 * $rad) * cos($lat1 * $rad) * cos($long2 * $rad - $long1 * $rad)) * $radius; //result in Kilometers
+
+        $distance = round($distance, 1);
+
+        $distance = $distance * 1000;
+
+        return $distance;
+
+
+    }
 
 }

@@ -33,6 +33,7 @@ class Carwash extends Authenticatable implements JWTSubject
         "type",
         "certified",
         "promoted",
+        "message",
     ];
 
     /**

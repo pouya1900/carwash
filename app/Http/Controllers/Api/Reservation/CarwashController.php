@@ -21,7 +21,17 @@ class CarwashController extends Controller
         try {
             $per_page = $this->getPerPage();
 
-            $carwashes = Carwash::paginate($per_page);
+
+            $lat = $this->request->input("lat");
+            $long = $this->request->input("long");
+            $radius = $this->request->input("radius") ?: 10;
+
+            $carwashes = Carwash::when($lat, function ($q) use ($lat, $long, $radius) {
+                $rad = M_PI / 180;
+                $r = 6371; //earth radius in kilometers
+                return $q->whereRaw("(acos( sin( lat * $rad ) * sin( $lat * $rad ) + cos( lat * $rad ) * cos( $lat * $rad ) * cos( carwashes.long * $rad - $long * $rad ) ) * $r ) < $radius  ");
+            })->paginate($per_page);
+
 
             return $this->sendResponse([
                 "carwashes"  => CarwashResource::collection($carwashes),
@@ -62,12 +72,23 @@ class CarwashController extends Controller
             $carwash_id = $this->request->input("carwash_id");
             $categories_id = json_decode($this->request->input("categories_id"), true);
 
+            $lat = $this->request->input("lat");
+            $long = $this->request->input("long");
+            $radius = $this->request->input("radius") ?: 10;
+
+
             $products = Product::when($search, function ($q) use ($search) {
                 return $q->where("title", "like", "%$search%")->orwhere("description", "like", "%$search%");
             })->when($carwash_id, function ($q) use ($carwash_id) {
                 return $q->where("carwash_id", $carwash_id);
             })->when(!empty($categories_id), function ($q) use ($categories_id) {
                 return $q->whereIn("category_id", $categories_id);
+            })->when($lat, function ($q) use ($lat, $long, $radius) {
+                return $q->wherehas("carwash", function ($q) use ($lat, $long, $radius) {
+                    $rad = M_PI / 180;
+                    $r = 6371; //earth radius in kilometers
+                    return $q->whereRaw("(acos( sin( lat * $rad ) * sin( $lat * $rad ) + cos( lat * $rad ) * cos( $lat * $rad ) * cos( carwashes.long * $rad - $long * $rad ) ) * $r ) < $radius  ");
+                });
             })->paginate($per_page);
 
             return $this->sendResponse([

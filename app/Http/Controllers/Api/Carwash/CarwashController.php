@@ -84,4 +84,20 @@ class CarwashController extends Controller
         }
     }
 
+    public function message()
+    {
+        try {
+            $carwash = $this->request->carwash;
+
+            $carwash->update([
+                "message" => $this->request->input("message"),
+            ]);
+
+            return $this->sendResponse([], trans("messages.crud.updatedModelSuccess"));
+        } catch (\Exception $e) {
+            return $this->sendError(trans('messages.response.failed'));
+        }
+
+    }
+
 }

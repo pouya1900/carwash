@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Helper;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -15,6 +16,8 @@ class CarwashFullResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $distance = Helper::getDistance($request->lat, $request->long, $this->lat, $this->long);
+
         return [
             "id"           => $this->id,
             "title"        => $this->title ?? "",
@@ -26,6 +29,8 @@ class CarwashFullResource extends JsonResource
             "productCount" => $this->product_count ?? "",
             "payment"      => $this->payment ?? "",
             "status"       => $this->status ?? "",
+            "distance"     => $distance ?? "",
+            "message"      => $this->message ?? "",
             "type"         => $this->type ?? "",
             "logo"         => new ImageResource($this->logo),
             "images"       => ImageResource::collection($this->images),
