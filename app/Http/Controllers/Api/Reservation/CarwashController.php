@@ -6,9 +6,11 @@ use App\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CarwashFullResource;
 use App\Http\Resources\CarwashResource;
+use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\ServiceResource;
 use App\Models\Carwash;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\Service;
 use Illuminate\Http\Request;
@@ -29,7 +31,8 @@ class CarwashController extends Controller
             $carwashes = Carwash::when($lat, function ($q) use ($lat, $long, $radius) {
                 $rad = M_PI / 180;
                 $r = 6371; //earth radius in kilometers
-                return $q->whereRaw("(acos( sin( lat * $rad ) * sin( $lat * $rad ) + cos( lat * $rad ) * cos( $lat * $rad ) * cos( carwashes.long * $rad - $long * $rad ) ) * $r ) < $radius  ");
+                return $q->whereRaw("(acos( sin( lat * $rad ) * sin( $lat * $rad ) + cos( lat * $rad ) * cos( $lat * $rad ) * cos( carwashes.long * $rad - $long * $rad ) ) * $r ) < $radius  ")
+                    ->orderByRaw("acos( sin( lat * $rad ) * sin( $lat * $rad ) + cos( lat * $rad ) * cos( $lat * $rad ) * cos( carwashes.long * $rad - $long * $rad ) ) * $r  ASC");
             })->paginate($per_page);
 
 
@@ -84,11 +87,13 @@ class CarwashController extends Controller
             })->when(!empty($categories_id), function ($q) use ($categories_id) {
                 return $q->whereIn("category_id", $categories_id);
             })->when($lat, function ($q) use ($lat, $long, $radius) {
+                $rad = M_PI / 180;
+                $r = 6371; //earth radius in kilometers
                 return $q->wherehas("carwash", function ($q) use ($lat, $long, $radius) {
                     $rad = M_PI / 180;
                     $r = 6371; //earth radius in kilometers
                     return $q->whereRaw("(acos( sin( lat * $rad ) * sin( $lat * $rad ) + cos( lat * $rad ) * cos( $lat * $rad ) * cos( carwashes.long * $rad - $long * $rad ) ) * $r ) < $radius  ");
-                });
+                })->join("carwashes", "carwashes.id", "products.carwash_id")->orderByRaw("acos( sin( carwashes.lat * $rad ) * sin( $lat * $rad ) + cos( carwashes.lat * $rad ) * cos( $lat * $rad ) * cos( carwashes.long * $rad - $long * $rad ) ) * $r ASC");
             })->paginate($per_page);
 
             return $this->sendResponse([
@@ -160,6 +165,28 @@ class CarwashController extends Controller
 
             return $this->sendResponse([
                 "free" => $free_times,
+            ]);
+        } catch (\Exception $e) {
+            return $this->sendError(trans('messages.response.failed'));
+        }
+    }
+
+    public function categories()
+    {
+        try {
+            $per_page = $this->getPerPage();
+
+            $categories = Category::paginate($per_page);
+
+            return $this->sendResponse([
+                "categories" => CategoryResource::collection($categories),
+                'pagination' => [
+                    "totalItems"      => $categories->total(),
+                    "perPage"         => $categories->perPage(),
+                    "nextPageUrl"     => $categories->nextPageUrl(),
+                    "previousPageUrl" => $categories->previousPageUrl(),
+                    "lastPageUrl"     => $categories->url($categories->lastPage()),
+                ],
             ]);
         } catch (\Exception $e) {
             return $this->sendError(trans('messages.response.failed'));
