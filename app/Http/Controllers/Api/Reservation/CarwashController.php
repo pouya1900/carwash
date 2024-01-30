@@ -80,7 +80,7 @@ class CarwashController extends Controller
             $radius = $this->request->input("radius") ?: 10;
 
 
-            $products = Product::when($search, function ($q) use ($search) {
+            $products = Product::selectRaw("products.* , carwashes.lat , carwashes.long")->when($search, function ($q) use ($search) {
                 return $q->where("title", "like", "%$search%")->orwhere("description", "like", "%$search%");
             })->when($carwash_id, function ($q) use ($carwash_id) {
                 return $q->where("carwash_id", $carwash_id);
@@ -95,7 +95,6 @@ class CarwashController extends Controller
                     return $q->whereRaw("(acos( sin( lat * $rad ) * sin( $lat * $rad ) + cos( lat * $rad ) * cos( $lat * $rad ) * cos( carwashes.long * $rad - $long * $rad ) ) * $r ) < $radius  ");
                 })->join("carwashes", "carwashes.id", "products.carwash_id")->orderByRaw("acos( sin( carwashes.lat * $rad ) * sin( $lat * $rad ) + cos( carwashes.lat * $rad ) * cos( $lat * $rad ) * cos( carwashes.long * $rad - $long * $rad ) ) * $r ASC");
             })->paginate($per_page);
-
             return $this->sendResponse([
                 "products"   => ProductResource::collection($products),
                 'pagination' => [
