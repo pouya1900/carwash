@@ -39,7 +39,7 @@ Route::group(['prefix' => 'carwashes', "namespace" => "Reservation", 'middleware
     Route::get('products/show/{product}', 'CarwashController@product_show');
     Route::get('services/show/{service}', 'CarwashController@service_show');
 
-    Route::get('categories', 'CarwashController@categories');
+    Route::get('products/categories', 'CarwashController@categories');
 
 });
 

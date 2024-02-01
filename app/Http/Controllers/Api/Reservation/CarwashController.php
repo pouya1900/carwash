@@ -11,8 +11,11 @@ use App\Http\Resources\ProductResource;
 use App\Http\Resources\ServiceResource;
 use App\Models\Carwash;
 use App\Models\Category;
+use App\Models\Lock_product;
 use App\Models\Product;
+use App\Models\Score;
 use App\Models\Service;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CarwashController extends Controller
@@ -23,16 +26,37 @@ class CarwashController extends Controller
         try {
             $per_page = $this->getPerPage();
 
-
+            $user = $this->request->user;
             $lat = $this->request->input("lat");
             $long = $this->request->input("long");
             $radius = $this->request->input("radius") ?: 10;
+
+            $is_promoted = $this->request->input("is_promoted");
+            $is_certified = $this->request->input("is_certified");
+            $is_new = $this->request->input("is_new");
+            $is_like = $this->request->input("is_like");
+            $is_bookmark = $this->request->input("is_bookmark");
+
 
             $carwashes = Carwash::when($lat, function ($q) use ($lat, $long, $radius) {
                 $rad = M_PI / 180;
                 $r = 6371; //earth radius in kilometers
                 return $q->whereRaw("(acos( sin( lat * $rad ) * sin( $lat * $rad ) + cos( lat * $rad ) * cos( $lat * $rad ) * cos( carwashes.long * $rad - $long * $rad ) ) * $r ) < $radius  ")
                     ->orderByRaw("acos( sin( lat * $rad ) * sin( $lat * $rad ) + cos( lat * $rad ) * cos( $lat * $rad ) * cos( carwashes.long * $rad - $long * $rad ) ) * $r  ASC");
+            })->when($is_promoted, function ($q) {
+                return $q->where("promoted", 1);
+            })->when($is_certified, function ($q) {
+                return $q->where("certified", 1);
+            })->when($is_new, function ($q) {
+                return $q->where("created_at", ">=", Carbon::now()->subDays(7));
+            })->when($is_like && $user, function ($q) use ($user) {
+                return $q->wherehas("likes", function ($q) use ($user) {
+                    return $q->where("user_id", $user->id);
+                });
+            })->when($is_bookmark && $user, function ($q) use ($user) {
+                return $q->wherehas("bookmarks", function ($q) use ($user) {
+                    return $q->where("user_id", $user->id);
+                });
             })->paginate($per_page);
 
 
@@ -71,6 +95,8 @@ class CarwashController extends Controller
         try {
             $per_page = $this->getPerPage();
 
+            $user = $this->request->user;
+
             $search = $this->request->input("search");
             $carwash_id = $this->request->input("carwash_id");
             $categories_id = json_decode($this->request->input("categories_id"), true);
@@ -79,9 +105,15 @@ class CarwashController extends Controller
             $long = $this->request->input("long");
             $radius = $this->request->input("radius") ?: 10;
 
+            $is_rated = $this->request->input("is_rated");
+            $is_discount = $this->request->input("is_discount");
+            $is_best_seller = $this->request->input("is_best_seller");
+            $is_new = $this->request->input("is_new");
+            $is_like = $this->request->input("is_like");
+            $is_bookmark = $this->request->input("is_bookmark");
 
             $products = Product::selectRaw("products.* , carwashes.lat , carwashes.long")->when($search, function ($q) use ($search) {
-                return $q->where("title", "like", "%$search%")->orwhere("description", "like", "%$search%");
+                return $q->where("products.title", "like", "%$search%")->orwhere("products.description", "like", "%$search%");
             })->when($carwash_id, function ($q) use ($carwash_id) {
                 return $q->where("carwash_id", $carwash_id);
             })->when(!empty($categories_id), function ($q) use ($categories_id) {
@@ -94,6 +126,24 @@ class CarwashController extends Controller
                     $r = 6371; //earth radius in kilometers
                     return $q->whereRaw("(acos( sin( lat * $rad ) * sin( $lat * $rad ) + cos( lat * $rad ) * cos( $lat * $rad ) * cos( carwashes.long * $rad - $long * $rad ) ) * $r ) < $radius  ");
                 })->join("carwashes", "carwashes.id", "products.carwash_id")->orderByRaw("acos( sin( carwashes.lat * $rad ) * sin( $lat * $rad ) + cos( carwashes.lat * $rad ) * cos( $lat * $rad ) * cos( carwashes.long * $rad - $long * $rad ) ) * $r ASC");
+            })->when($is_new, function ($q) {
+                return $q->where("products.created_at", ">=", Carbon::now()->subDays(7));
+            })->when($is_like && $user, function ($q) use ($user) {
+                return $q->wherehas("likes", function ($q) use ($user) {
+                    return $q->where("user_id", $user->id);
+                });
+            })->when($is_bookmark && $user, function ($q) use ($user) {
+                return $q->wherehas("bookmarks", function ($q) use ($user) {
+                    return $q->where("user_id", $user->id);
+                });
+            })->when($is_discount, function ($q) {
+                return $q->where("products.discount", ">", 0);
+            })->when($is_best_seller, function ($q) {
+                $lock_products = Lock_product::selectRaw("count(*) as count , product_id")->wherehas("product")->orderBy("count", "desc")->groupBy("product_id")->limit(5)->get()->pluck("product_id")->toArray();
+                return $q->wherein("products.id", $lock_products);
+            })->when($is_rated, function ($q) {
+                $top_score_products = Score::selectRaw("avg(rate) as avg , scorable_id")->where("scorable_type", Product::class)->orderBy("avg", "desc")->groupBy("scorable_id")->limit(5)->get()->pluck("scorable_id")->toArray();
+                return $q->wherein("products.id", $top_score_products);
             })->paginate($per_page);
             return $this->sendResponse([
                 "products"   => ProductResource::collection($products),

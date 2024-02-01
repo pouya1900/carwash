@@ -86,9 +86,14 @@ class Product extends Model
         return $this->morphMany(Score::class, "scorable");
     }
 
+    public function lock_products()
+    {
+        return $this->hasMany(Lock_product::class, "product_id");
+    }
+
     public function getIsBestSellerAttribute()
     {
-        $lock_products = Lock_product::selectRaw("count(*) as count , product_id")->orderBy("count", "desc")->groupBy("product_id")->limit(5)->get();
+        $lock_products = Lock_product::selectRaw("count(*) as count , product_id")->wherehas("product")->orderBy("count", "desc")->groupBy("product_id")->limit(5)->get();
 
         $z = $lock_products->filter(function ($item) {
             return $item->product_id == $this->id;

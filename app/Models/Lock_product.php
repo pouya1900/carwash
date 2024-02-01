@@ -26,4 +26,9 @@ class Lock_product extends Model
     {
         return $this->morphToMany(Reservation::class, "reservationable");
     }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, "product_id");
+    }
 }
