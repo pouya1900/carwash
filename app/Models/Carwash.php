@@ -152,4 +152,9 @@ class Carwash extends Authenticatable implements JWTSubject
         return $this->hasMany(Discount::class, "carwash_id");
     }
 
+    public function getRateAttribute()
+    {
+        return $this->scores()->average("rate");
+    }
+
 }

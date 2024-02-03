@@ -41,6 +41,11 @@ Route::group(['prefix' => 'carwashes', "namespace" => "Reservation", 'middleware
 
     Route::get('products/categories', 'CarwashController@categories');
 
+    Route::get('products/scores/{product}', 'CarwashController@product_scores');
+    Route::get('scores/{carwash}', 'CarwashController@carwash_scores');
+
+    Route::get('base_services', 'CarwashController@base_services');
+
 });
 
 Route::group(['prefix' => 'auth', "namespace" => "Auth"], function () {

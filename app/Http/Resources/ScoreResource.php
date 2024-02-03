@@ -19,11 +19,11 @@ class ScoreResource extends JsonResource
     {
         return [
             "userId"    => $this->reservation->user->id,
-            "carwashId" => $this->carwash->id,
+            "carwashId" => $this->scorable->id,
             "score"     => $this->rate,
-            "comment"   => $this->comment,
-            "reply"     => $this->reply,
-            "createdAt" => $this->created_at->format('Y-m-d H:i:s'),
+            "comment"   => $this->comment ?? "",
+            "reply"     => $this->reply ?? "",
+            "createdAt" => $this->created_at?->format('Y-m-d H:i:s'),
         ];
 
     }

@@ -44,13 +44,11 @@ class ServiceController extends Controller
             $carwash = $this->request->carwash;
 
             $service = $carwash->services()->create([
-                "title"       => $request->input("title"),
-                "description" => $request->input("description") ?? "",
-                "items"       => $request->input("items") ? json_encode($request->input("items")) : "[]",
-                "time"        => $request->input("time"),
-                "status"      => $request->input("status"),
-                "price"       => $request->input("price"),
-                "discount"    => $request->input("discount") ?? 0,
+                "base_id"  => $request->input("base_id"),
+                "time"     => $request->input("time"),
+                "status"   => $request->input("status"),
+                "price"    => $request->input("price"),
+                "discount" => $request->input("discount") ?? 0,
             ]);
 
             return $this->sendResponse([
@@ -72,13 +70,11 @@ class ServiceController extends Controller
             }
 
             $service->update([
-                "title"       => $request->input("title"),
-                "description" => $request->input("description") ?? "",
-                "items"       => $request->input("items") ? json_encode($request->input("items")) : "[]",
-                "time"        => $request->input("time"),
-                "status"      => $request->input("status"),
-                "price"       => $request->input("price"),
-                "discount"    => $request->input("discount") ?? 0,
+                "base_id"  => $request->input("base_id"),
+                "time"     => $request->input("time"),
+                "status"   => $request->input("status"),
+                "price"    => $request->input("price"),
+                "discount" => $request->input("discount") ?? 0,
             ]);
 
             return $this->sendResponse([

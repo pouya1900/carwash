@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Api\Reservation;
 
 use App\Helper;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BaseServiceResource;
 use App\Http\Resources\CarwashFullResource;
 use App\Http\Resources\CarwashResource;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ProductResource;
+use App\Http\Resources\ScoreResource;
 use App\Http\Resources\ServiceResource;
+use App\Models\Base_service;
 use App\Models\Carwash;
 use App\Models\Category;
 use App\Models\Lock_product;
@@ -30,6 +33,9 @@ class CarwashController extends Controller
             $lat = $this->request->input("lat");
             $long = $this->request->input("long");
             $radius = $this->request->input("radius") ?: 10;
+            $search = $this->request->input("search");
+            $carwash_id = $this->request->input("carwash_id");
+            $services_id = json_decode($this->request->input("services_id"), true);
 
             $is_promoted = $this->request->input("is_promoted");
             $is_certified = $this->request->input("is_certified");
@@ -43,6 +49,10 @@ class CarwashController extends Controller
                 $r = 6371; //earth radius in kilometers
                 return $q->whereRaw("(acos( sin( lat * $rad ) * sin( $lat * $rad ) + cos( lat * $rad ) * cos( $lat * $rad ) * cos( carwashes.long * $rad - $long * $rad ) ) * $r ) < $radius  ")
                     ->orderByRaw("acos( sin( lat * $rad ) * sin( $lat * $rad ) + cos( lat * $rad ) * cos( $lat * $rad ) * cos( carwashes.long * $rad - $long * $rad ) ) * $r  ASC");
+            })->when($search, function ($q) use ($search) {
+                return $q->where("title", "like", "%$search%");
+            })->when($carwash_id, function ($q) use ($carwash_id) {
+                return $q->where("id", $carwash_id);
             })->when($is_promoted, function ($q) {
                 return $q->where("promoted", 1);
             })->when($is_certified, function ($q) {
@@ -57,7 +67,11 @@ class CarwashController extends Controller
                 return $q->wherehas("bookmarks", function ($q) use ($user) {
                     return $q->where("user_id", $user->id);
                 });
-            })->paginate($per_page);
+            })->when(!empty($services_id), function ($q) use ($services_id) {
+                return $q->wherehas("services", function ($q) use ($services_id) {
+                    return $q->whereIn("base_id", $services_id);
+                });
+            })->where("status", "accepted")->paginate($per_page);
 
 
             return $this->sendResponse([
@@ -240,6 +254,49 @@ class CarwashController extends Controller
         } catch (\Exception $e) {
             return $this->sendError(trans('messages.response.failed'));
         }
+    }
+
+    public function carwash_scores(Carwash $carwash)
+    {
+        try {
+
+            $scores = $carwash->scores;
+
+            return $this->sendResponse([
+                "scores" => ScoreResource::collection($scores),
+            ]);
+        } catch (\Exception $e) {
+            return $this->sendError(trans('messages.response.failed'));
+        }
+    }
+
+    public function product_scores(Product $product)
+    {
+        try {
+
+            $scores = $product->scores;
+
+            return $this->sendResponse([
+                "scores" => ScoreResource::collection($scores),
+            ]);
+        } catch (\Exception $e) {
+            return $this->sendError(trans('messages.response.failed'));
+        }
+    }
+
+    public function base_services()
+    {
+        try {
+            $base_services = Base_service::all();
+
+            return $this->sendResponse([
+                "scores" => BaseServiceResource::collection($base_services),
+            ]);
+        } catch (\Exception $e) {
+            return $this->sendError(trans('messages.response.failed'));
+        }
+
+
     }
 
 }

@@ -112,4 +112,9 @@ class Product extends Model
         return $z ? 1 : 0;
     }
 
+    public function getRateAttribute()
+    {
+        return $this->scores()->average("rate");
+    }
+
 }

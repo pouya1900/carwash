@@ -43,6 +43,8 @@ class ProductResource extends JsonResource
             "isRated"      => $this->isRated,
             "isLike"       => $request->user && $this->likes()->where("user_id", $request->user->id)->first() ? 1 : 0,
             "isBookmark"   => $request->user && $this->bookmarks()->where("user_id", $request->user->id)->first() ? 1 : 0,
+            "rate"         => +$this->rate,
+            "reviewsCount" => $this->scores()->count(),
         ];
 
     }

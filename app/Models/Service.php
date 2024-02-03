@@ -11,9 +11,7 @@ class Service extends Model
 
     protected $fillable = [
         "carwash_id",
-        "title",
-        "description",
-        "items",
+        "base_id",
         "time",
         "status",
         "price",
@@ -23,6 +21,11 @@ class Service extends Model
     public function carwash()
     {
         return $this->belongsTo(Carwash::class, "carwash_id");
+    }
+
+    public function base()
+    {
+        return $this->belongsTo(Base_service::class, "base_id");
     }
 
 }

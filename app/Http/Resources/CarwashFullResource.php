@@ -42,6 +42,8 @@ class CarwashFullResource extends JsonResource
             "isNew"        => Carbon::now()->subDays(5) < $this->created_at ? 1 : 0,
             "isLike"       => $request->user && $this->likes()->where("user_id", $request->user->id)->first() ? 1 : 0,
             "isBookmark"   => $request->user && $this->bookmarks()->where("user_id", $request->user->id)->first() ? 1 : 0,
+            "rate"         => +$this->rate,
+            "reviewsCount" => $this->scores()->count(),
         ];
     }
 }
