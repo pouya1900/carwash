@@ -17,8 +17,7 @@ class BaseServiceResource extends JsonResource
         return [
             "id"          => $this->id,
             "title"       => $this->title,
-            "description" => $this->description,
-            "items"       => json_decode($this->items, true),
+            "description" => json_decode($this->description,true),
         ];
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\Api\UpdateUserRequest;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\ReservationResource;
 use App\Http\Resources\UserResource;
+use App\Models\Gift;
 use App\Services\Payment\Payment;
 use App\Services\Payment\Zarinpal;
 use App\Traits\ResponseUtilsTrait;
@@ -87,6 +88,41 @@ class UsersController extends Controller
             ]);
             auth("user")->logout();
             return $this->sendResponse([], trans("messages.auth.logOutSuccess"));
+        } catch (\Exception) {
+            return $this->sendError(trans('messages.response.failed'));
+        }
+    }
+
+    public function receive_gift(Gift $gift)
+    {
+        try {
+            $user = $this->request->user;
+
+            if ($user->id != $gift->user->id) {
+                return $this->sendError(trans('messages.crud.illegalAccess'));
+            }
+
+            if ($gift->status == "pending") {
+                return $this->sendError(trans('messages.gift.notCompleted'));
+            }
+
+            if ($gift->status == "received") {
+                return $this->sendError(trans('messages.gift.alreadyReceived'));
+            }
+
+            if ($gift->status != "completed") {
+                return $this->sendError(trans('messages.crud.illegalAccess'));
+            }
+
+            $gift->update([
+                "status" => "received",
+            ]);
+
+            $user->update([
+                "balance" => $user->balance + $gift->value,
+            ]);
+
+            return $this->sendResponse([], trans("messages.gift.success", ["value" => $gift->value]));
         } catch (\Exception) {
             return $this->sendError(trans('messages.response.failed'));
         }

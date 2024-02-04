@@ -42,9 +42,13 @@ class CarwashController extends Controller
             $is_new = $this->request->input("is_new");
             $is_like = $this->request->input("is_like");
             $is_bookmark = $this->request->input("is_bookmark");
+            $is_discount = $this->request->input("is_discount");
+            $order_by_score = $this->request->input("order_by_score");
 
 
-            $carwashes = Carwash::when($lat, function ($q) use ($lat, $long, $radius) {
+            $carwashes = Carwash::when($order_by_score, function ($q) {
+                return $q->withAvg("scores", "rate")->orderBy("scores_avg_rate", "desc");
+            })->when($lat, function ($q) use ($lat, $long, $radius) {
                 $rad = M_PI / 180;
                 $r = 6371; //earth radius in kilometers
                 return $q->whereRaw("(acos( sin( lat * $rad ) * sin( $lat * $rad ) + cos( lat * $rad ) * cos( $lat * $rad ) * cos( carwashes.long * $rad - $long * $rad ) ) * $r ) < $radius  ")
@@ -70,6 +74,10 @@ class CarwashController extends Controller
             })->when(!empty($services_id), function ($q) use ($services_id) {
                 return $q->wherehas("services", function ($q) use ($services_id) {
                     return $q->whereIn("base_id", $services_id);
+                });
+            })->when(!empty($is_discount), function ($q) {
+                return $q->wherehas("services", function ($q) {
+                    return $q->where("discount", ">", 0);
                 });
             })->where("status", "accepted")->paginate($per_page);
 
@@ -290,7 +298,7 @@ class CarwashController extends Controller
             $base_services = Base_service::all();
 
             return $this->sendResponse([
-                "scores" => BaseServiceResource::collection($base_services),
+                "services" => BaseServiceResource::collection($base_services),
             ]);
         } catch (\Exception $e) {
             return $this->sendError(trans('messages.response.failed'));

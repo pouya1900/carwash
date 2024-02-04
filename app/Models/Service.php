@@ -12,6 +12,7 @@ class Service extends Model
     protected $fillable = [
         "carwash_id",
         "base_id",
+        "items",
         "time",
         "status",
         "price",

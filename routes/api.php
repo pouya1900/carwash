@@ -66,6 +66,8 @@ Route::group(['prefix' => 'user', 'middleware' => "jwtAuth", "namespace" => "Use
     Route::get('/payment/verify/', 'UsersController@verifyPayment')->name("verifyPayment");
     Route::get('/inactive', 'UsersController@inactive');
 
+    Route::get('/gifts/receive/{gift}', 'UsersController@receive_gift');
+
     Route::get('/reservations', 'ReservationController@reservations');
 
     Route::get('/addresses', 'AddressController@index');

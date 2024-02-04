@@ -12,7 +12,6 @@ class Base_service extends Model
     protected $fillable = [
         "title",
         "description",
-        "items",
     ];
 
     public function services()

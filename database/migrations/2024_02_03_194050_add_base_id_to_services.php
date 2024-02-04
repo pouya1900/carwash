@@ -13,7 +13,6 @@ return new class extends Migration {
         Schema::table('services', function (Blueprint $table) {
             $table->dropColumn("title");
             $table->dropColumn("description");
-            $table->dropColumn("items");
             $table->unsignedInteger("base_id")->after("carwash_id");
         });
     }
@@ -26,7 +25,6 @@ return new class extends Migration {
         Schema::table('services', function (Blueprint $table) {
             $table->string('title');
             $table->text('description')->nullable();
-            $table->text('items')->nullable();
             $table->dropColumn("base_id");
         });
     }

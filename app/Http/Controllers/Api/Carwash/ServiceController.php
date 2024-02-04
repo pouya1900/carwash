@@ -45,6 +45,7 @@ class ServiceController extends Controller
 
             $service = $carwash->services()->create([
                 "base_id"  => $request->input("base_id"),
+                "items"    => $request->input("items") ? json_encode($request->input("items")) : "[]",
                 "time"     => $request->input("time"),
                 "status"   => $request->input("status"),
                 "price"    => $request->input("price"),
@@ -71,6 +72,7 @@ class ServiceController extends Controller
 
             $service->update([
                 "base_id"  => $request->input("base_id"),
+                "items"    => $request->input("items") ? json_encode($request->input("items")) : "[]",
                 "time"     => $request->input("time"),
                 "status"   => $request->input("status"),
                 "price"    => $request->input("price"),
