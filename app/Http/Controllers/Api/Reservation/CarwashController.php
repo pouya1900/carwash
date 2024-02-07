@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Reservation;
 
 use App\Helper;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BaseItemResource;
 use App\Http\Resources\BaseServiceResource;
 use App\Http\Resources\CarwashFullResource;
 use App\Http\Resources\CarwashResource;
@@ -14,6 +15,7 @@ use App\Http\Resources\ServiceResource;
 use App\Models\Base_service;
 use App\Models\Carwash;
 use App\Models\Category;
+use App\Models\Item;
 use App\Models\Lock_product;
 use App\Models\Product;
 use App\Models\Score;
@@ -36,6 +38,7 @@ class CarwashController extends Controller
             $search = $this->request->input("search");
             $carwash_id = $this->request->input("carwash_id");
             $services_id = json_decode($this->request->input("services_id"), true);
+            $types_id = json_decode($this->request->input("types_id"), true);
 
             $is_promoted = $this->request->input("is_promoted");
             $is_certified = $this->request->input("is_certified");
@@ -74,6 +77,12 @@ class CarwashController extends Controller
             })->when(!empty($services_id), function ($q) use ($services_id) {
                 return $q->wherehas("services", function ($q) use ($services_id) {
                     return $q->whereIn("base_id", $services_id);
+                });
+            })->when(!empty($types_id), function ($q) use ($types_id) {
+                return $q->wherehas("services", function ($q) use ($types_id) {
+                    return $q->wherehas("types", function ($q) use ($types_id) {
+                        return $q->whereIn("type_id", $types_id);
+                    });
                 });
             })->when(!empty($is_discount), function ($q) {
                 return $q->wherehas("services", function ($q) {
@@ -304,6 +313,20 @@ class CarwashController extends Controller
             return $this->sendError(trans('messages.response.failed'));
         }
 
+
+    }
+
+    public function base_items()
+    {
+        try {
+            $base_items = Item::all();
+
+            return $this->sendResponse([
+                "items" => BaseItemResource::collection($base_items),
+            ]);
+        } catch (\Exception $e) {
+            return $this->sendError(trans('messages.response.failed'));
+        }
 
     }
 

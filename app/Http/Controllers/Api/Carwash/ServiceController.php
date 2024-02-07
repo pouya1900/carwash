@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api\Carwash;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\StoreServiceRequest;
 use App\Http\Resources\ServiceResource;
+use App\Models\Item;
 use App\Models\Service;
+use App\Models\Type;
 use App\Traits\ResponseUtilsTrait;
 use Illuminate\Http\Request;
 
@@ -45,12 +47,25 @@ class ServiceController extends Controller
 
             $service = $carwash->services()->create([
                 "base_id"  => $request->input("base_id"),
-                "items"    => $request->input("items") ? json_encode($request->input("items")) : "[]",
                 "time"     => $request->input("time"),
                 "status"   => $request->input("status"),
                 "price"    => $request->input("price"),
                 "discount" => $request->input("discount") ?? 0,
             ]);
+
+            foreach ($request->input("items") as $item_id) {
+                $item = Item::find($item_id);
+                if ($item) {
+                    $service->items()->attach($item);
+                }
+            }
+
+            foreach ($request->input("types") as $type_id) {
+                $type = Type::find($type_id);
+                if ($type) {
+                    $service->types()->attach($type);
+                }
+            }
 
             return $this->sendResponse([
                 "service" => new ServiceResource($service),
@@ -72,12 +87,27 @@ class ServiceController extends Controller
 
             $service->update([
                 "base_id"  => $request->input("base_id"),
-                "items"    => $request->input("items") ? json_encode($request->input("items")) : "[]",
                 "time"     => $request->input("time"),
                 "status"   => $request->input("status"),
                 "price"    => $request->input("price"),
                 "discount" => $request->input("discount") ?? 0,
             ]);
+
+            $service->items()->detach();
+            foreach ($request->input("items") as $item_id) {
+                $item = Item::find($item_id);
+                if ($item) {
+                    $service->items()->attach($item);
+                }
+            }
+
+            $service->types()->detach();
+            foreach ($request->input("types") as $type_id) {
+                $type = Type::find($type_id);
+                if ($type) {
+                    $service->types()->attach($type);
+                }
+            }
 
             return $this->sendResponse([
                 "service" => new ServiceResource($service),
@@ -97,6 +127,8 @@ class ServiceController extends Controller
                 return $this->sendError(trans('messages.crud.illegalAccess'));
             }
 
+            $service->items()->detach();
+            $service->types()->detach();
             $service->delete();
 
             return $this->sendResponse([], trans("messages.crud.deletedModelSuccess"));

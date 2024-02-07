@@ -29,4 +29,13 @@ class Service extends Model
         return $this->belongsTo(Base_service::class, "base_id");
     }
 
+    public function items()
+    {
+        return $this->belongsToMany(Item::class, "service_item", "service_id", "item_id");
+    }
+
+    public function types()
+    {
+        return $this->belongsToMany(Type::class, "service_type", "service_id", "type_id");
+    }
 }
