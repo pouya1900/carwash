@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Gift;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,7 +18,6 @@ class AppViewResource extends JsonResource
      */
     public function toArray($request)
     {
-
         $return = [
             'id'                 => $this->id,
             'type'               => [
@@ -42,6 +43,22 @@ class AppViewResource extends JsonResource
             $return['carwashes'] = CarwashResource::collection($this->carwashes()->paginate($request->number));
         } else if ($this->type->content == "product") {
             $return['products'] = ProductResource::collection($this->products()->paginate($request->number));
+        } else if ($this->type->content == "gift") {
+
+            $gift = $request->user?->gifts()->where("status", "pending")->first();
+
+            if (!$gift) {
+                $setting = Setting::first();
+                $gift = new Gift([
+                    "total"   => $setting->gift_number,
+                    "number"  => 0,
+                    "value"   => $setting->gift_value,
+                    "user_id" => $request->user ? $request->user->id : 0,
+                    "status"  => "pending",
+                ]);
+            }
+
+            $return['pendingGift'] = new GiftResource($gift);
         }
 
 
