@@ -15,9 +15,10 @@ class TypeResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id"    => $this->id,
-            "title" => $this->title,
-            "logo"  => new ImageResource($this->logo),
+            "id"          => $this->id,
+            "title"       => $this->title,
+            "description" => $this->description,
+            "logo"        => new ImageResource($this->logo),
         ];
     }
 }
