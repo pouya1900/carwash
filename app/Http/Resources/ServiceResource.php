@@ -26,20 +26,21 @@ class ServiceResource extends JsonResource
         }
 
         return [
-            "id"          => $this->id,
-            "title"       => $this->base->title,
-            "description" => $this->base->description ? json_decode($this->base->description, true) : [],
-            "items"       => BaseItemResource::collection($this->items),
-            "type"        => TypeResource::collection($this->types),
-            "time"        => $this->time,
-            'carwash'     => [
+            "id"                => $this->id,
+            "title"             => $this->base->title,
+            "description"       => $this->base->description ? json_decode($this->base->description, true) : [],
+            "items"             => BaseItemResource::collection($this->items),
+            "type"              => TypeResource::collection($this->types),
+            "time"              => $this->time,
+            'carwash'           => [
                 "id"    => $this->carwash->id,
                 "title" => $this->carwash->title,
             ],
-            "status"      => $this->status,
-            "price"       => $this->price,
-            "discount"    => max($this->discount, $discount),
-            'createdAt'   => $this->created_at?->format('Y-m-d H:i:s'),
+            "status"            => $this->status,
+            "price"             => $this->price,
+            "discount"          => max($this->discount, $discount),
+            "temporaryDiscount" => $discount > $this->discount,
+            'createdAt'         => $this->created_at?->format('Y-m-d H:i:s'),
         ];
     }
 }
