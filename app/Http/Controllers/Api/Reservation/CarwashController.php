@@ -88,6 +88,10 @@ class CarwashController extends Controller
                     return $q->wherehas("types", function ($q) use ($types_id) {
                         return $q->whereIn("type_id", $types_id);
                     });
+                })->with("services", function ($q) use ($types_id) {
+                    return $q->wherehas("types", function ($q) use ($types_id) {
+                        return $q->whereIn("type_id", $types_id);
+                    });
                 });
             })->when(!empty($is_discount), function ($q) {
                 return $q->wherehas("services", function ($q) {
