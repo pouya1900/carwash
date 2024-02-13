@@ -22,6 +22,7 @@ use App\Models\Score;
 use App\Models\Service;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Morilog\Jalali\Jalalian;
 
 class CarwashController extends Controller
 {
@@ -39,6 +40,10 @@ class CarwashController extends Controller
             $carwash_id = $this->request->input("carwash_id");
             $services_id = json_decode($this->request->input("services_id"), true);
             $types_id = json_decode($this->request->input("types_id"), true);
+
+            $j_date = $this->request->input("date");
+            $time = $this->request->input("time");
+            $date = Jalalian::fromFormat('Y-m-d', $j_date)->addHours($time)->toCarbon();
 
             $is_promoted = $this->request->input("is_promoted");
             $is_certified = $this->request->input("is_certified");
@@ -91,8 +96,43 @@ class CarwashController extends Controller
             })->where("status", "accepted")->paginate($per_page);
 
 
+            $times = [];
+
+            for ($i = 0; $i < 8; $i++) {
+                $day = Carbon::now()->addDays($i)->startOfDay();
+                $times[$i]["date"] = jdate(strtotime($day))->format("Y-m-d");
+                $times[$i]["times"] = [];
+                $hour = Carbon::now()->hour + 1;
+                $start = !$i ? $hour : 0;
+
+                for ($j = $start; $j < 24; $j++) {
+                    $total = 0;
+                    $number = 0;
+                    $numberCarwash = 0;
+                    foreach ($carwashes as $carwash) {
+                        $response = Helper::isFree($carwash, $day, $j);
+                        if (isset($response["number"])) {
+                            $total += $response["total"];
+                            $number += $response["number"];
+                        }
+                        if ($response["is_free"]) {
+                            $numberCarwash++;
+                        }
+                    }
+                    $times[$i]["times"][] = [
+                        "start"         => $j,
+                        "end"           => $j + 1,
+                        "total"         => $total,
+                        "number"        => $number,
+                        "totalCarwash"  => $carwashes->count(),
+                        "numberCarwash" => $numberCarwash,
+                    ];
+                }
+            }
+
             return $this->sendResponse([
                 "carwashes"  => CarwashResource::collection($carwashes),
+                "times"      => $times,
                 'pagination' => [
                     "totalItems"      => $carwashes->total(),
                     "perPage"         => $carwashes->perPage(),
@@ -304,7 +344,13 @@ class CarwashController extends Controller
     public function base_services()
     {
         try {
-            $base_services = Base_service::all();
+
+            $is_main = $this->request->input("is_main");
+
+            $base_services = Base_service::when($is_main, function ($q) {
+                return $q->where("is_main", 1);
+            })->get();
+
 
             return $this->sendResponse([
                 "services" => BaseServiceResource::collection($base_services),

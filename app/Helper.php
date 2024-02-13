@@ -27,7 +27,7 @@ class Helper
 
         $free_times = [];
 
-        for ($i = 0; $i < 15; $i++) {
+        for ($i = 0; $i < 8; $i++) {
             $day = Carbon::now()->addDays($i)->startOfDay();
 
             $day_week = $day->weekday();
@@ -52,6 +52,7 @@ class Helper
                                 $free_times[$i]['times'][] = [
                                     "time"     => [$j, $j + 1],
                                     "number"   => $number - $used_times->count(),
+                                    "total"    => $number,
                                     "discount" => $discount ? $discount->value : 0,
                                 ];
                             }
@@ -62,6 +63,98 @@ class Helper
         }
 
         return $free_times;
+
+    }
+
+    public static function getFirstFreeTime($carwash, $date, $time)
+    {
+        $schedule = $carwash->schedule;
+
+        $day = $date->startOfDay();
+
+        $day_week = $day->weekday();
+        $h = "day" . $day_week;
+
+        if ($schedule) {
+            $schedule_day = $schedule->$h;
+
+            $schedule_day = json_decode($schedule_day, true);
+            if ($schedule_day) {
+                $number = $schedule_day["number"];
+                foreach ($schedule_day["times"] as $item) {
+                    for ($j = $time; $j < $item[1]; $j++) {
+                        $start = $day->copy()->startOfDay()->addHours($j);
+                        $used_times = $carwash->times()->whereNotNull("reservation_id")->where("start", $start)->get();
+                        $off = $carwash->times()->whereNull("reservation_id")->where("start", "<=", $start)->where("end", ">", $start)->first();
+
+                        if (!$off && $used_times->count() < $number) {
+                            return $start;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public static function isFree($carwash, $date, $time)
+    {
+        $schedule = $carwash->schedule;
+
+        $day = $date->startOfDay();
+
+        $date_time = $date->startOfDay()->addHours($time);
+
+        $day_week = $day->weekday();
+        $h = "day" . $day_week;
+
+        if ($schedule) {
+            $schedule_day = $schedule->$h;
+
+            $schedule_day = json_decode($schedule_day, true);
+            if ($schedule_day) {
+                $number = $schedule_day["number"];
+
+                $used_times = $carwash->times()->whereNotNull("reservation_id")->where("start", $date_time)->get();
+                $off = $carwash->times()->whereNull("reservation_id")->where("start", "<=", $date_time)->where("end", ">", $date_time)->first();
+
+                if ($used_times->count() >= $number) {
+                    return [
+                        "number"  => $number - $used_times->count(),
+                        "total"   => $number,
+                        "is_free" => 0,
+                    ];
+                }
+
+                if ($off) {
+                    return [
+                        "is_free" => 0,
+                    ];
+                }
+                foreach ($schedule_day["times"] as $item) {
+                    $start = $day->copy()->startOfDay()->addHours($item[0]);
+                    $end = $day->copy()->startOfDay()->addHours($item[1]);
+
+                    if ($start <= $date_time && $date_time < $end) {
+                        return [
+                            "number"  => $number - $used_times->count(),
+                            "total"   => $number,
+                            "is_free" => 1,
+                        ];
+                    }
+                }
+            }
+        }
+        return [
+            "is_free" => 0,
+        ];
+    }
+
+    public static function hasDiscount($carwash, $date, $time)
+    {
+        $date_time = $date->startOfDay()->addHours($time);
+
+        return $carwash->discounts()->where("start", "<=", $date_time)->where("end", ">", $date_time)->first();
 
     }
 
