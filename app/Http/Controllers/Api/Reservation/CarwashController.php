@@ -99,6 +99,90 @@ class CarwashController extends Controller
                 });
             })->where("status", "accepted")->paginate($per_page);
 
+            return $this->sendResponse([
+                "carwashes"  => CarwashResource::collection($carwashes),
+                'pagination' => [
+                    "totalItems"      => $carwashes->total(),
+                    "perPage"         => $carwashes->perPage(),
+                    "nextPageUrl"     => $carwashes->nextPageUrl(),
+                    "previousPageUrl" => $carwashes->previousPageUrl(),
+                    "lastPageUrl"     => $carwashes->url($carwashes->lastPage()),
+                ],
+            ]);
+        } catch (\Exception $e) {
+            return $this->sendError(trans('messages.response.failed'));
+        }
+
+    }
+
+    public function times_list()
+    {
+        try {
+            $per_page = $this->getPerPage();
+
+            $user = $this->request->user;
+            $lat = $this->request->input("lat");
+            $long = $this->request->input("long");
+            $radius = $this->request->input("radius") ?: 10;
+            $search = $this->request->input("search");
+            $carwash_id = $this->request->input("carwash_id");
+            $services_id = json_decode($this->request->input("services_id"), true);
+            $types_id = json_decode($this->request->input("types_id"), true);
+
+            $is_promoted = $this->request->input("is_promoted");
+            $is_certified = $this->request->input("is_certified");
+            $is_new = $this->request->input("is_new");
+            $is_like = $this->request->input("is_like");
+            $is_bookmark = $this->request->input("is_bookmark");
+            $is_discount = $this->request->input("is_discount");
+            $order_by_score = $this->request->input("order_by_score");
+
+
+            $carwashes = Carwash::when($order_by_score, function ($q) {
+                return $q->withAvg("scores", "rate")->orderBy("scores_avg_rate", "desc");
+            })->when($lat, function ($q) use ($lat, $long, $radius) {
+                $rad = M_PI / 180;
+                $r = 6371; //earth radius in kilometers
+                return $q->whereRaw("(acos( sin( lat * $rad ) * sin( $lat * $rad ) + cos( lat * $rad ) * cos( $lat * $rad ) * cos( carwashes.long * $rad - $long * $rad ) ) * $r ) < $radius  ")
+                    ->orderByRaw("acos( sin( lat * $rad ) * sin( $lat * $rad ) + cos( lat * $rad ) * cos( $lat * $rad ) * cos( carwashes.long * $rad - $long * $rad ) ) * $r  ASC");
+            })->when($search, function ($q) use ($search) {
+                return $q->where("title", "like", "%$search%");
+            })->when($carwash_id, function ($q) use ($carwash_id) {
+                return $q->where("id", $carwash_id);
+            })->when($is_promoted, function ($q) {
+                return $q->where("promoted", 1);
+            })->when($is_certified, function ($q) {
+                return $q->where("certified", 1);
+            })->when($is_new, function ($q) {
+                return $q->where("created_at", ">=", Carbon::now()->subDays(7));
+            })->when($is_like && $user, function ($q) use ($user) {
+                return $q->wherehas("likes", function ($q) use ($user) {
+                    return $q->where("user_id", $user->id);
+                });
+            })->when($is_bookmark && $user, function ($q) use ($user) {
+                return $q->wherehas("bookmarks", function ($q) use ($user) {
+                    return $q->where("user_id", $user->id);
+                });
+            })->when(!empty($services_id), function ($q) use ($services_id) {
+                return $q->wherehas("services", function ($q) use ($services_id) {
+                    return $q->whereIn("base_id", $services_id);
+                });
+            })->when(!empty($types_id), function ($q) use ($types_id) {
+                return $q->wherehas("services", function ($q) use ($types_id) {
+                    return $q->wherehas("types", function ($q) use ($types_id) {
+                        return $q->whereIn("type_id", $types_id);
+                    });
+                })->with("services", function ($q) use ($types_id) {
+                    return $q->wherehas("types", function ($q) use ($types_id) {
+                        return $q->whereIn("type_id", $types_id);
+                    });
+                });
+            })->when(!empty($is_discount), function ($q) {
+                return $q->wherehas("services", function ($q) {
+                    return $q->where("discount", ">", 0);
+                });
+            })->where("status", "accepted")->get();
+
 
             $times = [];
 
@@ -135,15 +219,7 @@ class CarwashController extends Controller
             }
 
             return $this->sendResponse([
-                "carwashes"  => CarwashResource::collection($carwashes),
-                "times"      => $times,
-                'pagination' => [
-                    "totalItems"      => $carwashes->total(),
-                    "perPage"         => $carwashes->perPage(),
-                    "nextPageUrl"     => $carwashes->nextPageUrl(),
-                    "previousPageUrl" => $carwashes->previousPageUrl(),
-                    "lastPageUrl"     => $carwashes->url($carwashes->lastPage()),
-                ],
+                "times" => $times,
             ]);
         } catch (\Exception $e) {
             return $this->sendError(trans('messages.response.failed'));

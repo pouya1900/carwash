@@ -31,6 +31,7 @@ Route::group(['prefix' => 'other', "namespace" => "Other"], function () {
 
 Route::group(['prefix' => 'carwashes', "namespace" => "Reservation", 'middleware' => "optionalJwtAuth"], function () {
     Route::get('/', 'CarwashController@index');
+    Route::get('/times_list', 'CarwashController@times_list');
     Route::get('/show/{carwash}', 'CarwashController@show');
     Route::get('services/{carwash}', 'CarwashController@services');
     Route::get('products', 'CarwashController@products');
