@@ -54,7 +54,6 @@ class CarController extends Controller
                 "model_id"   => $request->input("model_id"),
                 "color_id"   => $request->input("color_id"),
                 "year"       => $request->input("year"),
-                "is_default" => !$user->cars->count() ? 1 : 0,
             ]);
 
             $images_id = [$request->input("image_id")];
@@ -104,7 +103,6 @@ class CarController extends Controller
         }
     }
 
-
     public function delete(Car $car)
     {
         try {
@@ -112,12 +110,6 @@ class CarController extends Controller
 
             if ($user->id != $car->user->id) {
                 return $this->sendError(trans('messages.crud.illegalAccess'));
-            }
-
-            if ($car->is_default) {
-                $user->cars()->first()->update([
-                    "is_default" => 1,
-                ]);
             }
 
             $car->media()->delete();
@@ -128,4 +120,20 @@ class CarController extends Controller
             return $this->sendError(trans('messages.response.failed'));
         }
     }
+
+    public function clearDefault()
+    {
+        try {
+            $user = $this->request->user;
+
+            $user->cars()->update([
+                "is_default" => 0,
+            ]);
+
+            return $this->sendResponse([], trans("messages.crud.updatedModelSuccess"));
+        } catch (\Exception $e) {
+            return $this->sendError(trans('messages.response.failed'));
+        }
+    }
+
 }
