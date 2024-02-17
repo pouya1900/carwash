@@ -41,7 +41,7 @@ trait UploadUtilsTrait
                     ->save($path . "/" . $image_name);
             } else {
                 ImageManager::gd()->read($file_path)
-                    ->resize($value['width'], null)
+                    ->scale($value['width'])
                     ->save($path . "/" . $image_name);
             }
         }
