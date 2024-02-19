@@ -29,6 +29,8 @@ class ProductResource extends JsonResource
                 "id"       => $this->carwash->id,
                 "title"    => $this->carwash->title,
                 "distance" => $distance ?? "",
+                "lat"      => $this->carwash->lat,
+                "long"     => $this->carwash->long,
             ],
             'category'     => [
                 "id"    => $this->category->id,
