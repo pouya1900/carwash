@@ -79,9 +79,14 @@ class CarwashController extends Controller
                 return $q->wherehas("bookmarks", function ($q) use ($user) {
                     return $q->where("user_id", $user->id);
                 });
-            })->when(!empty($services_id), function ($q) use ($services_id) {
-                return $q->wherehas("services", function ($q) use ($services_id) {
-                    return $q->whereIn("base_id", $services_id);
+            })->when(!empty($services_id), function ($q) use ($services_id, $types_id) {
+                return $q->wherehas("services", function ($q) use ($services_id, $types_id) {
+                    return $q->whereIn("base_id", $services_id)
+                        ->when(!empty($types_id), function ($q) use ($types_id) {
+                            return $q->wherehas("types", function ($q) use ($types_id) {
+                                return $q->whereIn("type_id", $types_id);
+                            });
+                        });
                 });
             })->when(!empty($types_id), function ($q) use ($types_id) {
                 return $q->wherehas("services", function ($q) use ($types_id) {
@@ -93,9 +98,15 @@ class CarwashController extends Controller
                         return $q->whereIn("type_id", $types_id);
                     });
                 });
-            })->when(!empty($is_discount), function ($q) {
-                return $q->wherehas("services", function ($q) {
-                    return $q->where("discount", ">", 0);
+            })->when(!empty($is_discount), function ($q) use ($types_id, $date) {
+                return $q->wherehas("services", function ($q) use ($types_id) {
+                    return $q->when(!empty($types_id), function ($q) use ($types_id) {
+                        return $q->wherehas("types", function ($q) use ($types_id) {
+                            return $q->whereIn("type_id", $types_id);
+                        });
+                    })->where("discount", ">", 0);
+                })->orwherehas("discounts", function ($q) use ($date) {
+                    return $q->where("start", "<=", $date)->where("end", ">", $date)->where("value", ">", 0);
                 });
             })->where("status", "accepted")->paginate($per_page);
 
@@ -163,9 +174,14 @@ class CarwashController extends Controller
                 return $q->wherehas("bookmarks", function ($q) use ($user) {
                     return $q->where("user_id", $user->id);
                 });
-            })->when(!empty($services_id), function ($q) use ($services_id) {
-                return $q->wherehas("services", function ($q) use ($services_id) {
-                    return $q->whereIn("base_id", $services_id);
+            })->when(!empty($services_id), function ($q) use ($services_id, $types_id) {
+                return $q->wherehas("services", function ($q) use ($services_id, $types_id) {
+                    return $q->whereIn("base_id", $services_id)
+                        ->when(!empty($types_id), function ($q) use ($types_id) {
+                            return $q->wherehas("types", function ($q) use ($types_id) {
+                                return $q->whereIn("type_id", $types_id);
+                            });
+                        });
                 });
             })->when(!empty($types_id), function ($q) use ($types_id) {
                 return $q->wherehas("services", function ($q) use ($types_id) {
@@ -177,9 +193,15 @@ class CarwashController extends Controller
                         return $q->whereIn("type_id", $types_id);
                     });
                 });
-            })->when(!empty($is_discount), function ($q) {
-                return $q->wherehas("services", function ($q) {
-                    return $q->where("discount", ">", 0);
+            })->when(!empty($is_discount), function ($q) use ($types_id) {
+                return $q->wherehas("services", function ($q) use ($types_id) {
+                    return $q->when(!empty($types_id), function ($q) use ($types_id) {
+                        return $q->wherehas("types", function ($q) use ($types_id) {
+                            return $q->whereIn("type_id", $types_id);
+                        });
+                    })->where("discount", ">", 0);
+                })->orwherehas("discounts", function ($q) {
+                    return $q->where("value", ">", 0);
                 });
             })->where("status", "accepted")->get();
 
