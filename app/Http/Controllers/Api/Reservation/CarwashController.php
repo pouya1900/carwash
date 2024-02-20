@@ -386,7 +386,7 @@ class CarwashController extends Controller
             $free_times = Helper::getFreeTimes($carwash);
 
             return $this->sendResponse([
-                "free" => $free_times,
+                "times" => $free_times,
             ]);
         } catch (\Exception $e) {
             return $this->sendError(trans('messages.response.failed'));
