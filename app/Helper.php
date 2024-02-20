@@ -3,6 +3,7 @@
 namespace App;
 
 
+use App\Models\Car;
 use App\Models\Discount;
 use Carbon\Carbon;
 
@@ -50,7 +51,8 @@ class Helper
                             if (!$off && $used_times->count() < $number && $start > Carbon::now()) {
                                 $discount = $carwash->discounts()->where("start", "<=", $start)->where("end", ">", $start)->first();
                                 $free_times[$i]['times'][] = [
-                                    "time"     => [$j, $j + 1],
+                                    "start"    => $j,
+                                    "end"      => $j + 1,
                                     "number"   => $number - $used_times->count(),
                                     "total"    => $number,
                                     "discount" => $discount ? $discount->value : 0,
@@ -73,22 +75,25 @@ class Helper
         $day = $date->startOfDay();
 
         $day_week = $day->weekday();
-        $h = "day" . $day_week;
 
         if ($schedule) {
-            $schedule_day = $schedule->$h;
 
-            $schedule_day = json_decode($schedule_day, true);
-            if ($schedule_day) {
-                $number = $schedule_day["number"];
-                foreach ($schedule_day["times"] as $item) {
-                    for ($j = $time; $j < $item[1]; $j++) {
-                        $start = $day->copy()->startOfDay()->addHours($j);
-                        $used_times = $carwash->times()->whereNotNull("reservation_id")->where("start", $start)->get();
-                        $off = $carwash->times()->whereNull("reservation_id")->where("start", "<=", $start)->where("end", ">", $start)->first();
+            for ($i = 0; $i < 7; $i++) {
+                $h = "day" . ($day_week + $i == 7 ? 0 : $day_week + $i);
+                $schedule_day = $schedule->$h;
+                $schedule_day = json_decode($schedule_day, true);
+                if ($schedule_day) {
+                    $number = $schedule_day["number"];
+                    foreach ($schedule_day["times"] as $item) {
+                        $for_start = $i == 0 ? $time : $item[0];
+                        for ($j = $for_start; $j < $item[1]; $j++) {
+                            $start = $day->copy()->startOfDay()->addDays($i)->addHours($j);
+                            $used_times = $carwash->times()->whereNotNull("reservation_id")->where("start", $start)->get();
+                            $off = $carwash->times()->whereNull("reservation_id")->where("start", "<=", $start)->where("end", ">", $start)->first();
 
-                        if (!$off && $used_times->count() < $number) {
-                            return $start;
+                            if (!$off && $used_times->count() < $number && Carbon::now() < $start->copy()->addMinutes(30)) {
+                                return $start;
+                            }
                         }
                     }
                 }
