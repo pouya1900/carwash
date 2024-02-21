@@ -34,8 +34,8 @@ class Helper
             $day_week = $day->weekday();
             $h = "day" . $day_week;
 
-            $free_times[$i]['date'] = $day->format('Y-m-d');
-
+            $free_times[$i]['date'] = jdate(strtotime($day))->format("Y-m-d");
+            $free_times[$i]['times']=[];
             if ($schedule) {
                 $schedule_day = $schedule->$h;
 

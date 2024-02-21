@@ -16,18 +16,19 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'             => $this->id,
-            'mobile'         => $this->mobile,
-            'firstName'      => $this->first_name ?? '',
-            'lastName'       => $this->last_name ?? '',
-            'fullName'       => $this->full_name ?? '',
-            'username'       => $this->username ?? '',
-            "image"          => new ImageResource($this->avatar),
-            'balance'        => $this->balance ?? 0,
-            "pendingGift"    => new GiftResource($this->gifts()->where("status", "pending")->first()),
-            "completedGifts" => GiftResource::collection($this->gifts()->where("status", "completed")->get()),
-            "receivedGifts"  => GiftResource::collection($this->gifts()->where("status", "received")->get()),
-            'createdAt'      => $this->created_at?->format('Y-m-d H:i:s'),
+            'id'                  => $this->id,
+            'mobile'              => $this->mobile,
+            'firstName'           => $this->first_name ?? '',
+            'lastName'            => $this->last_name ?? '',
+            'fullName'            => $this->full_name ?? '',
+            'username'            => $this->username ?? '',
+            'image'               => new ImageResource($this->avatar),
+            'balance'             => $this->balance ?? 0,
+            'pendingGift'         => new GiftResource($this->gifts()->where("status", "pending")->first()),
+            'completedGifts'      => GiftResource::collection($this->gifts()->where("status", "completed")->get()),
+            'receivedGifts'       => GiftResource::collection($this->gifts()->where("status", "received")->get()),
+            'lastScorableReserve' => new ReservationResource($this->reservations()->where("status", "approved")->whereDoesntHave("score")->orderBy('id', 'desc')->first()),
+            'createdAt'           => $this->created_at?->format('Y-m-d H:i:s'),
         ];
     }
 }

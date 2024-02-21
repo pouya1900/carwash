@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Reservation;
 
 use App\Http\Controllers\Controller;
 use App\Models\Gift;
+use App\Models\Reservation;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 
@@ -35,6 +36,11 @@ class ReservationController extends Controller
         } catch (\Exception $e) {
             return $this->sendError(trans('messages.response.failed'));
         }
+    }
+
+    public function cancel(Reservation $reservation)
+    {
+
     }
 
 }

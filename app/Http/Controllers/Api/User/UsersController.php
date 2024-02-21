@@ -25,7 +25,8 @@ class UsersController extends Controller
             return $this->sendResponse([
                 "user" => new UserResource($user),
             ]);
-        } catch (\Exception) {
+        } catch (\Exception $e) {
+            dd($e);
             return $this->sendError(trans('messages.response.failed'));
         }
     }

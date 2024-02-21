@@ -27,6 +27,7 @@ Route::group(['prefix' => 'other', "namespace" => "Other"], function () {
     Route::get('colors', 'CarPropertyController@colors');
     Route::get('car-property', 'CarPropertyController@carProperty');
     Route::get('states', 'PlaceController@states');
+    Route::get('cancellation-rules', 'CancellationController@rules');
 });
 
 Route::group(['prefix' => 'carwashes', "namespace" => "Reservation", 'middleware' => "optionalJwtAuth"], function () {
@@ -47,6 +48,10 @@ Route::group(['prefix' => 'carwashes', "namespace" => "Reservation", 'middleware
 
     Route::get('base_services', 'CarwashController@base_services');
     Route::get('base_items', 'CarwashController@base_items');
+
+    Route::get('reserve', 'ReservationController@reserve');
+    Route::get('cancel/{reservation}', 'ReservationController@cancel');
+
 
 });
 

@@ -34,17 +34,22 @@ class Reservation extends Model
 
     public function services()
     {
-        return $this->morphedByMany(Lock_service::class, "reservationable");
+        return $this->morphedByMany(Lock_service::class, "reservationable",'reservationable');
     }
 
     public function products()
     {
-        return $this->morphedByMany(Lock_product::class, "reservationable");
+        return $this->morphedByMany(Lock_product::class, "reservationable",'reservationable');
     }
 
-    public function scores()
+    public function carwash()
     {
-        return $this->hasMany(Score::class, "reservation_id");
+        return $this->belongsTo(Carwash::class, "carwash_id");
+    }
+
+    public function score()
+    {
+        return $this->hasOne(Score::class, "reservation_id");
     }
 
 }

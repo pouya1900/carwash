@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->unsignedInteger('reservation_id');
             $table->unsignedInteger('reservationable_id');
-            $table->unsignedInteger('reservationable_type');
+            $table->string('reservationable_type');
             $table->timestamps();
         });
     }

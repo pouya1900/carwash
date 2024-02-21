@@ -26,7 +26,7 @@ class Lock_service extends Model
 
     public function reservations()
     {
-        return $this->morphToMany(Reservation::class, "reservationable");
+        return $this->morphToMany(Reservation::class, "reservationable",'reservationable');
     }
 
 }

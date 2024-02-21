@@ -21,9 +21,10 @@ class ReservationResource extends JsonResource
             ],
             "status"   => $this->status,
             "price"    => $this->price,
-            "services" => ServiceResource::collection($this->services),
+            "services" => LockServiceResource::collection($this->services),
             "products" => ProductResource::collection($this->products),
             "address"  => $this->address ? new AddressResource($this->address) : [],
+            "score"    => new ScoreResource($this->score),
         ];
     }
 }
