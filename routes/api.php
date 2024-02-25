@@ -14,11 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-Route::group(['prefix' => 'other', "namespace" => "Other"], function () {
-    Route::post('upload', 'MediaController@storeImage');
-});
-
 Route::group(['prefix' => 'other', "namespace" => "Other"], function () {
     Route::post('upload', 'MediaController@storeImage');
     Route::get('types', 'CarPropertyController@types');
@@ -49,10 +44,6 @@ Route::group(['prefix' => 'carwashes', "namespace" => "Reservation", 'middleware
     Route::get('base_services', 'CarwashController@base_services');
     Route::get('base_items', 'CarwashController@base_items');
 
-    Route::get('reserve', 'ReservationController@reserve');
-    Route::get('cancel/{reservation}', 'ReservationController@cancel');
-
-
 });
 
 Route::group(['prefix' => 'auth', "namespace" => "Auth"], function () {
@@ -75,8 +66,6 @@ Route::group(['prefix' => 'user', 'middleware' => "jwtAuth", "namespace" => "Use
 
     Route::get('/gifts/receive/{gift}', 'UsersController@receive_gift');
 
-    Route::get('/reservations', 'ReservationController@reservations');
-
     Route::get('/addresses', 'AddressController@index');
     Route::post('/addresses/store', 'AddressController@store');
     Route::post('/addresses/update/{address}', 'AddressController@update');
@@ -97,6 +86,12 @@ Route::group(['prefix' => 'user', 'middleware' => "jwtAuth", "namespace" => "Use
     Route::get('/tickets/show/{ticket}', 'TicketController@show');
     Route::post('/tickets/store', 'TicketController@store');
     Route::post('/tickets/update/{ticket}', 'TicketController@update');
+
+    Route::get('/reservations', 'ReservationController@index');
+    Route::post('/reserve', 'ReservationController@reserve');
+    Route::get('/reservation/cancel/{reservation}', 'ReservationController@cancel');
+    Route::post('/reservation/score/{reservation}', 'ReservationController@score');
+
 
 });
 
