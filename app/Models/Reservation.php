@@ -34,12 +34,12 @@ class Reservation extends Model
 
     public function services()
     {
-        return $this->morphedByMany(Lock_service::class, "reservationable",'reservationable');
+        return $this->morphedByMany(Lock_service::class, "reservationable", 'reservationable');
     }
 
     public function products()
     {
-        return $this->morphedByMany(Lock_product::class, "reservationable",'reservationable');
+        return $this->morphedByMany(Lock_product::class, "reservationable", 'reservationable')->withPivot("quantity");
     }
 
     public function carwash()

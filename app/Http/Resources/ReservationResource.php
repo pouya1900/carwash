@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use function Symfony\Component\Translation\t;
 
 class ReservationResource extends JsonResource
 {
@@ -15,16 +16,18 @@ class ReservationResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "carwash"  => [
+            "id"        => $this->id,
+            "carwash"   => [
                 "id"    => $this->carwash->id,
                 "title" => $this->carwash->title,
             ],
-            "status"   => $this->status,
-            "price"    => $this->price,
-            "services" => LockServiceResource::collection($this->services),
-            "products" => ProductResource::collection($this->products),
-            "address"  => $this->address ? new AddressResource($this->address) : [],
-            "score"    => new ScoreResource($this->score),
+            "status"    => $this->status,
+            "price"     => $this->price,
+            "service"   => new LockServiceResource($this->services()->first()),
+            "products"  => LockProductResource::collection($this->products),
+            "address"   => $this->address ? new AddressResource($this->address) : null,
+            "score"     => new ScoreResource($this->score),
+            'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
         ];
     }
 }

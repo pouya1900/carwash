@@ -28,6 +28,10 @@ class CarwashResource extends JsonResource
             if ($first_free_time == $datetime) {
                 $available = 1;
             }
+
+            if ($first_free_time < Carbon::now()->addMinutes(30)) {
+                $available = 1;
+            }
         }
 
         return [
@@ -46,7 +50,7 @@ class CarwashResource extends JsonResource
             "type"               => $this->type ?? "",
             "logo"               => new ImageResource($this->logo),
             "services"           => ServiceResource::collection($this->services),
-            "productsCount"           => $this->products->count(),
+            "productsCount"      => $this->products->count(),
             'createdAt'          => $this->created_at?->format('Y-m-d H:i:s'),
             "isPromoted"         => $this->promoted ? 1 : 0,
             "isCertified"        => $this->certified ? 1 : 0,

@@ -30,7 +30,7 @@ class ReservationController extends Controller
                     "lastPageUrl"     => $reservations->url($reservations->lastPage()),
                 ],
             ]);
-        } catch (\Exception) {
+        } catch (\Exception $e) {
             return $this->sendError(trans('messages.response.failed'));
         }
     }

@@ -23,7 +23,7 @@ class ScoreResource extends JsonResource
             "score"     => $this->rate,
             "comment"   => $this->comment ?? "",
             "reply"     => $this->reply ?? "",
-            "services"  => ServiceTitleResource::collection($this->reservation->services),
+            "service"   => new ServiceTitleResource($this->reservation->services()->first()),
             "createdAt" => $this->created_at?->format('Y-m-d H:i:s'),
         ];
 

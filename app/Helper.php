@@ -35,7 +35,7 @@ class Helper
             $h = "day" . $day_week;
 
             $free_times[$i]['date'] = jdate(strtotime($day))->format("Y-m-d");
-            $free_times[$i]['times']=[];
+            $free_times[$i]['times'] = [];
             if ($schedule) {
                 $schedule_day = $schedule->$h;
 
@@ -73,19 +73,18 @@ class Helper
         $schedule = $carwash->schedule;
 
         $day = $date->startOfDay();
-
         $day_week = $day->weekday();
 
         if ($schedule) {
 
             for ($i = 0; $i < 7; $i++) {
-                $h = "day" . ($day_week + $i == 7 ? 0 : $day_week + $i);
+                $h = "day" . ($day_week + $i >= 7 ? $day_week + $i - 7 : $day_week + $i);
                 $schedule_day = $schedule->$h;
                 $schedule_day = json_decode($schedule_day, true);
                 if ($schedule_day) {
                     $number = $schedule_day["number"];
                     foreach ($schedule_day["times"] as $item) {
-                        $for_start = $i == 0 ? $time : $item[0];
+                        $for_start = ($i == 0 ? max($time, $item[0]) : $item[0]);
                         for ($j = $for_start; $j < $item[1]; $j++) {
                             $start = $day->copy()->startOfDay()->addDays($i)->addHours($j);
                             $used_times = $carwash->times()->whereNotNull("reservation_id")->where("start", $start)->get();
