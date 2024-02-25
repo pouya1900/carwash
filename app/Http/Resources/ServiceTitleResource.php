@@ -20,7 +20,7 @@ class ServiceTitleResource extends JsonResource
 
         return [
             "id"    => $this->id,
-            "title" => $this->base->title,
+            "title" => $this->title,
         ];
     }
 }

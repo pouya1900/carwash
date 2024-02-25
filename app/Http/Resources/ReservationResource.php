@@ -20,6 +20,7 @@ class ReservationResource extends JsonResource
             "carwash"   => [
                 "id"    => $this->carwash->id,
                 "title" => $this->carwash->title,
+                "logo"  => new ImageResource($this->carwash->logo),
             ],
             "status"    => $this->status,
             "price"     => $this->price,
