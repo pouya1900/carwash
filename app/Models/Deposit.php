@@ -11,15 +11,16 @@ class Deposit extends Model
 
     protected $fillable = [
         "bank_id",
-        "carwash_id",
+        "depositable_id",
+        "depositable_type",
         "total",
         "status",
         "message",
     ];
 
-    public function carwash()
+    public function depositable()
     {
-        return $this->belongsTo(Carwash::class, "carwash_id");
+        return $this->morphTo("depositable");
     }
 
     public function bank()

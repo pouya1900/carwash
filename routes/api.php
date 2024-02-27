@@ -95,6 +95,9 @@ Route::group(['prefix' => 'user', 'middleware' => "jwtAuth", "namespace" => "Use
     Route::get('/deposits', 'DepositController@index');
     Route::post('/deposits/store', 'DepositController@store');
 
+    Route::get('/banks', 'BankController@index');
+    Route::post('/banks/store', 'BankController@store');
+
 });
 
 

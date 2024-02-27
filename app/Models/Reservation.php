@@ -16,6 +16,7 @@ class Reservation extends Model
         "price",
         "address_id",
         "car_id",
+        "type_id",
     ];
 
     public function payment()
@@ -56,6 +57,11 @@ class Reservation extends Model
     public function car()
     {
         return $this->belongsTo(Car::class, "car_id");
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(Type::class, "type_id");
     }
 
     public function time()

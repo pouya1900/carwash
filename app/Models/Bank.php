@@ -10,15 +10,16 @@ class Bank extends Model
     use HasFactory;
 
     protected $fillable = [
-        "carwash_id",
+        "bankable_id",
+        "bankable_type",
         "name",
         "card",
         "shaba",
     ];
 
-    public function carwash()
+    public function bankable()
     {
-        return $this->belongsTo(Carwash::class, "carwash_id");
+        return $this->morphTo("bankable");
     }
 
     public function deposits()

@@ -121,4 +121,14 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Gift::class, "user_id");
     }
 
+    public function deposits()
+    {
+        return $this->morphMany(Deposit::class, "depositable");
+    }
+
+    public function banks()
+    {
+        return $this->morphMany(Bank::class, "bankable");
+    }
+
 }

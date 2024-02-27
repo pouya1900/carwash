@@ -30,6 +30,7 @@ class ReservationResource extends JsonResource
             "score"     => new ScoreResource($this->score),
             "time"      => new UsedTimeResource($this->time),
             "car"       => new CarResource($this->car),
+            "type"      => new TypeResource($this->type),
             "payment"   => new PaymentResource($this->payment),
             'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
         ];
