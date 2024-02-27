@@ -22,7 +22,7 @@ Route::group(['prefix' => 'other', "namespace" => "Other"], function () {
     Route::get('colors', 'CarPropertyController@colors');
     Route::get('car-property', 'CarPropertyController@carProperty');
     Route::get('states', 'PlaceController@states');
-    Route::get('cancellation-rules', 'CancellationController@rules');
+    Route::get('cancellation-rules/{reservation}', 'CancellationController@rules');
 });
 
 Route::group(['prefix' => 'carwashes', "namespace" => "Reservation", 'middleware' => "optionalJwtAuth"], function () {
@@ -92,6 +92,8 @@ Route::group(['prefix' => 'user', 'middleware' => "jwtAuth", "namespace" => "Use
     Route::get('/reservation/cancel/{reservation}', 'ReservationController@cancel');
     Route::post('/reservation/score/{reservation}', 'ReservationController@score');
 
+    Route::get('/deposits', 'DepositController@index');
+    Route::post('/deposits/store', 'DepositController@store');
 
 });
 

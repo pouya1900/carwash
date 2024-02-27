@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -51,9 +52,10 @@ trait ResponseUtilsTrait
         $status = 0;
 
         $result = [
-            'status'  => $status,
-            'message' => strval($message),
-            'data'    => $data,
+            'status'   => $status,
+            'message'  => strval($message),
+            "dateTime" => Carbon::now(),
+            'data'     => $data,
         ];
 
         return response()->json(

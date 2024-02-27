@@ -28,6 +28,9 @@ class ReservationResource extends JsonResource
             "products"  => LockProductResource::collection($this->products),
             "address"   => $this->address ? new AddressResource($this->address) : null,
             "score"     => new ScoreResource($this->score),
+            "time"      => new UsedTimeResource($this->time),
+            "car"       => new CarResource($this->car),
+            "payment"   => new PaymentResource($this->payment),
             'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
         ];
     }

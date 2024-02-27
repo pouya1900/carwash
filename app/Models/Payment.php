@@ -12,10 +12,12 @@ class Payment extends Model
     protected $fillable = [
         "reservation_id",
         "user_id",
+        "online",
         "wallet",
         "cash",
         "total",
         "coupon_code",
+        "coupon_value",
         "status",
     ];
 

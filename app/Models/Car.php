@@ -71,4 +71,9 @@ class Car extends Model
 
     }
 
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class, "car_id");
+    }
+
 }

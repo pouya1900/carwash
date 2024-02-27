@@ -122,6 +122,10 @@ return [
         'notCompleted'    => 'مراحل جایزه هنوز کامل نشده است..',
         'alreadyReceived' => 'هدیه قبلا دریافت شده است.',
     ],
+    'reservation' => [
+        "cantCancel"         => "سفارش قابل لغو شدن نیست.",
+        "canceledSuccessful" => "سفارش با موفقیت لغو شد.",
+    ],
 ]
 ?>
 

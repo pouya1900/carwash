@@ -17,6 +17,7 @@ class Lock_product extends Model
         "title",
         "description",
         "price",
+        "discount",
     ];
 
     public function carwash()

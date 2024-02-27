@@ -15,6 +15,7 @@ class Reservation extends Model
         "status",
         "price",
         "address_id",
+        "car_id",
     ];
 
     public function payment()
@@ -50,6 +51,16 @@ class Reservation extends Model
     public function score()
     {
         return $this->hasOne(Score::class, "reservation_id");
+    }
+
+    public function car()
+    {
+        return $this->belongsTo(Car::class, "car_id");
+    }
+
+    public function time()
+    {
+        return $this->hasOne(Time_table::class, "reservation_id");
     }
 
 }
