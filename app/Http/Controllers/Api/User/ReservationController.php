@@ -28,7 +28,7 @@ class ReservationController extends Controller
 
             $per_page = $this->getPerPage();
 
-            $reservations = $user->reservations()->paginate($per_page);
+            $reservations = $user->reservations()->where("status", "!=", "created")->paginate($per_page);
 
             return $this->sendResponse([
                 "reservations" => ReservationResource::collection($reservations),
