@@ -52,7 +52,7 @@ class ReservationController extends Controller
             $setting = Setting::first();
 
             $carwash_id = $this->request->input("carwash_id");
-            $car_id = $this->request->input("car_id");
+            $car_id = $this->request->input("vehicle_id");
             $type_id = $this->request->input("type_id");
             $service_id = $this->request->input("service_id");
             $products_model = $this->request->input("products");
