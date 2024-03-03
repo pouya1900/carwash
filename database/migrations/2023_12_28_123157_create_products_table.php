@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->unsignedInteger('carwash_id')->comment('تعیین کارواش');
             $table->string('title')->comment('عنوان');
-            $table->string('description')->comment('توضیحات');
+            $table->text('description')->comment('توضیحات');
             $table->unsignedInteger('price')->comment('قیمت');
             $table->timestamps();
         });

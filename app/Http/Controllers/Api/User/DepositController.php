@@ -41,8 +41,8 @@ class DepositController extends Controller
             $amount = $this->request->input("amount");
             $bank_id = $this->request->input("bank_id");
 
-            if ($user->balance < intval($amount)) {
-                return $this->sendError(trans('messages.response.failed'));
+            if ($user->balance - $user->gift_balance < intval($amount)) {
+                return $this->sendError(trans('messages.payment.insufficientError'));
             }
 
             $deposit = $user->deposits()->create([
@@ -50,6 +50,10 @@ class DepositController extends Controller
                 "total"   => $amount,
                 "status"  => "requested",
                 "message" => "",
+            ]);
+
+            $user->update([
+                "balance" => $user->balance - $amount,
             ]);
 
             return $this->sendResponse([

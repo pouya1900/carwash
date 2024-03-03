@@ -157,7 +157,7 @@ class ReservationController extends Controller
                 }
             }
 
-            $reservation->payment()->create([
+            $payment = $reservation->payment()->create([
                 "user_id"      => $user->id,
                 "wallet"       => $wallet,
                 "online"       => $online,
@@ -166,6 +166,18 @@ class ReservationController extends Controller
                 "coupon_value" => 0,
                 "coupon_code"  => "",
                 "status"       => "pending",
+            ]);
+
+
+//            this section should transfer to final payment api
+
+            $payment->update([
+                "status" => "completed",
+            ]);
+
+            $user->update([
+                "balance"      => $user->balance - $payment->wallet,
+                "gift_balance" => max($user->gift_balance - $payment->wallet, 0),
             ]);
 
             if ($gift = $user->gifts()->where("status", "pending")->first()) {
@@ -181,6 +193,8 @@ class ReservationController extends Controller
                     "status" => "pending",
                 ]);
             }
+//            this section should transfer to final payment api
+
 
             return $this->sendResponse([
                 "reservation" => new ReservationResource($reservation),

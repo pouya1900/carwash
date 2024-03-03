@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -15,6 +16,12 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
+        $x = $this->reservations()->where("status", "approved")->whereDoesntHave("score")->orderBy('id', 'desc')->first();
+        $last_scorable_reserve = null;
+        if ($x->time->start < Carbon::now()->subHours($x->services()->first()->time)) {
+            $last_scorable_reserve = $x;
+        }
+
         return [
             'id'                  => $this->id,
             'mobile'              => $this->mobile,
@@ -24,10 +31,11 @@ class UserResource extends JsonResource
             'username'            => $this->username ?? '',
             'image'               => new ImageResource($this->avatar),
             'balance'             => $this->balance ?? 0,
+            'giftBalance'         => $this->gift_balance ?? 0,
             'pendingGift'         => new GiftResource($this->gifts()->where("status", "pending")->first()),
             'completedGifts'      => GiftResource::collection($this->gifts()->where("status", "completed")->get()),
             'receivedGifts'       => GiftResource::collection($this->gifts()->where("status", "received")->get()),
-            'lastScorableReserve' => new ReservationResource($this->reservations()->where("status", "approved")->whereDoesntHave("score")->orderBy('id', 'desc')->first()),
+            'lastScorableReserve' => new ReservationResource($last_scorable_reserve),
             'createdAt'           => $this->created_at?->format('Y-m-d H:i:s'),
         ];
     }

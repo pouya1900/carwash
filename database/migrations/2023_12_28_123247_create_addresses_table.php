@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->string('street');
             $table->string('lat');
             $table->string('long');
-            $table->string('description');
+            $table->text('description');
             $table->string('pluck');
             $table->string('floor');
             $table->timestamps();

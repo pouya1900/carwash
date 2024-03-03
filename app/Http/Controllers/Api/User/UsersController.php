@@ -26,7 +26,6 @@ class UsersController extends Controller
                 "user" => new UserResource($user),
             ]);
         } catch (\Exception $e) {
-            dd($e);
             return $this->sendError(trans('messages.response.failed'));
         }
     }
@@ -120,7 +119,8 @@ class UsersController extends Controller
             ]);
 
             $user->update([
-                "balance" => $user->balance + $gift->value,
+                "balance"      => $user->balance + $gift->value,
+                "gift_balance" => $user->gift_balance + $gift->value,
             ]);
 
             return $this->sendResponse([], trans("messages.gift.success", ["value" => $gift->value]));

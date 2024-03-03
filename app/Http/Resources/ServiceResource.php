@@ -31,7 +31,7 @@ class ServiceResource extends JsonResource
             "description"       => $this->base->description ? json_decode($this->base->description, true) : [],
             "items"             => BaseItemResource::collection($this->items),
             "type"              => TypeResource::collection($this->types),
-            "time"              => $this->time,
+            "duration"          => $this->time,
             'carwash'           => [
                 "id"    => $this->carwash->id,
                 "title" => $this->carwash->title,

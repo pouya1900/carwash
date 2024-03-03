@@ -50,11 +50,10 @@ trait ResponseUtilsTrait
         $message = $message ?? trans('messages.response.success');
         $httpCode = 200;
         $status = 0;
-
         $result = [
             'status'   => $status,
             'message'  => strval($message),
-            "dateTime" => Carbon::now(),
+            "dateTime" => Carbon::now()->format("Y-m-d H:i:s"),
             'data'     => $data,
         ];
 
