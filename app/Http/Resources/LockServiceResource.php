@@ -19,7 +19,7 @@ class LockServiceResource extends JsonResource
             "title"       => $this->title,
             "description" => $this->description ? json_decode($this->description, true) : [],
             "items"       => $this->items ? json_decode($this->items, true) : [],
-            "time"        => $this->time,
+            "duration"    => $this->time,
             'carwash'     => [
                 "id"    => $this->carwash->id,
                 "title" => $this->carwash->title,
