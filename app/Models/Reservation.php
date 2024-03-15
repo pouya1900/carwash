@@ -17,11 +17,12 @@ class Reservation extends Model
         "address_id",
         "car_id",
         "type_id",
+        "payment_id",
     ];
 
     public function payment()
     {
-        return $this->hasOne(Payment::class, "reservation_id");
+        return $this->belongsTo(Payment::class, "payment_id");
     }
 
     public function user()

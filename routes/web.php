@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', 'HomeController@index')->name("home");
+
+
+Route::group(['prefix' => 'payment', "namespace" => "Payment"], function () {
+
+    Route::get('balance/verify/{payment}', 'PaymentController@verifyBalance')->name("verifyPayment");
+    Route::get('reserve/verify/{payment}', 'PaymentController@verifyReserve')->name("reserveVerifyPayment");
+
 });

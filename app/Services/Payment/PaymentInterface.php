@@ -8,8 +8,8 @@ interface PaymentInterface
 {
     public function __construct();
 
-    public function createPayment();
+    public function createPayment($amount,$callback_url);
 
-    public function verifyPayment();
+    public function verifyPayment($status, $authority, $payment);
 
 }

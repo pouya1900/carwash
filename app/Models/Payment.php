@@ -10,7 +10,6 @@ class Payment extends Model
     use HasFactory;
 
     protected $fillable = [
-        "reservation_id",
         "user_id",
         "online",
         "wallet",
@@ -19,11 +18,12 @@ class Payment extends Model
         "coupon_code",
         "coupon_value",
         "status",
+        "ref_id",
     ];
 
-    public function reservation()
+    public function reservations()
     {
-        return $this->belongsTo(Reservation::class, "reservation_id");
+        return $this->hasMany(Reservation::class, "payment_id");
     }
 
     public function user()

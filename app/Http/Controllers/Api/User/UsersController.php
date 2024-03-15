@@ -8,7 +8,8 @@ use App\Http\Requests\UserRequest;
 use App\Http\Resources\ReservationResource;
 use App\Http\Resources\UserResource;
 use App\Models\Gift;
-use App\Services\Payment\Payment;
+use App\Models\Payment;
+use App\Services\Payment\PaymentGateway;
 use App\Services\Payment\Zarinpal;
 use App\Traits\ResponseUtilsTrait;
 use App\Traits\UploadUtilsTrait;
@@ -63,20 +64,32 @@ class UsersController extends Controller
                 return $this->sendError(trans('messages.payment.amountInvalid'));
             }
 
-            $payment = new Payment(new Zarinpal());
+            $payment = $user->payments()->create([
+                "wallet"       => 0,
+                "online"       => $amount,
+                "cash"         => 0,
+                "total"        => $amount,
+                "coupon_value" => 0,
+                "coupon_code"  => "",
+                "status"       => "pending",
+            ]);
 
-            $response = $payment->createPayment();
+            $payment_instance = new PaymentGateway(new Zarinpal());
+
+            $callback_url = route("verifyPayment", $payment->id);
+
+            $response = $payment_instance->createPayment($amount, $callback_url);
+
+            if ($response["status"]) {
+                return $this->sendError(trans('messages.payment.makePaymentFail'));
+            }
+
             return $this->sendResponse([
-                "link" => "https://paymentpageexample",
+                "link" => $response["link"],
             ]);
         } catch (\Exception) {
-            return $this->sendError(trans('messages.response.failed'));
+            return $this->sendError(trans('messages.payment.makePaymentFail'));
         }
-    }
-
-    public function verifyPayment()
-    {
-        dd($this->request->all());
     }
 
     public function inactive()

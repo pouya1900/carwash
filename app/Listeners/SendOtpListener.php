@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Services\sms\Kavenegar;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -22,5 +23,10 @@ class SendOtpListener
     {
         $mobile = $event->mobile;
         $code = $event->code;
+
+        $kavenegar = new Kavenegar();
+
+        $kavenegar->otp($mobile, $code);
+
     }
 }
