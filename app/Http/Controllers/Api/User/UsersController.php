@@ -142,4 +142,21 @@ class UsersController extends Controller
         }
     }
 
+    public function firebaseUpdate()
+    {
+        try {
+            $user = $this->request->user;
+
+            $user->update([
+                'firebase_token' => $this->request->input("firebase_token"),
+            ]);
+
+            return $this->sendResponse([
+                "user" => new UserResource($user),
+            ], trans("messages.crud.updatedModelSuccess"));
+        } catch (\Exception) {
+            return $this->sendError(trans('messages.response.failed'));
+        }
+    }
+
 }
