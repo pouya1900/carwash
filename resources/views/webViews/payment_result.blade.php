@@ -17,7 +17,8 @@
             @endif
 
             <div class="">
-                <a href="#" class="btn btn-secondary return_to_app">بازگشت به برنامه</a>
+                <a href="{{route("deep_link",["refId"=>$ref_id , "amount"=>$amount])}}"
+                   class="btn btn-secondary return_to_app">بازگشت به برنامه</a>
             </div>
         </div>
 

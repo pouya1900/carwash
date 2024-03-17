@@ -22,3 +22,6 @@ Route::group(['prefix' => 'payment', "namespace" => "Payment"], function () {
     Route::get('reserve/verify/{payment}', 'PaymentController@verifyReserve')->name("reserveVerifyPayment");
 
 });
+
+
+Route::get('/payment/reserve/success')->name("deep_link");

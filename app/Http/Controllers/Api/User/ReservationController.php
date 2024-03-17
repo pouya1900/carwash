@@ -52,6 +52,7 @@ class ReservationController extends Controller
     {
         try {
             $user = $this->request->user;
+            $setting = Setting::first();
 
             $total_price_all = 0;
             $use_balance = $this->request->input("use_balance");
@@ -203,13 +204,49 @@ class ReservationController extends Controller
                     return $this->sendError(trans('messages.payment.makePaymentFail'));
                 }
                 $link = $response["link"];
-            } else {
-                $link = $callback_url;
+
+                return $this->sendResponse([
+                    "needPayment" => 1,
+                    "link"        => $link,
+                ]);
+
             }
 
+            $payment->update([
+                "status" => "completed",
+                "ref_id" => "1",
+            ]);
+
+            $user->update([
+                "balance"      => $user->balance - $payment->wallet,
+                "gift_balance" => max($user->gift_balance - $payment->wallet, 0),
+            ]);
+
+            if ($gift = $user->gifts()->where("status", "pending")->first()) {
+                $gift->update([
+                    "number" => $gift->number + 1,
+                    "status" => $gift->number + 1 == $gift->total ? "completed" : "pending",
+                ]);
+            } else {
+                $user->gifts()->create([
+                    "number" => 1,
+                    "total"  => $setting->gift_number,
+                    "value"  => $setting->gift_value,
+                    "status" => "pending",
+                ]);
+            }
+
+            $reservations = $payment->reservations;
+
+            foreach ($reservations as $reservation) {
+                $reservation->update([
+                    "status" => "approved",
+                ]);
+            }
 
             return $this->sendResponse([
-                "link" => $link,
+                "needPayment"  => 0,
+                "reservations" => ReservationResource::collection($reservations),
             ]);
         } catch (\Exception $e) {
             return $this->sendError(trans('messages.response.failed'));
