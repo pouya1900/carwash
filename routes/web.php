@@ -24,4 +24,5 @@ Route::group(['prefix' => 'payment', "namespace" => "Payment"], function () {
 });
 
 
-Route::get('/payment/reserve/success')->name("deep_link");
+Route::get('/payment/reserve/success')->name("deep_link_success");
+Route::get('/payment/reserve/failed')->name("deep_link_failed");

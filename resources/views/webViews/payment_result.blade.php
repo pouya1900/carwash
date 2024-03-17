@@ -12,14 +12,21 @@
                 @else
                     <p class="success_payment">شماره تراکنش : {{$ref_id}}</p>
                 @endif
+
+                <div class="">
+                    <a href="{{route("deep_link_success",["refId"=>$ref_id , "amount"=>$amount])}}"
+                       class="btn btn-secondary return_to_app">بازگشت به برنامه</a>
+                </div>
             @else
                 <p class="failed_payment">@lang('messages.payment.verifyFailed')</p>
+
+                <div class="">
+                    <a href="{{route("deep_link_failed",["amount"=>$amount])}}"
+                       class="btn btn-secondary return_to_app">بازگشت به برنامه</a>
+                </div>
             @endif
 
-            <div class="">
-                <a href="{{route("deep_link",["refId"=>$ref_id , "amount"=>$amount])}}"
-                   class="btn btn-secondary return_to_app">بازگشت به برنامه</a>
-            </div>
+
         </div>
 
 
