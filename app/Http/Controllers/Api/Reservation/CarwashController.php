@@ -338,7 +338,7 @@ class CarwashController extends Controller
         try {
             $per_page = $this->getPerPage();
 
-            $services = $carwash->services()->paginate($per_page);
+            $services = $carwash->services()->orderBy("is_main", 'desc')->paginate($per_page);
 
             return $this->sendResponse([
                 "services"   => ServiceResource::collection($services),

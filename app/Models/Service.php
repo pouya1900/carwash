@@ -17,6 +17,7 @@ class Service extends Model
         "status",
         "price",
         "discount",
+        "is_main",
     ];
 
     public function carwash()

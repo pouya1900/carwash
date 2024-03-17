@@ -51,6 +51,7 @@ class ServiceController extends Controller
                 "status"   => $request->input("status"),
                 "price"    => $request->input("price"),
                 "discount" => $request->input("discount") ?? 0,
+                "is_main"  => $request->input("is_main") ?? 0,
             ]);
 
             foreach ($request->input("items") as $item_id) {
@@ -91,6 +92,7 @@ class ServiceController extends Controller
                 "status"   => $request->input("status"),
                 "price"    => $request->input("price"),
                 "discount" => $request->input("discount") ?? 0,
+                "is_main"  => $request->input("is_main") ?? 0,
             ]);
 
             $service->items()->detach();
