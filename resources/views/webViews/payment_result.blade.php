@@ -14,6 +14,9 @@
                 @endif
 
                 <div class="">
+                    <p id="return_to_app">اگر تا <span data-time="5" id="return_to_app_second">5</span> ثانیه دیگر به
+                        طور خودکار به برنامه بازنگشتید دکمه زیر را لمس
+                        کنید.</p>
                     <a href="{{route("deep_link_success",["refId"=>$ref_id , "amount"=>$amount])}}"
                        class="btn btn-secondary return_to_app">بازگشت به برنامه</a>
                 </div>
