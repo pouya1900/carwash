@@ -12,7 +12,7 @@ class Zarinpal implements PaymentInterface
 
     public function createPayment($amount, $callback_url)
     {
-        $amount = 2000;
+        $amount = 1000;
         $ch = curl_init();
         $service_url = "https://api.zarinpal.com/pg/v4/payment/request.json";
         $post_data = [
@@ -52,7 +52,7 @@ class Zarinpal implements PaymentInterface
 
     public function verifyPayment($status, $authority, $amount)
     {
-        $amount = 2000;
+        $amount = 1000;
         if (!$status || $status != "OK") {
             return ["status" => 2];
         }
