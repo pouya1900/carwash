@@ -15,12 +15,13 @@ class PaymentController extends Controller
     public function verifyBalance(Payment $payment)
     {
         $ref_id = 0;
+        $amount = $payment->online;
 
         try {
 
             if ($payment->status != "pending") {
                 $ref_id = $payment->ref_id;
-                return view('webViews.payment_result', compact('ref_id'));
+                return view('webViews.payment_result', compact('ref_id', 'amount'));
             }
 
             $status = $this->request->input("Status");
@@ -33,10 +34,10 @@ class PaymentController extends Controller
                 $payment->update([
                     "status" => "failed",
                 ]);
-                return view('webViews.payment_result', compact('ref_id'));
+                return view('webViews.payment_result', compact('ref_id', 'amount'));
             } elseif ($response["status"] == 1) {
                 $ref_id = $response["ref_id"];
-                return view('webViews.payment_result', compact('ref_id'));
+                return view('webViews.payment_result', compact('ref_id', 'amount'));
             }
 
             $ref_id = $response["ref_id"];
@@ -50,12 +51,11 @@ class PaymentController extends Controller
             $user->update([
                 "balance" => $user->balance + $payment->online,
             ]);
-            $amount = $payment->online;
 
             return view('webViews.payment_result', compact('ref_id', 'amount'));
 
         } catch (\Exception $e) {
-            return view('webViews.payment_result', compact('ref_id'));
+            return view('webViews.payment_result', compact('ref_id', 'amount'));
         }
     }
 
