@@ -12,14 +12,29 @@ class FireBase
         $this->token = env("FIREBASE_TOKEN");
     }
 
-    public function sendNotification($to, $message)
+    public function sendNotification($to, $title, $message)
     {
         $service_url = "https://fcm.googleapis.com/fcm/send";
 
+        $id = rand(1, 10000);
+
         $post_data = [
-            "to"   => $to,
+            "to"           => $to,
+            "notification" => [
+                "OrganizationId"    => "2",
+                "content_available" => true,
+                "priority"          => "high",
+                "subtitle"          => "Elementary School",
+            ],
+
             "data" => [
-                "message" => $message,
+                "id"        => $id,
+                "type"      => "alarm",
+                "title"     => $title,
+                "body"      => $message,
+                "service"   => "",
+                "datetime"  => "2024-04-05 11:00:00",
+                "createdAt" => "2024-04-03 16:00:00",
             ],
         ];
         $ch = curl_init();
@@ -42,6 +57,8 @@ class FireBase
         $result = curl_exec($ch);
         $response = json_decode($result, true);
         curl_close($ch);
+
+        dd($result);
     }
 
 }
