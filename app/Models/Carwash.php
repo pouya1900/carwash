@@ -17,6 +17,7 @@ class Carwash extends Authenticatable implements JWTSubject
 
     protected $fillable = [
         "title",
+        "balance",
         "lat",
         "long",
         'uuid',
@@ -76,12 +77,12 @@ class Carwash extends Authenticatable implements JWTSubject
         return $this->hasOne(Schedule::class, "carwash_id");
     }
 
-    public function city()
+    public function city(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(City::class, "city_id");
     }
 
-    public function state()
+    public function state(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(State::class, "state_id");
     }
@@ -91,7 +92,7 @@ class Carwash extends Authenticatable implements JWTSubject
         return $this->morphMany(Media::class, 'mediable');
     }
 
-    public function getLogoAttribute()
+    public function getLogoAttribute(): array
     {
         $image = $this->media()->where('model_type', 'carwashLogo')
             ->first();
@@ -108,7 +109,7 @@ class Carwash extends Authenticatable implements JWTSubject
         return ["paths" => $image_model, "model" => null];
     }
 
-    public function getImagesAttribute()
+    public function getImagesAttribute(): array
     {
         $images = $this->media()->where('model_type', 'carwashImages')
             ->get();
@@ -126,28 +127,28 @@ class Carwash extends Authenticatable implements JWTSubject
         return $exist_images;
     }
 
-    public function likes()
+    public function likes(): \Illuminate\Database\Eloquent\Relations\MorphMany
     {
         return $this->morphMany(Like::class, "likeable");
     }
 
-    public function bookmarks()
+    public function bookmarks(): \Illuminate\Database\Eloquent\Relations\MorphMany
     {
         return $this->morphMany(Bookmark::class, "bookmarkable");
     }
 
-    public function scores()
+    public function scores(): \Illuminate\Database\Eloquent\Relations\MorphMany
     {
         return $this->morphMany(Score::class, "scorable");
     }
 
 
-    public function times()
+    public function times(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Time_table::class, 'carwash_id');
     }
 
-    public function discounts()
+    public function discounts(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Discount::class, "carwash_id");
     }
@@ -157,9 +158,18 @@ class Carwash extends Authenticatable implements JWTSubject
         return $this->scores()->average("rate");
     }
 
-    public function deposits()
+    public function deposits(): \Illuminate\Database\Eloquent\Relations\MorphMany
     {
         return $this->morphMany(Deposit::class, "depositable");
     }
 
+    public function releases(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Release::class, "carwash_id");
+    }
+
+    public function notifications()
+    {
+        return $this->morphMany(Notification::class, 'notifiable');
+    }
 }

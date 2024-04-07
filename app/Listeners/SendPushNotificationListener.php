@@ -22,11 +22,12 @@ class SendPushNotificationListener
     public function handle(object $event): void
     {
         $to = $event->to;
+        $title = $event->title;
         $message = $event->message;
 
         $fire_base = new FireBase();
 
-        $fire_base->sendNotification($to, $message);
+        $fire_base->sendNotification($to, $title, $message);
 
     }
 }

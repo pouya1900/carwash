@@ -206,8 +206,9 @@ class ReservationController extends Controller
                 $link = $response["link"];
 
                 return $this->sendResponse([
-                    "needPayment" => 1,
-                    "link"        => $link,
+                    "needPayment"   => 1,
+                    "link"          => $link,
+                    "reservationId" => $reservation->id,
                 ]);
 
             }

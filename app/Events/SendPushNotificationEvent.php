@@ -17,13 +17,15 @@ class SendPushNotificationEvent
 
     public $to;
     public $message;
+    public $title;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($to, $message)
+    public function __construct($to, $title, $message)
     {
         $this->to = $to;
+        $this->title = $title;
         $this->message = $message;
     }
 

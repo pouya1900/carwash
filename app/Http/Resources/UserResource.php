@@ -23,20 +23,22 @@ class UserResource extends JsonResource
         }
 
         return [
-            'id'                  => $this->id,
-            'mobile'              => $this->mobile,
-            'firstName'           => $this->first_name ?? '',
-            'lastName'            => $this->last_name ?? '',
-            'fullName'            => $this->full_name ?? '',
-            'username'            => $this->username ?? '',
-            'image'               => new ImageResource($this->avatar),
-            'balance'             => $this->balance ?? 0,
-            'giftBalance'         => $this->gift_balance ?? 0,
-            'pendingGift'         => new GiftResource($this->gifts()->where("status", "pending")->first()),
-            'completedGifts'      => GiftResource::collection($this->gifts()->where("status", "completed")->get()),
-            'receivedGifts'       => GiftResource::collection($this->gifts()->where("status", "received")->get()),
-            'lastScorableReserve' => new ReservationResource($last_scorable_reserve),
-            'createdAt'           => $this->created_at?->format('Y-m-d H:i:s'),
+            'id'                    => $this->id,
+            'mobile'                => $this->mobile,
+            'firstName'             => $this->first_name ?? '',
+            'lastName'              => $this->last_name ?? '',
+            'fullName'              => $this->full_name ?? '',
+            'username'              => $this->username ?? '',
+            'firebase'              => $this->firebase_token ?? '',
+            'image'                 => new ImageResource($this->avatar),
+            'balance'               => $this->balance ?? 0,
+            'giftBalance'           => $this->gift_balance ?? 0,
+            'pendingGift'           => new GiftResource($this->gifts()->where("status", "pending")->first()),
+            'completedGifts'        => GiftResource::collection($this->gifts()->where("status", "completed")->get()),
+            'receivedGifts'         => GiftResource::collection($this->gifts()->where("status", "received")->get()),
+            'lastScorableReserve'   => new ReservationResource($last_scorable_reserve),
+            'lastApprovedReserveId' => $this->reservation()->where("status", "approved")->orderBy('id', 'desc')->first(),
+            'createdAt'             => $this->created_at?->format('Y-m-d H:i:s'),
         ];
     }
 }

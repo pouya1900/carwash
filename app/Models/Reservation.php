@@ -18,6 +18,7 @@ class Reservation extends Model
         "car_id",
         "type_id",
         "payment_id",
+        "notif",
     ];
 
     public function payment()

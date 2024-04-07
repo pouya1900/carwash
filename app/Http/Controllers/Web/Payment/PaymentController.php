@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Web\Payment;
 
+use App\Events\SendPushNotificationEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use App\Models\Setting;
 use App\Services\Payment\PaymentGateway;
 use App\Services\Payment\Zarinpal;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Event;
 
 class PaymentController extends Controller
 {
@@ -138,6 +140,12 @@ class PaymentController extends Controller
             }
             $ref_id = $response["ref_id"];
             $amount = $payment->online;
+
+//            its temporary
+            Event::dispatch(new SendPushNotificationEvent($user->firebase_token, "رزرو", "رزرو انجام شد."));
+//            its temporary
+
+
             return view('webViews.payment_result', compact('ref_id', 'amount'));
 
         } catch (\Exception $e) {
