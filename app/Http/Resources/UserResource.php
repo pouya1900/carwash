@@ -29,7 +29,7 @@ class UserResource extends JsonResource
             'lastName'              => $this->last_name ?? '',
             'fullName'              => $this->full_name ?? '',
             'username'              => $this->username ?? '',
-            'firebase'              => $this->firebase_token ?? '',
+            'ftm_token'             => $this->firebase_token ?? '',
             'image'                 => new ImageResource($this->avatar),
             'balance'               => $this->balance ?? 0,
             'giftBalance'           => $this->gift_balance ?? 0,
