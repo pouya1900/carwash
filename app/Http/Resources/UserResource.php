@@ -37,7 +37,7 @@ class UserResource extends JsonResource
             'completedGifts'        => GiftResource::collection($this->gifts()->where("status", "completed")->get()),
             'receivedGifts'         => GiftResource::collection($this->gifts()->where("status", "received")->get()),
             'lastScorableReserve'   => new ReservationResource($last_scorable_reserve),
-            'lastApprovedReserveId' => $this->reservation()->where("status", "approved")->orderBy('id', 'desc')->first(),
+            'lastApprovedReserveId' => $this->reservations()->where("status", "approved")->orderBy('id', 'desc')->first(),
             'createdAt'             => $this->created_at?->format('Y-m-d H:i:s'),
         ];
     }

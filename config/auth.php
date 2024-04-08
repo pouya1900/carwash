@@ -40,10 +40,10 @@ return [
             'provider' => 'users',
         ],
         'carwash' => [
-            'driver'   => 'jwt',
+            'driver'   => 'session',
             'provider' => 'carwashes',
         ],
-        'web'     => [
+        'admin'     => [
             'driver'   => 'session',
             'provider' => 'admins',
         ],
