@@ -14,7 +14,7 @@
                     <div class="d-flex">
                         <div class="flex-shrink-0 me-3">
                             <div class="avatar avatar-online">
-                                <img src="{{$carwash->logo['path']}}" alt
+                                <img src="{{$carwash->logo['paths']["standard"]}}" alt
                                      class="rounded-circle">
                             </div>
                         </div>

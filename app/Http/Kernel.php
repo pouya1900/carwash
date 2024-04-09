@@ -2,6 +2,10 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\AdminAuthMiddleware;
+use App\Http\Middleware\AdminPermissionMiddleware;
+use App\Http\Middleware\CarwashAuthMiddleware;
+use App\Http\Middleware\UserAuthMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -70,9 +74,13 @@ class Kernel extends HttpKernel
         'verified'         => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'optionalJwtAuth'  => \App\Http\Middleware\Api\OptionalJwtAuthenticate::class,
         'jwtAuth'          => \App\Http\Middleware\Api\JwtAuthenticate::class,
-        'jwtCarwashAuth'          => \App\Http\Middleware\Api\JwtCarwashAuthenticate::class,
+        'jwtCarwashAuth'   => \App\Http\Middleware\Api\JwtCarwashAuthenticate::class,
         'permission'       => \App\Http\Middleware\Api\PermissionMiddleware::class,
         'hasPermission'    => \App\Http\Middleware\CheckPermission::class,
+        'carwash.auth'     => CarwashAuthMiddleware::class,
+        'user.auth'        => UserAuthMiddleware::class,
+        'admin.auth'       => AdminAuthMiddleware::class,
+        'admin.permission' => AdminPermissionMiddleware::class,
 
     ];
 }

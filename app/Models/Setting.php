@@ -37,7 +37,7 @@ class Setting extends Model
         }
         $path = Storage::disk("assetsStorage")->url('') . 'siteContent/';
 
-        return ["path" => $path . "test_logo.png", "model" => null];
+        return ["path" => $path . "logo_test.png", "model" => null];
 
     }
 

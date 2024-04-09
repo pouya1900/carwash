@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="storage/css/media_style.css">
 
     <script type="text/javascript" src="storage/js/loading.js"></script>
+    @vite(['resources/js/app.js'])
 
 
 </head>

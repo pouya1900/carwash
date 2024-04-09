@@ -35,15 +35,19 @@ return [
     */
 
     'guards' => [
-        'user'    => [
+        'user'     => [
             'driver'   => 'jwt',
             'provider' => 'users',
         ],
-        'carwash' => [
+        'web_user' => [
+            'driver'   => 'session',
+            'provider' => 'users',
+        ],
+        'carwash'  => [
             'driver'   => 'session',
             'provider' => 'carwashes',
         ],
-        'admin'     => [
+        'admin'    => [
             'driver'   => 'session',
             'provider' => 'admins',
         ],

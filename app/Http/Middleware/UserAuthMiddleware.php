@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class CarwashAuthMiddleware
+class UserAuthMiddleware
 {
     /**
      * Handle an incoming request.
@@ -17,11 +17,10 @@ class CarwashAuthMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::guard('carwash')->check()) {
-            return redirect(route('login',['type'=>'carwash']));
+        if (!Auth::guard('web_user')->check()) {
+            return redirect(route('login', ['type' => 'user']));
         }
-
-        $request->current_carwash = Auth::guard('carwash')->user();
+        $request->current_user = Auth::guard('web_user')->user();
         return $next($request);
     }
 }

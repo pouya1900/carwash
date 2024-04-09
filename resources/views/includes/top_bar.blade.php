@@ -17,13 +17,13 @@
             <div class="col-lg-4  col-md-5 btnsc">
             <span class="loginregister">
 
-                @if ($current_user || $current_servant)
+                @if ($current_user || $current_carwash)
 
                     <div class="top_bar_profile">
                         <span><i class="fa-solid fa-user"></i></span>
                         <span>
-                            @if ($current_servant)
-                                <a href="{{route('servant_dashboard')}}">{{$current_servant->fullName}}</a>
+                            @if ($current_carwash)
+                                <a href="{{route('carwash_dashboard')}}">{{$current_carwash->fullName}}</a>
                                 <span class="logout"><a href="{{route('logout')}}"><i
                                             class="fa-solid fa-right-from-bracket"></i> @lang('trs.logout')</a></span>
 
