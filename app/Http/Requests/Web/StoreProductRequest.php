@@ -4,7 +4,7 @@ namespace App\Http\Requests\Web;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class carwashUpdateRequest extends FormRequest
+class StoreProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,9 @@ class carwashUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "title"   => "required",
-            "mobile"  => "required",
-            "address" => "required",
+            "title"    => "required",
+            "category" => "required",
+            "price"    => "required|numeric",
         ];
     }
 }

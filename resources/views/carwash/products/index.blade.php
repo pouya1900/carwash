@@ -1,4 +1,4 @@
-@extends('layouts.servant')
+@extends('layouts.carwash')
 
 @section('title')
     <span class="titlescc">@lang('trs.products')</span>
@@ -12,46 +12,32 @@
                 <thead>
                 <tr>
                     <th>@lang('trs.title')</th>
+                    <th>@lang('trs.category')</th>
                     <th>@lang('trs.price')</th>
-                    <th>@lang('trs.status')</th>
-                    <th>@lang('trs.status_message')</th>
+                    <th>@lang('trs.discount')</th>
                     <th>مدیریت</th>
                 </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
-                @foreach($servant->products()->orderBy("created_at","desc")->get() as $product)
+                @foreach($carwash->products()->orderBy("created_at","desc")->get() as $product)
                     <tr>
                         <td>{{ $product->title }}</td>
-                        <td>{{ number_format($product->price) }} @lang("trs.rial")</td>
-                        <td>
-                            @if($product->status == "pending")
-                                <span class="btn-label-info">در انتظار تایید</span>
-                            @elseif($product->status == "accepted")
-                                <span class="btn-label-success">تایید شده</span>
-                            @elseif($product->status == "rejected")
-                                <span class="btn-label-warning">رد شده</span>
-                            @elseif($product->status == "rfd")
-                                <span class="btn-label-warning">نیاز به اصلاح</span>
-                            @else
-                                ---
-                            @endif
-                        </td>
-                        <td>
-                            {{$product->status_message}}
-                        </td>
+                        <td>{{ $product->category->title }}</td>
+                        <td>{{ number_format($product->price) }} @lang("trs.toman")</td>
+                        <td>{{$product->discount}}</td>
                         <td>
                             <ul class="ulinlin fsize13">
                                 <li>
                                     <button style="background:none;border: none;"
                                             onclick='functionConfirm("آیا از حذف محصول اطمینان دارید ؟", function yes() {
-                                                window.location.replace("{{route('servant_product_delete',$product->id)}}");
+                                                window.location.replace("{{route('carwash_product_delete',$product->id)}}");
                                                 },
                                                 function no() {
                                                 });'>حذف
                                     </button>
                                 </li>
                                 <li class="mgright10"><a class="no_hover_a"
-                                                         href="{{route('servant_product_edit',$product->id)}}">ویرایش</a>
+                                                         href="{{route('carwash_product_edit',$product->id)}}">ویرایش</a>
                                 </li>
                             </ul>
                             <div id="confirm">

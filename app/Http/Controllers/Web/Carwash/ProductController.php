@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Servant;
+namespace App\Http\Controllers\Web\Carwash;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\productStoreRequest;
+use App\Http\Requests\Web\StoreProductRequest;
+use App\Models\Category;
 use App\Models\Media;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -16,55 +17,41 @@ class ProductController extends Controller
 
     public function index()
     {
-        $servant = $this->request->current_servant;
+        $carwash = $this->request->current_carwash;
 
-        return view('servant.products.index', compact('servant'));
+        return view('carwash.products.index', compact('carwash'));
     }
 
     public function create()
     {
-        $servant = $this->request->current_servant;
+        $carwash = $this->request->current_carwash;
 
-        return view('servant.products.create', compact('servant'));
+        $categories = Category::all();
+
+        return view('carwash.products.create', compact('carwash', 'categories'));
     }
 
-    public function store(productStoreRequest $request)
+    public function store(StoreProductRequest $request)
     {
         try {
-            $servant = $this->request->current_servant;
+            $carwash = $this->request->current_carwash;
 
             $added_media = $request->input('added_media');
             $deleted_media = $request->input('deleted_media');
 
-
-            $product = $servant->products()->create([
-                "title"       => $request->input('title'),
-                "description" => $request->input('description') ?? null,
-                "price"       => $request->input('price'),
-                "link"        => $request->input('link') ?? null,
+            $product = $carwash->products()->create([
+                "title"       => $request->input("title"),
+                "category_id" => $request->input("category"),
+                "description" => $request->input("description") ?? "",
+                "price"       => $request->input("price"),
+                "discount"    => $request->input("discount"),
             ]);
 
-            if ($added_media) {
-                foreach ($added_media as $media_name) {
-                    $file = Storage::disk('privateStorage')->readStream('tmp/' . $media_name);
-                    Storage::disk('assetsStorage')->writeStream('productImage/' . $media_name, $file);
-                    Storage::disk('privateStorage')->delete('tmp/' . $media_name);
+            if ($added_media || $deleted_media) {
+                $new_images_id = $added_media ? Media::whereIn('title', $added_media)->pluck("id")->toArray() : [];
+                $deleted_images_id = $deleted_media ? Media::whereIn('title', $deleted_media)->pluck("id")->toArray() : [];
 
-                    $media = Media::where('title', $media_name)->first();
-
-                    $product->media()->save($media);
-                    $media->update(['model_type' => 'productImage']);
-                }
-            }
-
-            if ($deleted_media) {
-                foreach ($deleted_media as $deleted_name) {
-                    Storage::disk('assetsStorage')->delete('productImage/' . $deleted_name);
-
-                    $media = Media::where('title', $deleted_name)->first();
-
-                    $media->delete();
-                }
+                $this->updateImages($product, "productImages", "assetsStorage", $new_images_id, $deleted_images_id);
             }
 
             if ($request->input('deleted_image_logo')) {
@@ -78,49 +65,33 @@ class ProductController extends Controller
                 $this->imageUpload($logo, 'productLogo', 'assetsStorage', $product);
             }
 
-            if ($request->hasFile('catalog')) {
-                $old_catalog = $product->catalog["model"];
-                $this->mediaRemove($old_catalog, 'assetsStorage');
-                $catalog = $request->file('catalog');
-                $this->documentUpload($catalog, 'productCatalog', 'assetsStorage', $product);
-            }
-
-            if ($request->input('deleted_video')) {
-                $video = $product->video["model"];
-                if ($video) {
-                    $this->mediaRemove($video, 'assetsStorage');
-                }
-            }
-
-            if ($request->hasFile('video')) {
-                $video = $request->file('video');
-                $this->videoUpload($video, $product, 'productVideo', 'assetsStorage');
-            }
-
-            return redirect(route('servant_products'))->with(['message' => trans('trs.changed_successfully')]);
-        } catch (\Exception) {
+            return redirect(route('carwash_products'))->with(['message' => trans('trs.changed_successfully')]);
+        } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => trans('trs.changed_unsuccessfully')]);
         }
     }
 
     public function edit(Product $product)
     {
-        $servant = $this->request->current_servant;
+        $carwash = $this->request->current_carwash;
 
-        if ($product->servant->id != $servant->id) {
-            abort(403);
+        if ($product->carwash->id != $carwash->id) {
+            return abort(403);
         }
 
-        return view('servant.products.edit', compact('servant', 'product'));
+        $categories = Category::all();
+
+
+        return view('carwash.products.edit', compact('carwash', 'product', 'categories'));
 
     }
 
-    public function update(productStoreRequest $request, Product $product)
+    public function update(StoreProductRequest $request, Product $product)
     {
         try {
-            $servant = $this->request->current_servant;
+            $carwash = $this->request->current_carwash;
 
-            if ($product->servant->id != $servant->id) {
+            if ($product->carwash->id != $carwash->id) {
                 abort(403);
             }
 
@@ -129,32 +100,19 @@ class ProductController extends Controller
 
 
             $product->update([
-                "title"       => $request->input('title'),
-                "description" => $request->input('description') ?? null,
-                "price"       => $request->input('price'),
-                "link"        => $request->input('link') ?? null,
+                "title"       => $request->input("title"),
+                "category_id" => $request->input("category"),
+                "description" => $request->input("description") ?? "",
+                "price"       => $request->input("price"),
+                "discount"    => $request->input("discount"),
             ]);
 
-            if ($added_media) {
-                foreach ($added_media as $media_name) {
-                    $file = Storage::disk('privateStorage')->readStream('tmp/' . $media_name);
-                    Storage::disk('assetsStorage')->writeStream('productImage/' . $media_name, $file);
-                    Storage::disk('privateStorage')->delete('tmp/' . $media_name);
+            if ($added_media || $deleted_media) {
+                $new_images_id = $added_media ? Media::whereIn('title', $added_media)->pluck("id")->toArray() : [];
+                $deleted_images_id = $deleted_media ? Media::whereIn('title', $deleted_media)->pluck("id")->toArray() : [];
 
-                    $media = Media::where('title', $media_name)->first();
+                $this->updateImages($product, "productImages", "assetsStorage", $new_images_id, $deleted_images_id);
 
-                    $product->media()->save($media);
-                    $media->update(['model_type' => 'productImage']);
-                }
-            }
-            if ($deleted_media) {
-                foreach ($deleted_media as $deleted_name) {
-                    Storage::disk('assetsStorage')->delete('productImage/' . $deleted_name);
-
-                    $media = Media::where('title', $deleted_name)->first();
-
-                    $media->delete();
-                }
             }
 
             if ($request->input('deleted_image_logo')) {
@@ -168,26 +126,7 @@ class ProductController extends Controller
                 $this->imageUpload($logo, 'productLogo', 'assetsStorage', $product);
             }
 
-            if ($request->hasFile('catalog')) {
-                $old_catalog = $product->catalog["model"];
-                $this->mediaRemove($old_catalog, 'assetsStorage');
-                $catalog = $request->file('catalog');
-                $this->documentUpload($catalog, 'productCatalog', 'assetsStorage', $product);
-            }
-
-            if ($request->input('deleted_video')) {
-                $video = $product->video["model"];
-                if ($video) {
-                    $this->mediaRemove($video, 'assetsStorage');
-                }
-            }
-
-            if ($request->hasFile('video')) {
-                $video = $request->file('video');
-                $this->videoUpload($video, $product, 'productVideo', 'assetsStorage');
-            }
-
-            return redirect(route('servant_products'))->with(['message' => trans('trs.changed_successfully')]);
+            return redirect(route('carwash_products'))->with(['message' => trans('trs.changed_successfully')]);
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => trans('trs.changed_unsuccessfully')]);
         }
@@ -197,15 +136,21 @@ class ProductController extends Controller
     public function delete(Product $product)
     {
         try {
-            $servant = $this->request->current_servant;
+            $carwash = $this->request->current_carwash;
 
-            if ($product->servant->id != $servant->id) {
-                abort(403);
+            if ($product->carwash->id != $carwash->id) {
+                return abort(403);
+            }
+
+            $this->mediaRemove($product->logo["model"], 'assetsStorage');
+
+            foreach ($product->images as $image) {
+                $this->mediaRemove($image["model"], 'assetsStorage');
             }
 
             $product->delete();
 
-            return redirect(route('servant_products'))->with(['message' => trans('trs.changed_successfully')]);
+            return redirect(route('carwash_products'))->with(['message' => trans('trs.changed_successfully')]);
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => trans('trs.changed_unsuccessfully')]);
         }

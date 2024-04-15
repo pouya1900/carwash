@@ -177,4 +177,22 @@ class Helper
 
     }
 
+    public static function serviceStatus($status)
+    {
+        return match ($status) {
+            "1" => trans('trs.accepted'),
+            "0" => trans('trs.rejected'),
+            default => trans('trs.unknown'),
+        };
+    }
+
+    public static function serviceStatusCSS($status)
+    {
+        return match ($status) {
+            "1" => "btn-label-success",
+            "0" => "btn-label-warning",
+            default => "btn-label-info",
+        };
+    }
+
 }

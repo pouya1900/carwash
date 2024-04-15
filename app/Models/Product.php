@@ -117,4 +117,15 @@ class Product extends Model
         return $this->scores()->average("rate");
     }
 
+    public function getImagesNameAttribute()
+    {
+        $images = $this->media()->where("model_type", 'productImages')->select('title as name')->get();
+        return $images;
+    }
+
+    public function getImagesPathAttribute()
+    {
+        return Storage::disk("assetsStorage")->url('') . 'productImages/';
+    }
+
 }

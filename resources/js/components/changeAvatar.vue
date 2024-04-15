@@ -1,7 +1,7 @@
 <template>
-    <input type="file" name="avatar" hidden id="change_avatar" accept="image/*" @change="handleFileUpload">
-    <input type="hidden" name="deleted_avatar" :value="delete_value">
-    <img id="avatar-preview"  :src="avatar" title="" alt="">
+    <input type="file" :name="name" hidden id="change_avatar" accept="image/*" @change="handleFileUpload">
+    <input type="hidden" :name="'deleted_'+name" :value="delete_value">
+    <img id="avatar-preview" :src="avatar" title="" alt="">
     <label for="change_avatar" class="change_avatar_vue">
         <i class="fa-solid fa-camera"></i> اپلود تصویر
     </label>
@@ -10,7 +10,7 @@
 <script>
 export default {
     props: ['avatar', 'att_name'],
-    name: 'video',
+    name: 'changeAvatar',
     methods: {
         previewImage() {
             let image = document.getElementById('avatar-preview');
@@ -43,7 +43,7 @@ export default {
             file: '',
             source: this.src,
             delete_value: 0,
-            name: this.att_name
+            name: this.att_name ?? "avatar"
         }
     },
 }

@@ -39,4 +39,17 @@ class Service extends Model
     {
         return $this->belongsToMany(Type::class, "service_type", "service_id", "type_id");
     }
+
+    public function getItemTextAttribute()
+    {
+        $text = "";
+
+        foreach ($this->items as $key => $item) {
+            $text .= $item->title;
+            if ($key < $this->items->count() - 1)
+                $text .= "، ";
+        }
+        return $text;
+    }
+
 }

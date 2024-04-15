@@ -22,6 +22,8 @@ import changeAvatar from './components/changeAvatar.vue';
 import Uploader from './components/vue-media-upload.vue';
 import videoPreview from './components/videoPreview.vue';
 import imagePreview from './components/imagePreview.vue';
+import changeMobile from './components/changeMobile.vue';
+import addService from './components/addService.vue';
 
 app.component('week-times', weekTimes);
 app.component('timetable', timetable);
@@ -30,6 +32,8 @@ app.component('upload-media', Uploader);
 app.component('video-input-preview', videoPreview);
 app.component('image-input-preview', imagePreview);
 app.component('login', login);
+app.component('change-mobile', changeMobile);
+app.component('add-service', addService);
 
 /**
  * The following block of code may be used to automatically register your

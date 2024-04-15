@@ -1,4 +1,4 @@
-@extends('layouts.servant')
+@extends('layouts.carwash')
 
 @section('style')
     <style>
@@ -18,7 +18,7 @@
         <div class="col-md-8 cardbank  bankadd" style="">
             <div class="card mb-4">
                 <h5 class="card-header txtcenter">@lang('trs.update_product')</h5>
-                <form action="{{ route('servant_product_update',$product->id) }}" method="POST"
+                <form action="{{ route('carwash_product_update',$product->id) }}" method="POST"
                       enctype="multipart/form-data">
                     @csrf
                     <div class="card-body demo-vertical-spacing demo-only-element">
@@ -41,34 +41,49 @@
                         <div class="row">
                             <div class="col-6">
 
-                                <label class="form-label" for="price">قیمت(@lang("trs.rial"))</label>
+                                <label class="form-label" for="price">قیمت(@lang("trs.toman"))</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control text-start number_format_input" id="price" name="price"
+                                    <input type="text" class="form-control text-start number_format_input" id="price"
+                                           name="price"
                                            dir="ltr" value="{{$product->price}}"
                                            placeholder="" required="">
                                 </div>
                             </div>
 
                             <div class="col-6">
-                                <label class="form-label" for="link">لینک</label>
+                                <label class="form-label" for="discount">@lang("trs.discount")</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control text-start" id="link" name="link" dir="ltr"
-                                           placeholder="" value="{{$product->link}}">
+                                    <input type="text" class="form-control text-start number_format_input" id="discount"
+                                           name="discount" dir="ltr" value="{{$product->discount}}"
+                                           placeholder="@lang("trs.discount")">
                                 </div>
                             </div>
+
+                            <div class="col-6">
+                                <label class="form-label" for="category"
+                                       style="margin-bottom: 10px;">@lang('trs.category')</label>
+                                <div class="input-group">
+                                    <select class="form-control boxaitradeselect" name="category"
+                                            id="category">
+                                        <option value="">انتخاب دسته بندی...</option>
+                                        @foreach($categories as $category)
+                                            <option
+                                                {{$category->id==$product->category->id ? "selected" : ""}} value="{{$category->id}}">{{ $category->title }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
                         </div>
                         <div class="col-12">
                             <div class="mg-office--item">
                                 <label>@lang('trs.product_logo')</label>
-
-
                                 <div>
                                     <image-input-preview att_name="logo"
-                                                         src="{{$product->logo["model"] ? $product->logo["path"] : ""}}">
+                                                         src="{{$product->logo["model"] ? $product->logo["paths"]["standard"] : ""}}">
                                     </image-input-preview>
                                 </div>
-
-
                             </div>
                         </div>
 
@@ -87,52 +102,6 @@
                                     </upload-media>
                                 </div>
 
-
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <div class="mg-office--item">
-                                <label>@lang('trs.product_video')</label>
-
-
-                                <div>
-                                    <video-input-preview
-                                        src="{{$product->video["model"] ? $product->video["path"] : ""}}">
-                                    </video-input-preview>
-                                </div>
-
-
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <div class="mg-office--item">
-                                <label>@lang('trs.product_catalog')</label>
-                                <div class="product_catalog--container">
-
-                                    {{--            @if ($office->catalog)--}}
-
-                                    <div class="row">
-                                        <div class="col-6 text-right">
-                                            <input type="file" name="catalog" accept="application/pdf">
-                                        </div>
-                                        <div class="col-6">
-                                            @if ($product->catalog["model"])
-                                                <div class="product_catalog--exist">
-                                                    <span><i
-                                                            class="fa-solid fa-file-pdf"></i>
-                                                        <a href="{{$product->catalog["path"]}}">@lang('trs.download_catalog_submitted_before')</a>
-                                                    </span>
-                                                </div>
-                                            @endif
-                                        </div>
-
-                                    </div>
-
-                                    {{--            @else--}}
-                                    {{--            @endif--}}
-                                </div>
 
                             </div>
                         </div>

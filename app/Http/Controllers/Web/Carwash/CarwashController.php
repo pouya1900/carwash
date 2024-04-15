@@ -35,6 +35,7 @@ class CarwashController extends Controller
             $carwash = $this->request->current_carwash;
 
             $title = $request->input('title');
+            $address = $request->input('address');
             $mobile = $request->input('mobile');
             $code = $request->input('code');
 
@@ -63,18 +64,19 @@ class CarwashController extends Controller
             }
 
             $carwash->update([
-                'title'  => $title,
-                'mobile' => $mobile,
+                'title'   => $title,
+                'mobile'  => $mobile,
+                'address' => $address,
             ]);
 
-            if ($this->request->input('deleted_avatar')) {
+            if ($this->request->input('deleted_logo')) {
                 $this->mediaRemove($carwash->logo['model'], 'assetsStorage');
             }
 
             if ($this->request->hasFile('logo')) {
                 $logo = $this->request->file('logo');
 
-                $this->imageUpload($logo, 'logo', 'assetsStorage', $carwash);
+                $this->imageUpload($logo, 'carwashLogo', 'assetsStorage', $carwash);
             }
 
             return redirect(route('carwash_dashboard'))->with(['message' => trans('trs.changed_successfully')]);

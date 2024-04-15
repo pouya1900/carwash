@@ -1,126 +1,70 @@
 <?php
 
-namespace App\Http\Controllers\Servant;
+namespace App\Http\Controllers\Web\Carwash;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ServiceRequest;
+use App\Http\Requests\Web\ServiceRequest;
+use App\Models\Base_service;
 use App\Models\Category;
-use App\Models\Insurance;
-use App\Models\Servant;
+use App\Models\Item;
+use App\Models\carwash;
 use App\Models\Service;
-use App\Models\Tariff;
-use App\Models\Unit;
+use App\Models\Type;
 use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
     public function services()
     {
-        $servant = $this->request->current_servant;
+        $carwash = $this->request->current_carwash;
 
-        return view('servant.services.index', compact('servant'));
+        return view('carwash.services.index', compact('carwash'));
     }
 
     public function create()
     {
-        $servant = $this->request->current_servant;
+        $carwash = $this->request->current_carwash;
 
-        $categories = Category::whereNull('parent_id')->with('children')->get();
-        $units = Unit::all();
+        $base_services = Base_service::all();
 
-        $insurances = Insurance::all();
+        $items = Item::all();
+        $types = Type::all();
 
-        $children = $servant->accepted("children")->get();
-        foreach ($children as $child) {
-            $child->full_name = $child->fullName;
+        foreach ($base_services as $base_service) {
+            $base_service->description_text = $base_service->descriptionText;
         }
 
-        $servant->addresses = $servant->addresses;
-
-        $parents_place = $servant->accepted("parents")->where("is_place", 1)->with('addresses')->get();
-
-        return view('servant.services.create', compact('servant', 'categories', 'units', 'insurances', 'children', 'parents_place'));
+        return view('carwash.services.create', compact('carwash', 'base_services', 'items', 'types'));
     }
 
     public function store(ServiceRequest $request)
     {
         try {
-            $servant = $this->request->current_servant;
+            $carwash = $this->request->current_carwash;
 
-            $title = $request->input('title');
-            $description = $request->input('description');
-            $category = $request->input('category');
-            $time = $request->input('time');
-            $type = $request->input('type');
-            $price = $request->input('price');
-
-            $insurances = $request->input('insurances');
-            $insurances_type = $request->input('insurances_type');
-            $insurances_value = $request->input('insurances_value');
-
-            $team = $request->input('team');
-            $member_title = $request->input('member_title');
-            $member_share = $request->input('member_share');
-
-            $address_id = $request->input('place');
-
-
-            $service = $servant->services()->create([
-                'title'       => $title,
-                'description' => $description,
-                'type'        => $type,
-                'category_id' => $category,
-                'time'        => $time,
-                'base_price'  => $price,
-                'address_id'  => $address_id ?: null,
+            $service = $carwash->services()->create([
+                "base_id"  => $request->input("base_service"),
+                "status"   => $request->input("status") ? 1 : 0,
+                "price"    => $request->input("price"),
+                "discount" => $request->input("discount") ?? 0,
+                "is_main"  => $request->input("is_main") ? 1 : 0,
             ]);
 
-            $attr_title = $request->input('attr_title');
-            $attr_type = $request->input('attr_type');
-            $attr_price = $request->input('attr_price');
-            $attr_unit = $request->input('attr_unit');
-            $attr = $request->input('attr');
-
-            if ($attr_title) {
-                for ($i = 0; $i < count($attr_title); $i++) {
-
-                    $attribute = [];
-                    $attribute["title"] = $attr_title[$i];
-                    $attribute["type"] = $attr_type[$i];
-                    $options = null;
-
-                    if ($attribute["type"] == 1) {
-                        $attribute["fee"] = $attr_price[$i];
-                        $attribute["unit_id"] = $attr_unit[$i];
-                    } else {
-                        $options = [];
-                        for ($j = 0; $j < count($attr[$i]['title']); $j++) {
-                            $options[] = ["title" => $attr[$i]['title'][$j], "fee" => $attr[$i]['price'][$j]];
-                        }
-                        $options = json_encode($options);
-                    }
-
-                    $attribute['option'] = $options;
-
-                    $service->attributes()->create($attribute);
+            foreach ($request->input("items") as $item_id) {
+                $item = Item::find($item_id);
+                if ($item) {
+                    $service->items()->attach($item);
                 }
             }
 
-            if ($insurances) {
-                foreach ($insurances as $key => $insurance) {
-                    $service->insurances()->attach($insurance, ['type' => $insurances_type[$key], 'value' => $insurances_value[$key]]);
+            foreach ($request->input("types") as $type_id) {
+                $type = Type::find($type_id);
+                if ($type) {
+                    $service->types()->attach($type);
                 }
             }
 
-            if ($team) {
-                foreach ($team as $key => $member) {
-                    $title = $member_title[$key];
-                    $share = $member_share[$key];
-                    $service->teamMembers()->attach($member, ["title" => $title, "share" => $share]);
-                }
-            }
-
-            return redirect(route('servant_services'))->with(['message' => trans('trs.service_added_successfully')]);
+            return redirect(route('carwash_services'))->with(['message' => trans('trs.service_added_successfully')]);
         } catch (\Exception $e) {
             return redirect()->back()->withErrors('error', trans('trs.changed_unsuccessfully'));
         }
@@ -128,122 +72,61 @@ class ServiceController extends Controller
 
     public function edit(Service $service)
     {
-        $servant = $this->request->current_servant;
+        $carwash = $this->request->current_carwash;
 
-        if ($servant->id != $service->servant->id) {
-            abort(403);
+        if ($carwash->id != $service->carwash->id) {
+            return abort(403);
         }
 
-        $categories = Category::whereNull('parent_id')->with('children')->get();
-        $units = Unit::all();
+        $base_services = Base_service::all();
 
-        $insurances = Insurance::all();
+        $items = Item::all();
+        $types = Type::all();
 
-        $children = $servant->accepted("children")->get();
-        foreach ($children as $child) {
-            $child->full_name = $child->fullName;
+        foreach ($base_services as $base_service) {
+            $base_service->description_text = $base_service->descriptionText;
         }
 
-        $service->category = $service->category;
-        $service->category->parent = $service->category->parent;
-        $service->insurances = $service->insurances;
-        $service->attributes = $service->attributes;
-        $service->teamMembers = $service->teamMembers;
-        $servant->addresses = $servant->addresses;
+        $service->items=$service->items;
+        $service->types=$service->types;
 
-        $parents_place = $servant->accepted("parents")->where("is_place", 1)->with('addresses')->get();
-
-
-        return view('servant.services.edit', compact('servant', 'service', 'categories', 'units', 'insurances', 'children', 'parents_place'));
+        return view('carwash.services.edit', compact('carwash', 'service', 'base_services', 'items', 'types'));
 
     }
 
     public function update(ServiceRequest $request, Service $service)
     {
         try {
-            $servant = $this->request->current_servant;
+            $carwash = $this->request->current_carwash;
 
-            if ($servant->id != $service->servant->id) {
-                abort(403);
+            if ($carwash->id != $service->carwash->id) {
+                return abort(403);
             }
-
-            $title = $request->input('title');
-            $description = $request->input('description');
-            $category = $request->input('category');
-            $time = $request->input('time');
-            $type = $request->input('type');
-            $price = $request->input('price');
-            $address_id = $request->input('place');
-
-            $insurances = $request->input('insurances');
-            $insurances_type = $request->input('insurances_type');
-            $insurances_value = $request->input('insurances_value');
-
-            $team = $request->input('team');
-            $member_title = $request->input('member_title');
-            $member_share = $request->input('member_share');
-
             $service->update([
-                'title'       => $title,
-                'description' => $description,
-                'type'        => $type,
-                'category_id' => $category,
-                'time'        => $time,
-                'base_price'  => $price,
-                'address_id'  => $address_id ?: null,
+                "base_id"  => $request->input("base_service"),
+                "status"   => $request->input("status") ? 1 : 0,
+                "price"    => $request->input("price"),
+                "discount" => $request->input("discount") ?? 0,
+                "is_main"  => $request->input("is_main") ? 1 : 0,
             ]);
 
-            $attr_title = $request->input('attr_title');
-            $attr_type = $request->input('attr_type');
-            $attr_price = $request->input('attr_price');
-            $attr_unit = $request->input('attr_unit');
-            $attr = $request->input('attr');
-
-            $service->attributes()->delete();
-            $service->insurances()->detach();
-            $service->teamMembers()->detach();
-
-            if ($attr_title) {
-                for ($i = 0; $i < count($attr_title); $i++) {
-
-                    $attribute = [];
-                    $attribute["title"] = $attr_title[$i];
-                    $attribute["type"] = $attr_type[$i];
-                    $options = null;
-
-                    if ($attribute["type"] == 1) {
-                        $attribute["fee"] = $attr_price[$i];
-                        $attribute["unit_id"] = $attr_unit[$i];
-                    } else {
-                        $options = [];
-                        for ($j = 0; $j < count($attr[$i]['title']); $j++) {
-                            $options[] = ["title" => $attr[$i]['title'][$j], "fee" => $attr[$i]['price'][$j]];
-                        }
-                        $options = json_encode($options);
-                    }
-
-                    $attribute['option'] = $options;
-
-                    $service->attributes()->create($attribute);
+            $service->items()->detach();
+            foreach ($request->input("items") as $item_id) {
+                $item = Item::find($item_id);
+                if ($item) {
+                    $service->items()->attach($item);
                 }
             }
 
-            if ($insurances) {
-                foreach ($insurances as $key => $insurance) {
-                    $service->insurances()->attach($insurance, ['type' => $insurances_type[$key], 'value' => $insurances_value[$key]]);
+            $service->types()->detach();
+            foreach ($request->input("types") as $type_id) {
+                $type = Type::find($type_id);
+                if ($type) {
+                    $service->types()->attach($type);
                 }
             }
 
-            if ($team) {
-                foreach ($team as $key => $member) {
-                    $title = $member_title[$key];
-                    $share = $member_share[$key];
-                    $service->teamMembers()->attach($member, ["title" => $title, "share" => $share]);
-
-                }
-            }
-
-            return redirect(route('servant_services'))->with(['message' => trans('trs.service_updated_successfully')]);
+            return redirect(route('carwash_services'))->with(['message' => trans('trs.service_updated_successfully')]);
         } catch (\Exception $e) {
             return redirect()->back()->withErrors('error', trans('trs.changed_unsuccessfully'));
         }
@@ -252,13 +135,17 @@ class ServiceController extends Controller
     public function remove(Service $service)
     {
         try {
+            $carwash = $this->request->current_carwash;
 
-            $service->attributes()->delete();
-            $service->insurances()->detach();
-            $service->teamMembers()->detach();
+            if ($carwash->id != $service->carwash->id) {
+                return abort(403);
+            }
+
+            $service->items()->detach();
+            $service->types()->detach();
             $service->delete();
 
-            return redirect(route('servant_services'))->with(['message' => trans('trs.service_removed_successfully')]);
+            return redirect(route('carwash_services'))->with(['message' => trans('trs.service_removed_successfully')]);
         } catch (\Exception $e) {
             return redirect()->back()->withErrors('error', trans('trs.changed_unsuccessfully'));
         }

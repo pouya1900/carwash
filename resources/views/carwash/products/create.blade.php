@@ -1,4 +1,4 @@
-@extends('layouts.servant')
+@extends('layouts.carwash')
 
 @section('style')
     <style>
@@ -18,7 +18,7 @@
         <div class="col-md-8 cardbank  bankadd" style="">
             <div class="card mb-4">
                 <h5 class="card-header txtcenter">@lang('trs.add_new_product')</h5>
-                <form action="{{ route('servant_product_store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('carwash_product_store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body demo-vertical-spacing demo-only-element">
 
@@ -40,19 +40,36 @@
                         <div class="row">
                             <div class="col-6">
 
-                                <label class="form-label" for="price">قیمت(@lang("trs.rial"))</label>
+                                <label class="form-label" for="price">قیمت(@lang("trs.toman"))</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control text-start number_format_input" id="price" name="price"
+                                    <input type="text" class="form-control text-start number_format_input" id="price"
+                                           name="price"
                                            dir="ltr"
                                            placeholder="" required="">
                                 </div>
                             </div>
 
                             <div class="col-6">
-                                <label class="form-label" for="link">لینک</label>
+
+                                <label class="form-label" for="discount">@lang("trs.discount")</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control text-start" id="link" name="link" dir="ltr"
-                                           placeholder="">
+                                    <input type="text" class="form-control text-start number_format_input" id="discount"
+                                           name="discount" dir="ltr" placeholder="@lang("trs.discount")">
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                                <label class="form-label" for="category"
+                                       style="margin-bottom: 10px;">@lang('trs.category')</label>
+                                <div class="input-group">
+                                    <select class="form-control boxaitradeselect" name="category"
+                                            id="category">
+                                        <option value="">انتخاب دسته بندی...</option>
+                                        @foreach($categories as $category)
+                                            <option value="{{$category->id}}">{{ $category->title }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -83,44 +100,6 @@
                                     </upload-media>
                                 </div>
 
-
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <div class="mg-office--item">
-                                <label>@lang('trs.product_video')</label>
-
-
-                                <div>
-                                    <video-input-preview src="">
-                                    </video-input-preview>
-                                </div>
-
-
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <div class="mg-office--item">
-                                <label>@lang('trs.product_catalog')</label>
-                                <div class="product_catalog--container">
-
-                                    {{--            @if ($office->catalog)--}}
-
-                                    <div class="row">
-                                        <div class="col-6 text-right">
-                                            <input type="file" name="catalog" accept="application/pdf">
-                                        </div>
-                                        <div class="col-6">
-
-                                        </div>
-
-                                    </div>
-
-                                    {{--            @else--}}
-                                    {{--            @endif--}}
-                                </div>
 
                             </div>
                         </div>

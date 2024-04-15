@@ -1,4 +1,4 @@
-@extends('layouts.servant')
+@extends('layouts.carwash')
 
 
 @section('title')
@@ -14,30 +14,34 @@
                 <thead>
                 <tr>
                     <th>عنوان</th>
-                    <th>@lang('trs.base_price')</th>
-                    <th>دسته بندی</th>
+                    <th>توضیحات</th>
+                    <th>ایتم ها</th>
+                    <th>قیمت</th>
+                    <th>تخفیف</th>
                     <th>نوع</th>
                     <th>وضعیت</th>
                     <th>مدیریت</th>
                 </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
-                @foreach($servant->services()->orderBy("created_at","desc")->get() as $service)
+                @foreach($carwash->services()->orderBy("is_main","desc")->orderBy("created_at","desc")->get() as $service)
                     <tr>
-                        <td>{{ $service->title }}</td>
-                        <td>{{ number_format($service->price) }} ریال</td>
-                        <td>{{ $service->category?->title }}</td>
-                        <td>{{ \App\Helper::serviceType($service->type) }}</td>
+                        <td>{{ $service->base->title }}</td>
+                        <td>{{ $service->base->descriptionText }}</td>
+                        <td>{{ $service->base->itemText }}</td>
+                        <td>{{ number_format($service->price) }} تومان</td>
+                        <td>{{ $service->discount }}</td>
+                        <td>{{ $service->is_main ? "اصلی" : "فرعی" }}</td>
                         <td class="{{\App\Helper::serviceStatusCSS($service->status)}}">{{ \App\Helper::serviceStatus($service->status) }}</td>
                         <td>
                             <ul class="ulinlin fsize13">
                                 <li class="mgright10"><a class="no_hover_a"
-                                                         href="{{route('servant_service_edit',$service->id)}}">ویرایش</a>
+                                                         href="{{route('carwash_service_edit',$service->id)}}">ویرایش</a>
                                 </li>
                                 <li>
                                     <button style="background:none;border: none;"
                                             onclick='functionConfirm("آیا از حذف سرویس اطمینان دارید ؟", function yes() {
-                                                window.location.replace("{{route('servant_service_delete',$service->id)}}");
+                                                window.location.replace("{{route('carwash_service_delete',$service->id)}}");
                                                 },
                                                 function no() {
                                                 });'>حذف
