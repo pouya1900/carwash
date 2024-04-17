@@ -110,7 +110,7 @@
                                                     <span>@lang('trs.total_cost')</span>
                                                 </div>
                                                 <div class="col-9">
-                                                    {{number_format($reservation->price)}} @lang("trs.rial")
+                                                    {{number_format($reservation->price)}} @lang("trs.toman")
                                                 </div>
                                             </div>
                                         </li>

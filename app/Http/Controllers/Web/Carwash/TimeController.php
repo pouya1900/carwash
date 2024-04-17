@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Servant;
+namespace App\Http\Controllers\Web\Carwash;
 
 use App\Helper;
 use App\Http\Controllers\Controller;
@@ -12,36 +12,38 @@ class TimeController extends Controller
 {
     public function index()
     {
-        $servant = $this->request->current_servant;
+        $carwash = $this->request->current_carwash;
 
-        $schedule = $servant->schedule;
-
-        return view('servant.times.index', compact('servant', 'schedule'));
+        $schedule = $carwash->schedule;
+        return view('carwash.times.index', compact('carwash', 'schedule'));
     }
 
     public function update()
     {
         try {
-            $servant = $this->request->current_servant;
+            $carwash = $this->request->current_carwash;
 
             $d = $this->request->input('d');
             $days = [];
             foreach ($d as $key => $item) {
                 if ($item) {
                     $array = [];
-                    foreach ($item as $key2 => $time) {
+                    $array["times"] = [];
+                    $array["number"] = $item["number"];
+                    $times = $item["times"];
+                    foreach ($times as $key2 => $time) {
                         if ((is_null($time['start']) || $time['start'] < 0 || $time['start'] > 24) || (is_null($time['end']) || $time['end'] <= $time['start'])) {
                             $h = Helper::week_day($key);
                             return redirect()->back()->withErrors(['error' => "بازه زمانی روز $h اشتباه است."]);
                         }
-                        $array[$key2][0] = $time['start'];
-                        $array[$key2][1] = $time['end'];
+                        $array["times"][$key2][0] = $time['start'];
+                        $array["times"][$key2][1] = $time['end'];
                     }
                     $days[$key] = json_encode($array);
                 }
             }
-            if (!$schedule = $servant->schedule) {
-                $schedule = $servant->schedule()->create();
+            if (!$schedule = $carwash->schedule) {
+                $schedule = $carwash->schedule()->create();
             }
 
 
@@ -54,8 +56,9 @@ class TimeController extends Controller
                 "day5" => $days[6] ?? "[]",
                 "day6" => $days[0] ?? "[]",
             ]);
-            return redirect(route('servant_times'))->with('message', trans('trs.changed_successfully'));
+            return redirect(route('carwash_times'))->with('message', trans('trs.changed_successfully'));
         } catch (\Exception $e) {
+            dd($e);
             return redirect()->back()->withErrors(['error' => trans('trs.changed_unsuccessfully')]);
         }
     }
@@ -65,11 +68,11 @@ class TimeController extends Controller
         $day = Carbon::now();
 
         $day_week = $day->weekday();
-        $servant = $this->request->current_servant;
+        $carwash = $this->request->current_carwash;
 
-        $schedule = $servant->schedule;
+        $schedule = $carwash->schedule;
 
-        $time_table = $servant->times()->orderBy('start', 'asc')->get();
+        $time_table = $carwash->times()->orderBy('start', 'asc')->get();
 
         $days = [];
 
@@ -80,7 +83,7 @@ class TimeController extends Controller
                 continue;
             }
 
-            if ($item->reservation?->status == "canceled" || $item->reservation?->status == "rejected") {
+            if ($item->reservation?->status == "canceled") {
                 continue;
             }
 
@@ -93,36 +96,33 @@ class TimeController extends Controller
                 $today->addDay();
             }
             $days[$counter][] = [
-                "user"        => $item->reservation?->user->fullName,
+                "car_type"    => $item->reservation?->car?->type?->title,
+                "car_model"   => $item->reservation?->car?->model?->brand?->title . " " . $item->reservation?->car?->model?->title,
                 "reservation" => $item->reservation ?? null,
                 "start"       => date("H", strtotime($item->start)),
-                "start_part"  => $this->getMinuteNumber($item->start),
                 "end"         => date("H", strtotime($item->end)),
-                "end_part"    => $this->getMinuteNumber($item->end),
                 "label"       => $item->label,
-                "remove_url"  => route('servant_time_remove', $item->id),
+                "remove_url"  => route('carwash_time_remove', $item->id),
             ];
         }
-        return view('servant.times.timetable', compact('servant', 'days', 'schedule'));
+        return view('carwash.times.timetable', compact('carwash', 'days', 'schedule'));
     }
 
     public function timetableUpdate()
     {
         try {
-            $servant = $this->request->current_servant;
+            $carwash = $this->request->current_carwash;
             $start = $this->request->input('start');
-            $start_part = $this->request->input('start_part');
             $end = $this->request->input('end');
-            $end_part = $this->request->input('end_part');
             $date = date('Y-m-d', strtotime($this->request->input('date')));
             $label = $this->request->input('label');
 
-            $time = $servant->times()->create([
-                'start' => date('Y-m-d H:i', strtotime($date . ' ' . $start . ':' . $start_part * 15)),
-                'end'   => date('Y-m-d H:i', strtotime($date . ' ' . $end . ':' . $end_part * 15)),
+            $time = $carwash->times()->create([
+                'start' => date('Y-m-d H:i', strtotime($date . ' ' . $start . ':00')),
+                'end'   => date('Y-m-d H:i', strtotime($date . ' ' . $end . ':00')),
                 'label' => $label,
             ]);
-            return response()->json(['status' => 0, 'remove_url' => route('servant_time_remove', $time->id)]);
+            return response()->json(['status' => 0, 'remove_url' => route('carwash_time_remove', $time->id)]);
         } catch (\Exception $e) {
             return response()->json(['status' => 1]);
         }
@@ -132,9 +132,9 @@ class TimeController extends Controller
     public function remove(Time_table $time)
     {
         try {
-            $servant = $this->request->current_servant;
+            $carwash = $this->request->current_carwash;
 
-            if ($time->servant->id != $servant->id) {
+            if ($time->carwash->id != $carwash->id) {
                 abort(403);
             }
 
@@ -143,22 +143,6 @@ class TimeController extends Controller
         } catch (\Exception $e) {
             return response()->json(['status' => 1]);
         }
-    }
-
-    public function getMinuteNumber($date)
-    {
-        $time = date("i", strtotime($date));
-        switch ($time) {
-            case 0 :
-                return 0;
-            case 15 :
-                return 1;
-            case 30 :
-                return 2;
-            case 45 :
-                return 3;
-        }
-        return 0;
     }
 
 }

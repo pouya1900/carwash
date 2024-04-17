@@ -1,43 +1,42 @@
 @extends('layouts.carwash')
 
 @section('title')
-    <span class="titlescc">@lang('trs.tickets')</span>
+    <span class="titlescc">مالی</span>
 @endsection
 
 @section('content')
     <div class="card ticket">
-        <h5 class="card-header">لیست درخواست های پشتیبانی</h5>
+        <h5 class="card-header">لیست برداشت ها</h5>
         <div class="table-responsive text-nowrap">
             <table class="table txtcenter" style="width: 95%">
                 <thead>
                 <tr>
-                    <th>موضوع</th>
-                    <th>وضعیت</th>
+                    <th>مبلغ</th>
+                    <th>کارت</th>
                     <th>تاریخ</th>
+                    <th>وضعیت</th>
                     <th>مدیریت</th>
                 </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
-                @foreach($tickets as $ticket)
+                @foreach($carwash->deposits()->orderBy("created_at","desc")->get() as $deposit)
                     <tr>
-                        <td>{{ $ticket->title }}</td>
-                        <td>
-                            @if($ticket->status == "pending")
-                                <span class="btn-label-info">در انتظار پاسخ</span>
-                            @elseif($ticket->status == "answered")
-                                <span class="btn-label-success">پاسخ داده شده</span>
-                            @elseif($ticket->status == "closed")
-                                <span class="btn-label-warning">بسته شده</span>
-                            @else
-                                ---
-                            @endif
-                        </td>
-                        <td>
-                            {{jdate(strtotime($ticket->created_at))->format("Y-n-j")}}
-                        </td>
+                        <td>{{number_format($deposit->total)}} @lang("trs.toman")</td>
+                        <td>{{$deposit->bank?->card}}</td>
+                        <td>{{jdate($deposit->created_at)->format('Y-m-d')}}</td>
+                        <td class="{{\App\Helper::turn_withdraw_statusCSS($deposit->status)}}">{{\App\Helper::turn_withdraw_status($deposit->status)}}</td>
                         <td>
                             <ul class="ulinlin fsize13">
-                                <li class="mgright10"><a class="no_hover_a" href="{{route('carwash_ticket_edit',$ticket->id)}}">پاسخ</a>
+                                <li>
+                                    @if ($deposit->status == "requested")
+                                        <button style="background:none;border: none;"
+                                                onclick='functionConfirm("آیا از لغو درخواست اطمینان دارید ؟", function yes() {
+                                                    window.location.replace("{{route('carwash_withdraw_delete',$deposit->id)}}");
+                                                    },
+                                                    function no() {
+                                                    });'>لغو
+                                        </button>
+                                    @endif
                                 </li>
                             </ul>
                             <div id="confirm">
@@ -45,9 +44,7 @@
                                 <button class="yes">بله</button>
                                 <button class="no">خیر</button>
                             </div>
-
                         </td>
-
                     </tr>
                 @endforeach
                 </tbody>
@@ -57,7 +54,6 @@
 @endsection
 
 @section('script')
-
     <script>
         function functionConfirm(msg, myYes, myNo) {
             var confirmBox = $("#confirm");

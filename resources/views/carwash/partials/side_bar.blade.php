@@ -101,27 +101,27 @@
 
 
         {{-- blog --}}
-        <li class="menu-item {{url()->current()==route('carwash_blog_create') || url()->current()==route('carwash_blogs') ? 'active' : ''}}">
-            <a href="javascript:void(0)" class="menu-link menu-toggle">
-                <i class="menu-icon fa-solid fa-blog"></i>
-                <div data-i18n="Layouts">بلاگ</div>
-            </a>
+        {{--        <li class="menu-item {{url()->current()==route('carwash_blog_create') || url()->current()==route('carwash_blogs') ? 'active' : ''}}">--}}
+        {{--            <a href="javascript:void(0)" class="menu-link menu-toggle">--}}
+        {{--                <i class="menu-icon fa-solid fa-blog"></i>--}}
+        {{--                <div data-i18n="Layouts">بلاگ</div>--}}
+        {{--            </a>--}}
 
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="{{ route('carwash_blog_create') }}" class="menu-link">
-                        <i class="fa-solid fa-circle-plus"></i>
-                        <div data-i18n="Without menu">پست جدید</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="{{route('carwash_blogs')}}" class="menu-link">
-                        <i class="fa-solid fa-rectangle-list"></i>
-                        <div data-i18n="Vertical">لیست پست ها</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
+        {{--            <ul class="menu-sub">--}}
+        {{--                <li class="menu-item">--}}
+        {{--                    <a href="{{ route('carwash_blog_create') }}" class="menu-link">--}}
+        {{--                        <i class="fa-solid fa-circle-plus"></i>--}}
+        {{--                        <div data-i18n="Without menu">پست جدید</div>--}}
+        {{--                    </a>--}}
+        {{--                </li>--}}
+        {{--                <li class="menu-item">--}}
+        {{--                    <a href="{{route('carwash_blogs')}}" class="menu-link">--}}
+        {{--                        <i class="fa-solid fa-rectangle-list"></i>--}}
+        {{--                        <div data-i18n="Vertical">لیست پست ها</div>--}}
+        {{--                    </a>--}}
+        {{--                </li>--}}
+        {{--            </ul>--}}
+        {{--        </li>--}}
         {{-- blog --}}
 
 

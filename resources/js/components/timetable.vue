@@ -21,11 +21,6 @@
                     <th>روز</th>
                     <th v-for="(time,i) in 24" :id="'time'+i">
                         {{ i }}
-
-                        <div class="time_partition_container">
-                            <div v-for="(l,k) in 4" :id="'time'+i+'_'+k" class="time_partition"></div>
-                        </div>
-
                     </th>
                 </tr>
                 </thead>
@@ -50,13 +45,10 @@
                         </div>
                     </td>
                     <td v-for="(time,i) in 24" class="time_span col"
-                        :class="this.isWorkTime(index,i) ? 'work_day_background' : ''">
-                        <div class="time_partition_container">
-                            <div v-for="(l,k) in 4" class="time_partition"
-                                 @mousedown.left.prevent="startSelection(i,index,k)"
-                                 @mouseup.left.prevent="endSelection(i,index,k)"
-                                 @mouseover.prevent="slideSelection(i,index,k)"></div>
-                        </div>
+                        :class="this.isWorkTime(index,i) ? 'work_day_background' : ''"
+                        @mousedown.left.prevent="startSelection(i,index)"
+                        @mouseup.left.prevent="endSelection(i,index)"
+                        @mouseover.prevent="slideSelection(i,index)">
                         <span v-show="this.isWorkTime(index,i)">.</span>
                     </td>
                 </tr>
@@ -69,15 +61,13 @@
                      :class="item2.f ? 'selected_div_f' : '' , item2.type=='s' ? 'selected_div_user' : '' "
                      :style="'width: '+getWidth(item2)[1]+'px; right: '+getWidth(item2)[0]+'px; top: '+getHeight(index)+'px;'">
                     <div class="time_selected_label_title">
-                        <span>{{
-                                item2.start + ":" + getMinute(item2.start_part)
-                            }} تا {{ item2.end + ":" + getMinute(item2.end_part) }}</span>
+                        <span>{{ item2.start }} تا {{ item2.end + 1 }}</span>
                     </div>
-                    <div v-if="item2.reservation" class="time_selected_label_description">
-                        <span>{{ item2.user }}</span>
+                    <div v-if="item2.users?.length" class="time_selected_label_description">
+                        <span>{{ item2.users.length }} رزرو</span>
                     </div>
                     <div v-else-if="item2.label" class="time_selected_label_description">
-                        <span>{{ item2.label }}b</span>
+                        <span>{{ item2.label }}</span>
                     </div>
                 </div>
             </div>
@@ -147,18 +137,19 @@
                                     }}
                                     ساعت
                                     {{
-                                        this.selectedRange[selectedTimeModal[0]][selectedTimeModal[1]].start + ":" + (this.selectedRange[selectedTimeModal[0]][selectedTimeModal[1]].start_part ? this.selectedRange[selectedTimeModal[0]][selectedTimeModal[1]].start_part * 15 : "00") + " تا " + this.selectedRange[selectedTimeModal[0]][selectedTimeModal[1]].end + ":" + (this.selectedRange[selectedTimeModal[0]][selectedTimeModal[1]].end_part ? this.selectedRange[selectedTimeModal[0]][selectedTimeModal[1]].end_part * 15 : "00")
+                                        this.selectedRange[selectedTimeModal[0]][selectedTimeModal[1]].start + " تا " + this.selectedRange[selectedTimeModal[0]][selectedTimeModal[1]].end
                                     }}
                                 </li>
                                 <li>نوع :
                                     {{
-                                        this.selectedRange[selectedTimeModal[0]][selectedTimeModal[1]].reservation ? "خدمت" : "شخصی"
+                                        this.selectedRange[selectedTimeModal[0]][selectedTimeModal[1]].users?.length ? "خدمت" : "شخصی"
                                     }}
                                 </li>
                             </ul>
-                            <ul v-if="this.selectedRange[selectedTimeModal[0]][selectedTimeModal[1]].reservation">
-                                <li>
-                                    کاربر : {{ this.selectedRange[selectedTimeModal[0]][selectedTimeModal[1]].user }}
+                            <ul v-if="this.selectedRange[selectedTimeModal[0]][selectedTimeModal[1]].users?.length">
+                                <li>نوبت ها :</li>
+                                <li v-for="(user,i) in this.selectedRange[selectedTimeModal[0]][selectedTimeModal[1]].users">
+                                    کاربر {{ i + 1 }} : {{ user.car_type + " " + user.car_model }}
                                 </li>
                             </ul>
                             <ul v-else>
@@ -213,19 +204,34 @@ export default {
             this.days.forEach(function (item, index) {
                 vm.selectedRange[index] = [];
                 if (item) {
+                    let helper = -1;
+                    let helper_index = -1;
                     item.forEach(function (item2, index2) {
-                        vm.selectedRange[index].push({
-                            start: parseInt(item2.start),
-                            start_part: parseInt(item2.start_part),
-                            end: parseInt(item2.end),
-                            end_part: parseInt(item2.end_part),
-                            f: true,
-                            user: item2.user,
-                            reservation: item2.reservation,
-                            label: item2.label,
-                            type: !item2.user ? "s" : "",
-                            remove_url: item2.remove_url,
-                        });
+                        if (helper != item2.start) {
+                            helper = item2.start;
+                            helper_index++;
+                            vm.selectedRange[index][helper_index] = {
+                                start: parseInt(item2.start),
+                                end: parseInt(item2.end) - 1,
+                                f: true,
+                                users: item2.reservation ? [
+                                    {
+                                        car_type: item2.car_type,
+                                        car_model: item2.car_model,
+                                        reservation: item2.reservation,
+                                    },
+                                ] : [],
+                                label: item2.label,
+                                type: !item2.reservation ? "s" : "",
+                                remove_url: item2.remove_url,
+                            };
+                        } else {
+                            vm.selectedRange[index][helper_index].users.push({
+                                car_type: item2.car_type,
+                                car_model: item2.car_model,
+                                reservation: item2.reservation,
+                            });
+                        }
                     });
                 }
             });
@@ -237,8 +243,8 @@ export default {
                 let day_of_week = this_date.getDay();
                 let day = this.schedule['day' + day_of_week];
                 day = JSON.parse(day);
-                if (day) {
-                    day.forEach(function (item) {
+                if (day && day.times) {
+                    day.times.forEach(function (item) {
                         if (time >= parseInt(item[0]) && time < parseInt(item[1])) {
                             x = true;
                         }
@@ -247,43 +253,21 @@ export default {
             }
             return x;
         },
-        startSelection(time, index, k) {
+        startSelection(time, index) {
             this.selecting = true;
             if (!this.selectedRange[index]) {
                 this.selectedRange[index] = [];
             }
-            let end = time;
-            let end_part = k + 1;
-            if (k == 3) {
-                end = time + 1;
-                end_part = 0;
-            }
-
-            this.selectedRange[index].push({start: time, start_part: k, end: end, end_part: end_part, 'type': 's'});
+            this.selectedRange[index].push({start: time, end: time, 'type': 's'});
         },
-        slideSelection(time, index, k) {
+        slideSelection(time, index) {
             if (this.selecting) {
-                let end = time;
-                let end_part = k + 1;
-                if (k == 3) {
-                    end = time + 1;
-                    end_part = 0;
-                }
-                this.selectedRange[index][this.selectedRange[index].length - 1].end = end;
-                this.selectedRange[index][this.selectedRange[index].length - 1].end_part = end_part;
+                this.selectedRange[index][this.selectedRange[index].length - 1].end = time;
             }
         },
-        endSelection(time, index, k) {
-
+        endSelection(time, index) {
             if (this.selecting) {
-                let end = time;
-                let end_part = k + 1;
-                if (k == 3) {
-                    end = time + 1;
-                    end_part = 0;
-                }
-                this.selectedRange[index][this.selectedRange[index].length - 1].end = end;
-                this.selectedRange[index][this.selectedRange[index].length - 1].end_part = end_part;
+                this.selectedRange[index][this.selectedRange[index].length - 1].end = time;
                 this.selectedIndex = index;
                 $("#label_modal").modal('show');
             }
@@ -301,9 +285,7 @@ export default {
             const data = {
                 'date': new Date(this.getDay(this.selectedIndex)),
                 'start': selected.start,
-                'start_part': selected.start_part,
-                'end': selected.end,
-                'end_part': selected.end_part,
+                'end': selected.end + 1,
                 'label': label,
             };
             axios.post(this.url, data, {headers})
@@ -338,22 +320,13 @@ export default {
             return d.setDate(d.getDate() + index);
         },
         getWidth(item2) {
-            let time = "#time" + item2.start + "_" + item2.start_part;
-            let right = $(".card").width() - ($(time).offset().left + $(time).width());
+            let time = "#time" + item2.start;
+
+            let right = $(".time_table_body").width() - ($(time).offset().left + $(time).width());
             let width = 0;
             for (let i = item2.start; i <= item2.end; i++) {
-                let for_start = 0;
-                let for_end = 4;
-                if (i == item2.start) {
-                    for_start = item2.start_part;
-                }
-                if (i == item2.end) {
-                    for_end = item2.end_part;
-                }
-                for (let j = for_start; j < for_end; j++) {
-                    let time = "#time" + i + "_" + j;
-                    width += $(time).outerWidth();
-                }
+                let time = "#time" + i;
+                width += $(time).outerWidth();
             }
             return [right, width];
         },
@@ -381,18 +354,6 @@ export default {
 
 
         },
-        getMinute(number) {
-            switch (number) {
-                case 0 :
-                    return 0;
-                case 1 :
-                    return 15;
-                case 2 :
-                    return 30;
-                case 3 :
-                    return 45;
-            }
-        }
     },
 };
 </script>

@@ -195,4 +195,26 @@ class Helper
         };
     }
 
+    public static function turn_withdraw_status($status)
+    {
+        return match ($status) {
+            "requested" => trans('trs.requested_withdraw'),
+            "rejected" => trans('trs.rejected'),
+            "completed" => trans('trs.completed'),
+            "pending" => trans('trs.pending_withdraw'),
+            default => trans('trs.unknown'),
+        };
+    }
+
+    public static function turn_withdraw_statusCSS($status)
+    {
+        return match ($status) {
+            "requested" => "btn-label-info",
+            "rejected" => "btn-label-warning",
+            "completed" => "btn-label-success",
+            "pending" => "btn-label-info",
+            default => "btn-label-info",
+        };
+    }
+
 }

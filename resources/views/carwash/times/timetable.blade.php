@@ -1,4 +1,4 @@
-@extends('layouts.servant')
+@extends('layouts.carwash')
 
 @section('style')
     <style>
@@ -22,7 +22,7 @@
                 <timetable :trs="{{json_encode(trans('trs'))}}"
                            :days="{{json_encode($days)}}"
                            :csrf="{{json_encode(csrf_token())}}"
-                           :url="{{json_encode(route('servant_timetable_update'))}}"
+                           :url="{{json_encode(route('carwash_timetable_update'))}}"
                            :schedule="{{json_encode($schedule)}}">
 
                 </timetable>

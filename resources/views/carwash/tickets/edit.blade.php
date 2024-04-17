@@ -1,4 +1,4 @@
-@extends('layouts.servant')
+@extends('layouts.carwash')
 
 @section('title')
     <span class="titlescc">@lang('trs.ticket')</span>
@@ -50,7 +50,6 @@
                                         <div class="timeline-header mb-sm-0 mb-3">
                                             <small class="left-to-right">
                                                 {{jdate(strtotime($message->created_at))->format('Y-n-j G:i')}}
-
                                             </small>
                                         </div>
                                         <p>{{ $message->text }}</p>
@@ -60,7 +59,7 @@
                         @endforeach
                     </ul>
                     <div style="width: 92%;margin-right: 8%;">
-                        <form action="{{ route('servant_ticket_update',$ticket->id) }}" method="POST">
+                        <form action="{{ route('carwash_ticket_update',$ticket->id) }}" method="POST">
                             @csrf
                             <label class="form-label" for="message">متن پیام </label>
                             <div class="input-group">

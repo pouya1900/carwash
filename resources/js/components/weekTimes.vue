@@ -9,7 +9,7 @@
                     <div class="panel_top_description">
                         <i class="fa-regular fa-circle-question"></i>
                         <span> در این قسمت برنامه کاری هفتگی خود را وارد کنید. می توانید برای روز های مختلف هفته بازه های
-                            مختلفی تعیین کنید. برای مثال از ساعت 8 الی 12 و از ساعت 14 الی 20. سیستم از این زمان بندی
+                            مختلفی تعیین کنید. برای مثال از ساعت 8 الی 12 و از ساعت 14 الی 20. همچنین حداکثر نوبتی که در هر ساعت از این روز قابل رزرو می باشد را وارد کنید. (برای مثال وقتی برای روز شنبه عدد 5 را وارد کنید برای هر ساعت از روز شنبه - مثلا ساعت 10 الی 11 - فقط 5 رزرو قابل انجام است.) سیستم از این زمان بندی
                             برای نمایش نوبت به کاربر استفاده می کند. شما می توانید از بخش جدول زمانی برنامه روز های خود
                             را مشاهده کرده و در صورت نیاز ساعاتی از روزی خاص را تعطیل کنید بدون اینکه نیاز به تغییر
                              برنامه هفتگی باشد. اگر روزی از هفته را کار نمی کنید همه ی بازه های زمانی ان را حذف کنید.</span>
@@ -17,27 +17,36 @@
                     <div v-for="(n,i) in 7">
                         <div class="week_times_item">
                             <div class="row full-width">
-                                <div class="col-2">
+                                <div class="col-4">
                                     <span>{{ week_day(i) }}</span>
+                                    <div v-if="times[i]" class="">
+                                        <label class="form-label">حداکثر نوبت در ساعت</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control text-start number_format_input"
+                                                   :name="'d['+i+'][number]'"
+                                                   placeholder="" min="0" required
+                                                   v-model="t_model[i]['number']">
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-10">
+                                <div class="col-8">
                                     <div v-for="(index,i2) in times[i]" class="row week_times_item_option">
                                         <div class="col-5">
                                             <label class="form-label">از</label>
                                             <div class="input-group">
                                                 <input type="text" class="form-control text-start number_format_input"
-                                                       :name="'d['+i+']['+i2+'][start]'"
+                                                       :name="'d['+i+'][times]['+i2+'][start]'"
                                                        placeholder="" min="0" max="24" required
-                                                       v-model="t_model[i][i2]['start']">
+                                                       v-model="t_model[i]['times'][i2]['start']">
                                             </div>
                                         </div>
                                         <div class="col-5">
                                             <label class="form-label">تا</label>
                                             <div class="input-group">
                                                 <input type="text" class="form-control text-start number_format_input"
-                                                       :name="'d['+i+']['+i2+'][end]'"
+                                                       :name="'d['+i+'][times]['+i2+'][end]'"
                                                        placeholder="" min="0" max="24" required
-                                                       v-model="t_model[i][i2]['end']">
+                                                       v-model="t_model[i]['times'][i2]['end']">
                                             </div>
                                         </div>
                                         <div v-if="index==times[i]" class="col-2">
@@ -45,10 +54,10 @@
                                                 class="fa-solid fa-circle-minus"></i> حذف </span>
                                         </div>
                                     </div>
-                                    <div class="row justify-content-center">
-                                        <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-10">
                                             <div class="add_service_attribute">
-                                                <span class="btn btn-primary" @click="add_new_time(i)">+ {{
+                                                <span class="btn btn-primary half-width" @click="add_new_time(i)">+ {{
                                                         trs.add_new_time
                                                     }}</span>
                                                 <!--                                                <span data-bs-toggle="tooltip" data-bs-placement="top"-->
@@ -84,26 +93,30 @@ export default {
         let vm = this;
         for (let i = 0; i < 7; i++) {
             vm.t_model[i] = [];
-            vm.t_model[i][0] = [];
-            vm.t_model[i][0]['start'] = null;
-            vm.t_model[i][0]['end'] = null;
+            vm.t_model[i]["times"] = [];
+            vm.t_model[i]["times"][0] = [];
+            vm.t_model[i]["number"] = null;
+            vm.t_model[i]["times"][0]['start'] = null;
+            vm.t_model[i]["times"][0]['end'] = null;
             if (this.schedule) {
                 let day_counter = i - 1 >= 0 ? i - 1 : 6;
-                JSON.parse(this.schedule['day' + day_counter]).forEach(function (item, key) {
-                    vm.t_model[i][key] = [];
-                    vm.t_model[i][key]['start'] = item["0"];
-                    vm.t_model[i][key]['end'] = item["1"];
-                });
+                let cur_schedule = JSON.parse(this.schedule['day' + day_counter]);
+                if (cur_schedule.times) {
+                    cur_schedule.times.forEach(function (item, key) {
+                        vm.t_model[i]["times"][key] = [];
+                        vm.t_model[i]["number"] = cur_schedule.number;
+                        vm.t_model[i]["times"][key]['start'] = item["0"];
+                        vm.t_model[i]["times"][key]['end'] = item["1"];
+                    });
+                }
             }
         }
-
-        console.log(this.t_model);
     },
     methods: {
         add_new_time(i) {
-            this.t_model[i][this.times[i]] = [];
-            this.t_model[i][this.times[i]]['start'] = null;
-            this.t_model[i][this.times[i]]['end'] = null;
+            this.t_model[i]["times"][this.times[i]] = [];
+            this.t_model[i]["times"][this.times[i]]['start'] = null;
+            this.t_model[i]["times"][this.times[i]]['end'] = null;
             this.times[i]++;
 
         },
@@ -132,13 +145,13 @@ export default {
     data() {
         return {
             times: [
-                Math.max(0, this.schedule ? JSON.parse(this.schedule['day6']).length : 0),
-                Math.max(0, this.schedule ? JSON.parse(this.schedule['day0']).length : 0),
-                Math.max(0, this.schedule ? JSON.parse(this.schedule['day1']).length : 0),
-                Math.max(0, this.schedule ? JSON.parse(this.schedule['day2']).length : 0),
-                Math.max(0, this.schedule ? JSON.parse(this.schedule['day3']).length : 0),
-                Math.max(0, this.schedule ? JSON.parse(this.schedule['day4']).length : 0),
-                Math.max(0, this.schedule ? JSON.parse(this.schedule['day5']).length : 0),
+                Math.max(0, this.schedule && JSON.parse(this.schedule['day6']).times ? JSON.parse(this.schedule['day6']).times.length : 0),
+                Math.max(0, this.schedule && JSON.parse(this.schedule['day0']).times ? JSON.parse(this.schedule['day0']).times.length : 0),
+                Math.max(0, this.schedule && JSON.parse(this.schedule['day1']).times ? JSON.parse(this.schedule['day1']).times.length : 0),
+                Math.max(0, this.schedule && JSON.parse(this.schedule['day2']).times ? JSON.parse(this.schedule['day2']).times.length : 0),
+                Math.max(0, this.schedule && JSON.parse(this.schedule['day3']).times ? JSON.parse(this.schedule['day3']).times.length : 0),
+                Math.max(0, this.schedule && JSON.parse(this.schedule['day4']).times ? JSON.parse(this.schedule['day4']).times.length : 0),
+                Math.max(0, this.schedule && JSON.parse(this.schedule['day5']).times ? JSON.parse(this.schedule['day5']).times.length : 0),
             ],
             t_model: []
         }

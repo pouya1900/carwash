@@ -1,4 +1,4 @@
-@extends('layouts.servant')
+@extends('layouts.carwash')
 
 @section('title')
     <span class="titlescc">@lang('trs.bank_cards')</span>
@@ -32,14 +32,14 @@
                                 <li>
                                     <button style="background:none;border: none;"
                                             onclick='functionConfirm("آیا از حذف کارت اطمینان دارید ؟", function yes() {
-                                                window.location.replace("{{route('servant_bank_delete',$bank->id)}}");
+                                                window.location.replace("{{route('carwash_bank_delete',$bank->id)}}");
                                                 },
                                                 function no() {
                                                 });'>حذف
                                     </button>
                                 </li>
                                 <li class="mgright10"><a class="no_hover_a"
-                                                         href="{{route('servant_bank_edit',$bank->id)}}">ویرایش</a>
+                                                         href="{{route('carwash_bank_edit',$bank->id)}}">ویرایش</a>
                                 </li>
                             </ul>
                             <div id="confirm">

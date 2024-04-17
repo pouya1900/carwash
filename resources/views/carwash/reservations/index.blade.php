@@ -1,4 +1,4 @@
-@extends('layouts.servant')
+@extends('layouts.carwash')
 
 @section('title')
     <span class="titlescc">@lang('trs.reservations_list')</span>
@@ -12,67 +12,42 @@
                 <table class="table txtcenter" style="width: 95%">
                     <thead>
                     <tr>
-                        <th>خدمات</th>
+                        <th>خدمت</th>
+                        <th>محصولات</th>
                         <th>کاربر</th>
                         <th>وضعیت</th>
                         <th>هزینه</th>
                         <th>تاریخ</th>
-                        <th>مدیریت</th>
                     </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
                     @foreach($reservations as $reservation)
                         <tr>
+                            <td>{{$reservation->services()->first()?->title}}</td>
                             <td>
-                                @foreach($reservation->services as $key=>$service)
+                                @foreach($reservation->products as $key=>$product)
                                     @if ($key>0)
                                         {{"، "}}
                                     @endif
-                                    {{$service->title}}
+                                    {{$product->title}}
                                 @endforeach
                             </td>
-                            <td>{{$reservation->user?->fullName}}</td>
+                            <td>{{$reservation->user?->fullName}} {{$reservation->user && $reservation->user->car ? ("- ".$reservation->user->car->type?->title) : ""}}</td>
                             <td>
-                                @if($reservation->status == "requested")
-                                    <span class="btn-label-info">@lang('trs.res_status_requested')</span>
-                                @elseif($reservation->status == "canceled")
+                                @if($reservation->status == "canceled")
                                     <span class="btn-label-warning">@lang('trs.res_status_canceled')</span>
-                                @elseif($reservation->status == "rejected")
-                                    <span class="btn-label-warning">@lang('trs.res_status_rejected')</span>
-                                @elseif($reservation->status == "accepted")
-                                    <span class="btn-label-success">@lang('trs.res_status_accepted')</span>
-                                @elseif($reservation->status == "asked")
-                                    <span class="btn-label-info">@lang('trs.res_status_asked')</span>
-                                @elseif($reservation->status == "doing")
-                                    <span class="btn-label-success">@lang('trs.res_status_doing')</span>
-                                @elseif($reservation->status == "done")
-                                    <span class="btn-label-success">@lang('trs.res_status_done')</span>
-                                @elseif($reservation->status == "finished")
+                                @elseif($reservation->status == "approved" && $reservation->time->end < \Carbon\Carbon::now()->addHour())
                                     <span class="btn-label-success">@lang('trs.res_status_finished')</span>
-                                @elseif($reservation->status == "sued")
-                                    <span class="btn-label-warning">@lang('trs.res_status_sued')</span>
+                                @elseif($reservation->status == "approved")
+                                    <span class="btn-label-info">@lang('trs.res_status_approved')</span>
                                 @else
                                     ---
                                 @endif
                             </td>
-                            <td>{{number_format($reservation->price)}} @lang("trs.rial")</td>
-                            <td>
-                                {{jdate(strtotime($reservation->created_at))->format("Y-n-j")}}
+                            <td>{{number_format($reservation->price)}} @lang("trs.toman")</td>
+                            <td style="direction: ltr">
+                                {{jdate(strtotime($reservation->time->start))->format("Y-n-j H:i")}}
                             </td>
-                            <td>
-                                <ul class="ulinlin fsize13">
-                                    <li class="mgright10"><a class="no_hover_a"
-                                                             href="{{route('servant_reservation_show',$reservation->id)}}">نمایش</a>
-                                    </li>
-                                </ul>
-                                <div id="confirm">
-                                    <div class="message"></div>
-                                    <button class="yes">بله</button>
-                                    <button class="no">خیر</button>
-                                </div>
-
-                            </td>
-
                         </tr>
                     @endforeach
                     </tbody>

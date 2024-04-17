@@ -1,4 +1,4 @@
-@extends('layouts.servant')
+@extends('layouts.carwash')
 
 @section('title')
     <span class="titlescc">@lang('trs.add_new_bank_card')</span>
@@ -9,7 +9,7 @@
         <div class="col-md-8 cardbank  bankadd" style="">
             <div class="card mb-4">
                 <h5 class="card-header txtcenter">@lang('trs.add_new_bank_card')</h5>
-                <form action="{{ route('servant_bank_store') }}" method="POST">
+                <form action="{{ route('carwash_bank_store') }}" method="POST">
                     @csrf
                     <div class="card-body demo-vertical-spacing demo-only-element">
 

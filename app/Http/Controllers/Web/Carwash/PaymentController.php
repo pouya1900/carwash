@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Servant;
+namespace App\Http\Controllers\Web\Carwash;
 
 use App\Http\Controllers\Controller;
+use App\Models\Carwash;
 use App\Models\Deposit;
 use Illuminate\Http\Request;
 
@@ -10,38 +11,38 @@ class PaymentController extends Controller
 {
     public function incomes()
     {
-        $servant = $this->request->current_servant;
+        $carwash = $this->request->current_carwash;
 
-        return view('servant.payments.income', compact('servant'));
+        return view('carwash.payments.income', compact('carwash'));
     }
 
     public function withdraws()
     {
-        $servant = $this->request->current_servant;
+        $carwash = $this->request->current_carwash;
 
-        return view('servant.payments.withdraw', compact('servant'));
+        return view('carwash.payments.withdraw', compact('carwash'));
     }
 
     public function create()
     {
-        $servant = $this->request->current_servant;
+        $carwash = $this->request->current_carwash;
 
-        return view('servant.payments.create', compact('servant'));
+        return view('carwash.payments.create', compact('carwash'));
     }
 
     public function store()
     {
         try {
-            $servant = $this->request->current_servant;
+            $carwash = $this->request->current_carwash;
 
             $price = $this->request->input("price");
             $bank = $this->request->input("bank");
 
-            if (intval($price) > $servant->balance) {
+            if (intval($price) > $carwash->balance) {
                 return redirect()->back()->withErrors(['error' => trans('trs.amount_is_more_than_balance')]);
             }
 
-            if (!$servant->banks()->where('id', $bank)->first()) {
+            if (!$carwash->banks()->where('id', $bank)->first()) {
                 return redirect()->back()->withErrors(['error' => "بانک انتخاب نشده است."]);
             }
 
@@ -49,18 +50,19 @@ class PaymentController extends Controller
                 return redirect()->back()->withErrors(['error' => "مبلغ نامعتبر است."]);
             }
 
-            $servant->deposits()->create([
+            $carwash->deposits()->create([
                 "bank_id" => $bank,
                 "total"   => $price,
                 "status"  => "requested",
+                "message" => "",
             ]);
 
-            $servant->update([
-                "balance" => $servant->balance - $price,
+            $carwash->update([
+                "balance" => $carwash->balance - $price,
             ]);
 
-            return redirect(route('servant_withdraws'))->with(['message' => trans('trs.changed_successfully')]);
-        } catch (\Exception) {
+            return redirect(route('carwash_withdraws'))->with(['message' => trans('trs.changed_successfully')]);
+        } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => trans('trs.changed_unsuccessfully')]);
         }
     }
@@ -68,9 +70,9 @@ class PaymentController extends Controller
     public function delete(Deposit $deposit)
     {
         try {
-            $servant = $this->request->current_servant;
+            $carwash = $this->request->current_carwash;
 
-            if ($servant->id != $deposit->servant->id) {
+            if ($carwash->id != $deposit->depositable->id || !$deposit->depositable instanceof Carwash) {
                 abort(403);
             }
 
@@ -82,11 +84,11 @@ class PaymentController extends Controller
 
             $deposit->delete();
 
-            $servant->update([
-                "balance" => $servant->balance + $price,
+            $carwash->update([
+                "balance" => $carwash->balance + $price,
             ]);
 
-            return redirect(route('servant_withdraws'))->with(['message' => trans('trs.changed_successfully')]);
+            return redirect(route('carwash_withdraws'))->with(['message' => trans('trs.changed_successfully')]);
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => trans('trs.changed_unsuccessfully')]);
         }

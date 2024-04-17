@@ -1,28 +1,29 @@
 <?php
 
-namespace App\Http\Controllers\Servant;
+namespace App\Http\Controllers\Web\Carwash;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\bankStoreRequest;
+use App\Http\Requests\Web\bankStoreRequest;
 use App\Models\Bank;
+use App\Models\Carwash;
 use Illuminate\Http\Request;
 
 class BankController extends Controller
 {
     public function index()
     {
-        $servant = $this->request->current_servant;
+        $carwash = $this->request->current_carwash;
 
-        $banks = $servant->banks;
+        $banks = $carwash->banks;
 
-        return view('servant.banks.index', compact('banks', 'servant'));
+        return view('carwash.banks.index', compact('banks', 'carwash'));
     }
 
     public function create()
     {
-        $servant = $this->request->current_servant;
+        $carwash = $this->request->current_carwash;
 
-        return view('servant.banks.create', compact('servant'));
+        return view('carwash.banks.create', compact('carwash'));
     }
 
     public function store(bankStoreRequest $request)
@@ -31,14 +32,14 @@ class BankController extends Controller
             $name = $request->input('name');
             $card = $request->input('card');
             $shaba = $request->input('shaba');
-            $servant = $this->request->current_servant;
+            $carwash = $this->request->current_carwash;
 
-            $bank = $servant->banks()->create([
+            $bank = $carwash->banks()->create([
                 'name'  => $name,
                 'card'  => $card,
                 'shaba' => $shaba,
             ]);
-            return redirect(route('servant_banks'))->with(['message' => trans('trs.bank_saved_successfully')]);
+            return redirect(route('carwash_banks'))->with(['message' => trans('trs.bank_saved_successfully')]);
         } catch (\Exception) {
             return redirect()->back()->withErrors(['error' => trans('trs.changed_unsuccessfully')]);
         }
@@ -47,13 +48,13 @@ class BankController extends Controller
 
     public function edit(Bank $bank)
     {
-        $servant = $this->request->current_servant;
+        $carwash = $this->request->current_carwash;
 
-        if ($servant->id != $bank->servant->id) {
-            abort('403');
+        if ($carwash->id != $bank->bankable->id || !$bank->bankable instanceof Carwash) {
+            return abort('403');
         }
 
-        return view('servant.banks.edit', compact('bank', 'servant'));
+        return view('carwash.banks.edit', compact('bank', 'carwash'));
     }
 
     public function update(Bank $bank, bankStoreRequest $request)
@@ -63,10 +64,10 @@ class BankController extends Controller
             $name = $request->input('name');
             $card = $request->input('card');
             $shaba = $request->input('shaba');
-            $servant = $this->request->current_servant;
+            $carwash = $this->request->current_carwash;
 
-            if ($servant->id != $bank->servant->id) {
-                abort('403');
+            if ($carwash->id != $bank->bankable->id || !$bank->bankable instanceof Carwash) {
+                return abort('403');
             }
 
             $bank->update([
@@ -74,7 +75,7 @@ class BankController extends Controller
                 'card'  => $card,
                 'shaba' => $shaba,
             ]);
-            return redirect(route('servant_banks'))->with(['message' => trans('trs.changed_successfully')]);
+            return redirect(route('carwash_banks'))->with(['message' => trans('trs.changed_successfully')]);
         } catch (\Exception) {
             return redirect()->back()->withErrors(['error' => trans('trs.changed_unsuccessfully')]);
         }
@@ -83,15 +84,15 @@ class BankController extends Controller
     public function delete(Bank $bank)
     {
         try {
-            $servant = $this->request->current_servant;
+            $carwash = $this->request->current_carwash;
 
-            if ($servant->id != $bank->servant->id) {
-                abort('403');
+            if ($carwash->id != $bank->bankable->id || !$bank->bankable instanceof Carwash) {
+                return abort('403');
             }
 
             $bank->delete();
 
-            return redirect(route('servant_banks'))->with(['message' => trans('trs.changed_successfully')]);
+            return redirect(route('carwash_banks'))->with(['message' => trans('trs.changed_successfully')]);
         } catch (\Exception) {
             return redirect()->back()->withErrors(['error' => trans('trs.changed_unsuccessfully')]);
         }

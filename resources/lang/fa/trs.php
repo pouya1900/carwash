@@ -230,4 +230,11 @@ return [
     "verify_code"                       => "کد تایید",
     "toman"                             => "تومان",
     "discount"                          => "تخفیف",
+    "res_status_canceled"               => "لغو شده",
+    "res_status_approved"               => "تایید شده",
+    "res_status_finished"               => "تمام شده",
+    "amount_is_more_than_balance"       => "مبلغ درخواستی بیشتر از موجودی شما است.",
+    "new_withdraw"                         => "درخواست برداشت جدید",
+    "requested_withdraw"                   => "درخواست برداشت",
+    "pending_withdraw"                     => "در حال واریز",
 ];

@@ -17,19 +17,20 @@
                 <div class="profile_main_content">
 
                     <div class="row justify-content-around">
-                        <div class="col-12 col-lg-6">
+                        <div class="col-12">
                             <div class="row">
-                                <div class="col-3">
+                                <div class="col-2">
                                     <div class="profile_main--avatar">
                                         <img src="{{$carwash->logo['paths']["standard"]}}" title="" alt="">
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-8">
                                     <div class="profile_main--name">
                                         <p>{{$carwash->title}}</p>
+                                        <p>{{$carwash->address}}</p>
                                     </div>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-2">
                                     <p>{{$carwash->mobile}}</p>
                                 </div>
                             </div>

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Servant;
+namespace App\Http\Controllers\Web\Carwash;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ticketMessageRequest;
-use App\Http\Requests\ticketStoreRequest;
+use App\Http\Requests\Web\ticketMessageRequest;
+use App\Http\Requests\Web\ticketStoreRequest;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 
@@ -12,18 +12,18 @@ class TicketController extends Controller
 {
     public function index()
     {
-        $servant = $this->request->current_servant;
+        $carwash = $this->request->current_carwash;
 
-        $tickets = $servant->tickets()->orderBy("created_at", "desc")->get();
+        $tickets = $carwash->tickets()->orderBy("created_at", "desc")->get();
 
-        return view('servant.tickets.index', compact('tickets', 'servant'));
+        return view('carwash.tickets.index', compact('tickets', 'carwash'));
     }
 
     public function create()
     {
-        $servant = $this->request->current_servant;
+        $carwash = $this->request->current_carwash;
 
-        return view('servant.tickets.create', compact('servant'));
+        return view('carwash.tickets.create', compact('carwash'));
     }
 
     public function store(ticketStoreRequest $request)
@@ -31,9 +31,9 @@ class TicketController extends Controller
         try {
             $title = $request->input('title');
             $message = $request->input('message');
-            $servant = $this->request->current_servant;
+            $carwash = $this->request->current_carwash;
 
-            $ticket = $servant->tickets()->create([
+            $ticket = $carwash->tickets()->create([
                 'title'  => $title,
                 'status' => "pending",
             ]);
@@ -43,7 +43,7 @@ class TicketController extends Controller
                 'text'   => $message,
             ]);
 
-            return redirect(route('servant_ticket_edit', $ticket->id));
+            return redirect(route('carwash_ticket_edit', $ticket->id));
         } catch (\Exception) {
             return redirect()->back()->withErrors(['error' => trans('trs.there_is_problem_to_send_ticket')]);
         }
@@ -52,13 +52,13 @@ class TicketController extends Controller
 
     public function edit(Ticket $ticket)
     {
-        $servant = $this->request->current_servant;
+        $carwash = $this->request->current_carwash;
 
-        if ($servant->id != $ticket->ticketable->id) {
+        if ($carwash->id != $ticket->ticketable->id) {
             abort('403');
         }
 
-        return view('servant.tickets.edit', compact('ticket', 'servant'));
+        return view('carwash.tickets.edit', compact('ticket', 'carwash'));
     }
 
     public function update(Ticket $ticket, ticketMessageRequest $request)
@@ -66,9 +66,9 @@ class TicketController extends Controller
         try {
 
             $message = $request->input('message');
-            $servant = $this->request->current_servant;
+            $carwash = $this->request->current_carwash;
 
-            if ($servant->id != $ticket->ticketable->id) {
+            if ($carwash->id != $ticket->ticketable->id) {
                 abort('403');
             }
 
@@ -76,7 +76,7 @@ class TicketController extends Controller
                 'sender' => 'user',
                 'text'   => $message,
             ]);
-            return redirect(route('servant_ticket_edit', $ticket->id));
+            return redirect(route('carwash_ticket_edit', $ticket->id));
         } catch (\Exception) {
             return redirect()->back()->withErrors(['error' => trans('trs.there_is_problem_to_send_message')]);
         }

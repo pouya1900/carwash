@@ -23,7 +23,7 @@
                         </div>
 
                         <div class="flex-grow-1 margin-right-10">
-                            <span>موجودی : {{number_format($carwash->balance)}} @lang('trs.rial')</span>
+                            <span>موجودی : {{number_format($carwash->balance)}} @lang('trs.toman')</span>
                         </div>
 
                     </div>

@@ -57,6 +57,11 @@ class Carwash extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class, "carwash_id");
+    }
+
     public function banks()
     {
         return $this->morphMany(Bank::class, "bankable");
@@ -172,4 +177,10 @@ class Carwash extends Authenticatable implements JWTSubject
     {
         return $this->morphMany(Notification::class, 'notifiable');
     }
+
+    public function tickets()
+    {
+        return $this->morphMany(Ticket::class, 'ticketable');
+    }
+
 }
