@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
             <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
-                <i class="bx bx-menu bx-sm"></i>
+                <i class="fa-solid fa-bars"></i>
             </a>
         </div>
 
@@ -14,7 +14,7 @@
                     <div class="d-flex">
                         <div class="flex-shrink-0 me-3">
                             <div class="avatar avatar-online">
-                                <img src="{{$admin->avatar['path']}}" alt
+                                <img src="{{$admin->avatar['paths']['standard']}}" alt
                                      class="rounded-circle">
                             </div>
                         </div>

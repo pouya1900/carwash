@@ -21,6 +21,25 @@ class Helper
         return $image_model;
     }
 
+    public static function turn_user_status($type)
+    {
+        return match ($type) {
+            "active" => trans('trs.active'),
+            "inactive" => trans('trs.inactive'),
+            default => trans('trs.unknown'),
+        };
+    }
+
+    public static function turn_carwash_status($type)
+    {
+        return match ($type) {
+            "pending" => trans('trs.pending'),
+            "accepted" => trans('trs.accepted'),
+            default => trans('trs.unknown'),
+        };
+    }
+
+
     public static function getFreeTimes($carwash)
     {
         $schedule = $carwash->schedule;
@@ -214,6 +233,18 @@ class Helper
             "completed" => "btn-label-success",
             "pending" => "btn-label-info",
             default => "btn-label-info",
+        };
+    }
+
+    public static function turn_payment_status($status)
+    {
+        return match ($status) {
+            "pending" => trans('trs.pending_payment'),
+            "canceled" => trans('trs.canceled_payment'),
+            "failed" => trans('trs.failed_payment'),
+            "approved" => trans('trs.approved_payment'),
+            "completed" => trans('trs.completed_payment'),
+            default => trans('trs.unknown'),
         };
     }
 

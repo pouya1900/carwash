@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use App\Helper;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
-class Administrator extends Model
+class Administrator extends Authenticatable
 {
     use HasFactory;
 

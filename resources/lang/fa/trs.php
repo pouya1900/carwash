@@ -1,6 +1,10 @@
 <?php
 
 return [
+    "all_carwashes"                     => "همه کارواش ها",
+    "carwashes"                         => "کارواش ها",
+    "carwash"                           => "کارواش",
+    "edit_carwash"                      => "ویرایش کارواش",
     "categories"                        => "دسته بندی ها",
     "categories_list"                   => "لیست دسته بندی ها",
     "add_category"                      => "افزودن دسته بندی",
@@ -234,7 +238,7 @@ return [
     "res_status_approved"               => "تایید شده",
     "res_status_finished"               => "تمام شده",
     "amount_is_more_than_balance"       => "مبلغ درخواستی بیشتر از موجودی شما است.",
-    "new_withdraw"                         => "درخواست برداشت جدید",
-    "requested_withdraw"                   => "درخواست برداشت",
-    "pending_withdraw"                     => "در حال واریز",
+    "new_withdraw"                      => "درخواست برداشت جدید",
+    "requested_withdraw"                => "درخواست برداشت",
+    "pending_withdraw"                  => "در حال واریز",
 ];

@@ -29,10 +29,10 @@
             </a>
         </li>
 
-        <li class="menu-item {{url()->current()==route('admin.servants') ? 'active' : ''}}">
-            <a href="{{route('admin.servants')}}" class="menu-link ">
+        <li class="menu-item {{url()->current()==route('admin.carwashes') ? 'active' : ''}}">
+            <a href="{{route('admin.carwashes')}}" class="menu-link ">
                 <i class="menu-icon fa-solid fa-list"></i>
-                <div data-i18n="Dashboards">@lang('trs.servants')</div>
+                <div data-i18n="Dashboards">@lang('trs.carwashes')</div>
             </a>
         </li>
 
@@ -57,27 +57,6 @@
             </a>
         </li>
 
-        <li class="menu-item {{url()->current()==route('admin.tariffs') || url()->current()==route('admin.tariff.create') ? 'active' : ''}}">
-            <a href="javascript:void(0)" class="menu-link menu-toggle">
-                <i class="menu-icon fa-solid fa-headset"></i>
-                <div data-i18n="Layouts">@lang('trs.tariffs')</div>
-            </a>
-
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="{{ route('admin.tariff.create') }}" class="menu-link">
-                        <i class="fa-regular fa-envelope"></i>
-                        <div data-i18n="Without menu">@lang('trs.add_tariff')</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="{{route('admin.tariffs')}}" class="menu-link">
-                        <i class="fa-solid fa-envelope"></i>
-                        <div data-i18n="Vertical">@lang('trs.tariffs_list')</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
 
 
         <li class="menu-item {{url()->current()==route('admin.payments') || url()->current()==route('admin.releases') || url()->current()==route('admin.deposits') ? 'active' : ''}}">
@@ -108,35 +87,6 @@
             </ul>
         </li>
 
-        <li class="menu-item {{url()->current()==route('admin.invoices') ? 'active' : ''}}">
-            <a href="{{route('admin.invoices')}}" class="menu-link">
-                <i class="menu-icon fa-solid fa-headset"></i>
-                <div data-i18n="Layouts">@lang('trs.invoices')</div>
-            </a>
-        </li>
-
-        <li class="menu-item {{url()->current()==route('admin.insurances') || url()->current()==route('admin.insurance.create') ? 'active' : ''}}">
-            <a href="javascript:void(0)" class="menu-link menu-toggle">
-                <i class="menu-icon fa-solid fa-headset"></i>
-                <div data-i18n="Layouts">@lang('trs.insurances')</div>
-            </a>
-
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="{{ route('admin.insurance.create') }}" class="menu-link">
-                        <i class="fa-regular fa-envelope"></i>
-                        <div data-i18n="Without menu">@lang('trs.add_insurance')</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="{{route('admin.insurances')}}" class="menu-link">
-                        <i class="fa-solid fa-envelope"></i>
-                        <div data-i18n="Vertical">@lang('trs.insurances_list')</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-
 
         <li class="menu-item {{url()->current()==route('admin.tickets','user') ? 'active' : ''}}">
             <a href="{{route('admin.tickets','user')}}" class="menu-link ">
@@ -145,10 +95,10 @@
             </a>
         </li>
 
-        <li class="menu-item {{url()->current()==route('admin.tickets','servant') ? 'active' : ''}}">
-            <a href="{{route('admin.tickets','servant')}}" class="menu-link ">
+        <li class="menu-item {{url()->current()==route('admin.tickets','carwash') ? 'active' : ''}}">
+            <a href="{{route('admin.tickets','carwash')}}" class="menu-link ">
                 <i class="menu-icon fa-solid fa-list"></i>
-                <div data-i18n="Dashboards">@lang('trs.servant_ticket')</div>
+                <div data-i18n="Dashboards">@lang('trs.carwash_ticket')</div>
             </a>
         </li>
 
@@ -220,12 +170,6 @@
             </ul>
         </li>
 
-        <li class="menu-item {{url()->current()==route('admin.contact_forms') ? 'active' : ''}}">
-            <a href="{{route('admin.contact_forms')}}" class="menu-link ">
-                <i class="menu-icon fa-solid fa-list"></i>
-                <div data-i18n="Dashboards">@lang('trs.contact_forms')</div>
-            </a>
-        </li>
 
         <li class="menu-item {{url()->current()==route('admin.settings') ? 'active' : ''}}">
             <a href="{{route('admin.settings')}}" class="menu-link ">
