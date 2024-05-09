@@ -13168,4 +13168,7 @@ table.dataTable thead > tr > th {
     background: var(--color1);
 }
 
+.load_screen_image {
+    max-height: 200px;
+}
 
