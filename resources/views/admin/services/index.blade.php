@@ -14,55 +14,62 @@
                 <p><a class="btn btn-secondary add_button_admin"
                       href="{{route('admin.service.create',$carwash->id)}}">@lang('trs.add_new_service')</a></p>
             @endif
-            <table id="example" class="table table-striped" style="width:95%">
-                <thead>
-                <tr>
-                    <th>کارواش</th>
-                    <th>عنوان</th>
-                    <th>ایتم ها</th>
-                    <th>قیمت</th>
-                    <th>تخفیف</th>
-                    <th>نوع</th>
-                    <th>وضعیت</th>
-                    <th>مدیریت</th>
-                </tr>
-                </thead>
-                <tbody class="table-border-bottom-0">
-                @foreach($services as $service)
+            @if (count($services))
+                <table id="example" class="table table-striped" style="width:95%">
+                    <thead>
                     <tr>
-                        <td>{{ $service->carwash?->title }}</td>
-                        <td>{{ $service->base?->title }}</td>
-                        <td>{{ $service->base?->itemText }}</td>
-                        <td>{{ number_format($service->price) }} تومان</td>
-                        <td>{{ $service->discount }}</td>
-                        <td>{{ $service->is_main ? "اصلی" : "فرعی" }}</td>
-                        <td class="{{\App\Helper::serviceStatusCSS($service->status)}}">{{ \App\Helper::serviceStatus($service->status) }}</td>
-                        <td>
-                            <ul class="ulinlin fsize13">
-                                <li class="mgright10"><a class="no_hover_a"
-                                                         href="{{route('admin.service.edit',$service->id)}}">ویرایش</a>
-                                </li>
-                                <li>
-                                    <button style="background:none;border: none;"
-                                            onclick='functionConfirm("آیا از حذف سرویس اطمینان دارید ؟", function yes() {
-                                                window.location.replace("{{route('admin.service.delete',$service->id)}}");
-                                                },
-                                                function no() {
-                                                });'>حذف
-                                    </button>
-                                </li>
-                            </ul>
-                            <div id="confirm">
-                                <div class="message"></div>
-                                <button class="yes">بله</button>
-                                <button class="no">خیر</button>
-                            </div>
-                        </td>
+                        <th>کارواش</th>
+                        <th>عنوان</th>
+                        <th>ایتم ها</th>
+                        <th>قیمت</th>
+                        <th>تخفیف</th>
+                        <th>نوع</th>
+                        <th>وضعیت</th>
+                        <th>مدیریت</th>
                     </tr>
-                @endforeach
-                </tbody>
-            </table>
-
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                    @foreach($services as $service)
+                        <tr>
+                            <td data-th="کارواش">{{ $service->carwash?->title }}</td>
+                            <td data-th="عنوان">{{ $service->base?->title }}</td>
+                            <td data-th="ایتم ها">{{ $service->base?->itemText }}</td>
+                            <td data-th="قیمت">{{ number_format($service->price) }} تومان</td>
+                            <td data-th="تخفیف">{{ $service->discount }}</td>
+                            <td data-th="نوع">{{ $service->is_main ? "اصلی" : "فرعی" }}</td>
+                            <td data-th="وضعیت"
+                                class="{{\App\Helper::serviceStatusCSS($service->status)}}">{{ \App\Helper::serviceStatus($service->status) }}</td>
+                            <td data-th="مدیریت">
+                                <ul class="ulinlin fsize13">
+                                    <li class="mgright10"><a class="no_hover_a"
+                                                             href="{{route('admin.service.edit',$service->id)}}">ویرایش</a>
+                                    </li>
+                                    <li>
+                                        <button style="background:none;border: none;"
+                                                onclick='functionConfirm("آیا از حذف سرویس اطمینان دارید ؟", function yes() {
+                                                    window.location.replace("{{route('admin.service.delete',$service->id)}}");
+                                                    },
+                                                    function no() {
+                                                    });'>حذف
+                                        </button>
+                                    </li>
+                                </ul>
+                                <div id="confirm">
+                                    <div class="message"></div>
+                                    <button class="yes">بله</button>
+                                    <button class="no">خیر</button>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            @else
+                <div class="nodata">
+                    <img src="storage/assets/siteContent/no_data_new1.png" alt="#" class="nodata_img">
+                    <p class="nodata-text">اطلاعاتی وجود ندارد</p>
+                </div>
+            @endif
 
         </div>
     </div>

@@ -1,4 +1,4 @@
-@extends('layouts.servant')
+@extends('layouts.carwash')
 
 @section('title')
     <span class="titlescc">@lang('trs.notifications')</span>
@@ -8,27 +8,44 @@
     <div class="card ticket">
         <h5 class="card-header">@lang('trs.notifications')</h5>
         <div class="table-responsive text-nowrap">
-            <table class="table txtcenter" style="width: 95%">
-                <thead>
-                <tr>
-                    <th>@lang('trs.title')</th>
-                    <th>@lang('trs.time')</th>
-                </tr>
-                </thead>
-                <tbody class="table-border-bottom-0">
-                @foreach($notifications as $notification)
+            @if (count($notifications))
+                <table class="table txtcenter" style="width: 95%">
+                    <thead>
                     <tr>
-                        <td><p class="notification_title">{{ $notification->title }}</p></td>
-                        <td>{{ jdate($notification->created_at)->format("Y-m-d H:i") }}</td>
+                        <th>@lang('trs.title')</th>
+                        <th>@lang('trs.time')</th>
                     </tr>
-                @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                    @foreach($notifications as $notification)
+                        <tr>
+                            <td data-th="@lang('trs.title')"><p
+                                    class="notification_title">{{ $notification->title }}</p></td>
+                            <td data-th="@lang('trs.time')">{{ jdate($notification->created_at)->format("Y-m-d H:i") }}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            @else
+                <div class="nodata">
+                    <img src="storage/assets/siteContent/no_data_new1.png" alt="#" class="nodata_img">
+                    <p class="nodata-text">اطلاعاتی وجود ندارد</p>
+                </div>
+            @endif
         </div>
     </div>
 @endsection
 
 @section('script')
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/fa.json',
+                },
+            });
+        });
+    </script>
 
     <script>
         function functionConfirm(msg, myYes, myNo) {

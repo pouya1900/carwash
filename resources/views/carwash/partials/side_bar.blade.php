@@ -23,14 +23,14 @@
 
         <li class="menu-item {{url()->current()==route('carwash_services') || url()->current()==route('carwash_service_create') ? 'active' : ''}}">
             <a href="javascript:void(0)" class="menu-link menu-toggle">
-                <i class="menu-icon fa-solid fa-list"></i>
+                <i class="menu-icon fa-solid fa-hands-bubbles"></i>
                 <div data-i18n="Layouts">@lang('trs.services')</div>
             </a>
 
             <ul class="menu-sub">
                 <li class="menu-item">
                     <a href="{{ route('carwash_service_create') }}" class="menu-link">
-                        <i class="menu-icon fa-solid fa-list"></i>
+                        <i class="fa-solid fa-heart-circle-plus"></i>
                         <div data-i18n="Without menu">@lang('trs.add_service')</div>
                     </a>
                 </li>
@@ -46,20 +46,20 @@
         {{--        product--}}
         <li class="menu-item {{url()->current()==route('carwash_product_create') || url()->current()==route('carwash_products') ? 'active' : ''}}">
             <a href="javascript:void(0)" class="menu-link menu-toggle">
-                <i class="menu-icon fa-solid fa-headset"></i>
+                <i class="menu-icon fa-solid fa-cart-shopping"></i>
                 <div data-i18n="Layouts">@lang('trs.products')</div>
             </a>
 
             <ul class="menu-sub">
                 <li class="menu-item">
                     <a href="{{ route('carwash_product_create') }}" class="menu-link">
-                        <i class="fa-regular fa-envelope"></i>
+                        <i class="fa-solid fa-cart-plus"></i>
                         <div data-i18n="Without menu">@lang('trs.add_new_product')</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="{{route('carwash_products')}}" class="menu-link">
-                        <i class="fa-solid fa-envelope"></i>
+                        <i class="fa-solid fa-clipboard-list"></i>
                         <div data-i18n="Vertical">@lang('trs.products_list')</div>
                     </a>
                 </li>
@@ -85,13 +85,13 @@
             <ul class="menu-sub">
                 <li class="menu-item">
                     <a href="{{ route('carwash_ticket_create') }}" class="menu-link">
-                        <i class="fa-regular fa-envelope"></i>
+                        <i class="fa-solid fa-magnifying-glass-plus"></i>
                         <div data-i18n="Without menu">ارسال تیکت</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="{{route('carwash_tickets')}}" class="menu-link">
-                        <i class="fa-solid fa-envelope"></i>
+                        <i class="fa-solid fa-clipboard-list"></i>
                         <div data-i18n="Vertical">لیست تیکت ها</div>
                     </a>
                 </li>
@@ -153,20 +153,20 @@
         {{--        payment--}}
         <li class="menu-item {{url()->current()==route('carwash_incomes') || url()->current()==route('carwash_withdraw_create') || url()->current()==route('carwash_withdraws') ? 'active' : ''}}">
             <a href="javascript:void(0)" class="menu-link menu-toggle">
-                <i class="menu-icon fa-solid fa-headset"></i>
+                <i class="menu-icon fa-solid fa-money-bill"></i>
                 <div data-i18n="Layouts">مالی</div>
             </a>
 
             <ul class="menu-sub">
                 <li class="menu-item">
                     <a href="{{ route('carwash_incomes') }}" class="menu-link">
-                        <i class="fa-regular fa-envelope"></i>
+                        <i class="fa-solid fa-hand-holding-dollar"></i>
                         <div data-i18n="Without menu">لیست درامد ها</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="{{route('carwash_withdraws')}}" class="menu-link">
-                        <i class="fa-solid fa-envelope"></i>
+                        <i class="fa-solid fa-money-bill-transfer"></i>
                         <div data-i18n="Vertical">لیست برداشت ها</div>
                     </a>
                 </li>
@@ -185,20 +185,20 @@
         {{-- time --}}
         <li class="menu-item {{url()->current()==route('carwash_times') || url()->current()==route('carwash_timetable') ? 'active' : ''}}">
             <a href="javascript:void(0)" class="menu-link menu-toggle">
-                <i class="menu-icon fa-solid fa-building-columns"></i>
+                <i class="menu-icon fa-regular fa-clock"></i>
                 <div data-i18n="Layouts">@lang('trs.times_table')</div>
             </a>
 
             <ul class="menu-sub">
                 <li class="menu-item">
                     <a href="{{ route('carwash_times') }}" class="menu-link">
-                        <i class="fa-solid fa-circle-plus"></i>
+                        <i class="fa-solid fa-business-time"></i>
                         <div data-i18n="Without menu">@lang('trs.week_times')</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="{{ route('carwash_timetable') }}" class="menu-link">
-                        <i class="fa-solid fa-circle-plus"></i>
+                        <i class="fa-solid fa-calendar-days"></i>
                         <div data-i18n="Without menu">@lang('trs.times_table')</div>
                     </a>
                 </li>

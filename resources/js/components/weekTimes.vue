@@ -5,7 +5,7 @@
             <input type="hidden" name="_token" :value="this.csrf" autocomplete="off">
 
             <div class="row full-width justify-content-center">
-                <div class="col-8">
+                <div class="col-12 col-lg-8">
                     <div class="panel_top_description">
                         <i class="fa-regular fa-circle-question"></i>
                         <span> در این قسمت برنامه کاری هفتگی خود را وارد کنید. می توانید برای روز های مختلف هفته بازه های
@@ -17,7 +17,7 @@
                     <div v-for="(n,i) in 7">
                         <div class="week_times_item">
                             <div class="row full-width">
-                                <div class="col-4">
+                                <div class="col-12 col-lg-4 mg-b-10">
                                     <span>{{ week_day(i) }}</span>
                                     <div v-if="times[i]" class="">
                                         <label class="form-label">حداکثر نوبت در ساعت</label>
@@ -29,9 +29,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-8">
+                                <div class="col-12 col-lg-8">
                                     <div v-for="(index,i2) in times[i]" class="row week_times_item_option">
-                                        <div class="col-5">
+                                        <div class="col-4 col-lg-5">
                                             <label class="form-label">از</label>
                                             <div class="input-group">
                                                 <input type="text" class="form-control text-start number_format_input"
@@ -40,7 +40,7 @@
                                                        v-model="t_model[i]['times'][i2]['start']">
                                             </div>
                                         </div>
-                                        <div class="col-5">
+                                        <div class="col-4 col-lg-5">
                                             <label class="form-label">تا</label>
                                             <div class="input-group">
                                                 <input type="text" class="form-control text-start number_format_input"
@@ -49,7 +49,7 @@
                                                        v-model="t_model[i]['times'][i2]['end']">
                                             </div>
                                         </div>
-                                        <div v-if="index==times[i]" class="col-2">
+                                        <div v-if="index==times[i]" class="col-4 col-lg-2">
                                             <span class="btn times_table_mines" @click="delete_time(i)"><i
                                                 class="fa-solid fa-circle-minus"></i> حذف </span>
                                         </div>

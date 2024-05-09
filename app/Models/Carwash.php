@@ -109,7 +109,7 @@ class Carwash extends Authenticatable implements JWTSubject
             return ["paths" => $image_model, "model" => $image];
         }
         $path = Storage::disk("assetsStorage")->url('') . 'siteContent/';
-        $image_model = Helper::getImageModel($path, "ic_no_avatar.png", 1);
+        $image_model = Helper::getImageModel($path, "your_logo.png", 1);
 
         return ["paths" => $image_model, "model" => null];
     }

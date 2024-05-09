@@ -23,7 +23,7 @@
                         <span><i class="fa-solid fa-user"></i></span>
                         <span>
                             @if ($current_carwash)
-                                <a href="{{route('carwash_dashboard')}}">{{$current_carwash->fullName}}</a>
+                                <a href="{{route('carwash_dashboard')}}">{{$current_carwash->title}}</a>
                                 <span class="logout"><a href="{{route('logout')}}"><i
                                             class="fa-solid fa-right-from-bracket"></i> @lang('trs.logout')</a></span>
 

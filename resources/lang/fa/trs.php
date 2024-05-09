@@ -241,4 +241,11 @@ return [
     "new_withdraw"                      => "درخواست برداشت جدید",
     "requested_withdraw"                => "درخواست برداشت",
     "pending_withdraw"                  => "در حال واریز",
+    "otp_not_correct"                   => "کد تایید نادرست است.",
+    "otp_too_many_attempt"              => "بیشتر از حد مجاز تلاش شده است.",
+    "otp_expired"                       => "کد تایید منقضی شده است.",
+    "otp_should_send_in_two_minute"     => "محدودیت ارسال کد تایید در هر 2 دقیقه",
+    "loading"                           => "در حال بارگذاری",
+    "notifications"                     => "اطلاعیه ها",
+
 ];

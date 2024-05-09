@@ -51,7 +51,7 @@
                     <div class="mb-3 form-password-toggle">
 
                         <div class="row">
-                            <div class="col-lg-4">
+                            <div class="col-lg-4 mg-b-10">
                                 <a class="btn btn-info d-grid w-100 submit_form_OTP" @click="send_otp()">ارسال کد</a>
                             </div>
                             <div class="col-lg-8">

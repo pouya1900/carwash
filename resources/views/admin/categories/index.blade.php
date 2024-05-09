@@ -8,48 +8,55 @@
     <div class="card ticket">
         <h5 class="card-header">@lang('trs.categories_list')</h5>
         <div class="table-responsive text-nowrap">
-            <table class="table txtcenter" style="width: 95%">
-                <thead>
-                <tr>
-                    <th>ردیف</th>
-                    <th>عنوان</th>
-                    <th>توضیحات</th>
-                    <th>مدیریت</th>
-                </tr>
-                </thead>
-                <tbody class="table-border-bottom-0">
-                @foreach($categories as $key=>$category)
+            @if (count($categories))
+                <table class="table txtcenter" style="width: 95%">
+                    <thead>
                     <tr>
-                        <td>{{$key+1}}</td>
-                        <td>{{ $category->title }}</td>
-                        <td>{{ $category->description}}</td>
-                        <td>
-                            <ul class="ulinlin fsize13">
-                                <li>
-                                    <button style="background:none;border: none;"
-                                            onclick='functionConfirm("آیا از حذف دسته بندی اطمینان دارید ؟", function yes() {
-                                                window.location.replace("{{route('admin.category.remove',$category->id)}}");
-                                                },
-                                                function no() {
-                                                });'>حذف
-                                    </button>
-                                </li>
-                                <li class="mgright10"><a class="no_hover_a"
-                                                         href="{{route('admin.category.edit',$category->id)}}">ویرایش</a>
-                                </li>
-                            </ul>
-                            <div id="confirm">
-                                <div class="message"></div>
-                                <button class="yes">بله</button>
-                                <button class="no">خیر</button>
-                            </div>
-
-                        </td>
-
+                        <th>ردیف</th>
+                        <th>عنوان</th>
+                        <th>توضیحات</th>
+                        <th>مدیریت</th>
                     </tr>
-                @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                    @foreach($categories as $key=>$category)
+                        <tr>
+                            <td data-th="ردیف">{{$key+1}}</td>
+                            <td data-th="عنوان">{{ $category->title }}</td>
+                            <td data-th="توضیحات">{{ $category->description}}</td>
+                            <td data-th="مدیریت">
+                                <ul class="ulinlin fsize13">
+                                    <li>
+                                        <button style="background:none;border: none;"
+                                                onclick='functionConfirm("آیا از حذف دسته بندی اطمینان دارید ؟", function yes() {
+                                                    window.location.replace("{{route('admin.category.remove',$category->id)}}");
+                                                    },
+                                                    function no() {
+                                                    });'>حذف
+                                        </button>
+                                    </li>
+                                    <li class="mgright10"><a class="no_hover_a"
+                                                             href="{{route('admin.category.edit',$category->id)}}">ویرایش</a>
+                                    </li>
+                                </ul>
+                                <div id="confirm">
+                                    <div class="message"></div>
+                                    <button class="yes">بله</button>
+                                    <button class="no">خیر</button>
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            @else
+                <div class="nodata">
+                    <img src="storage/assets/siteContent/no_data_new1.png" alt="#" class="nodata_img">
+                    <p class="nodata-text">اطلاعاتی وجود ندارد</p>
+                </div>
+            @endif
         </div>
     </div>
 @endsection

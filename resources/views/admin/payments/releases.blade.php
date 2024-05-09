@@ -9,7 +9,7 @@
         <h5 class="card-header">@lang('trs.releases')</h5>
         <div class="table-responsive text-nowrap">
             @if ($carwash)
-                <p>خدمت دهنده : {{$carwash->fullName}}</p>
+                <p>کارواش : {{$carwash->title}}</p>
             @endif
             @if (count($releases))
                 <table class="table txtcenter" style="width: 95%">
@@ -18,24 +18,25 @@
                         <th>ردیف</th>
                         <th>سفارش</th>
                         <th>کارواش</th>
-                        <th>دریافتی خدمت دهنده</th>
                         <th>مبلغ کل</th>
+                        <th>دریافتی کارواش</th>
                         <th>کارمزد</th>
                         <th>تاریخ</th>
-                        <th>موجودی خدمت دهنده</th>
+                        <th>موجودی کارواش</th>
                     </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
                     @foreach($releases as $key=>$release)
                         <tr>
-                            <td>{{$key+1}}</td>
-                            <td>{{$release->reservation?->id}}</td>
-                            <td>{{$release->carwash?->fullName}}</td>
-                            <td>{{number_format($release->paid)}}</td>
-                            <td>{{number_format($release->total)}} @lang("trs.toman")</td>
-                            <td>{{number_format($release->commission)}}</td>
-                            <td>{{jdate($release->created_at)->format('Y-m-d')}}</td>
-                            <td>{{number_format($release->balance)}}</td>
+                            <td data-th="ردیف">{{$key+1}}</td>
+                            <td data-th="سفارش">{{$release->reservation?->id}}</td>
+                            <td data-th="کارواش">{{$release->carwash?->title}}</td>
+                            <td data-th="مبلغ کل">{{number_format($release->total)}} @lang("trs.toman")</td>
+                            <td data-th="دریافتی کارواش">{{number_format($release->paid)}}</td>
+                            <td data-th="کارمزد">{{number_format($release->commission)}}</td>
+                            <td data-th="تاریخ"
+                                class="left-to-right">{{jdate($release->created_at)->format('Y-m-d H:i')}}</td>
+                            <td data-th="موجودی کارواش">{{number_format($release->balance)}}</td>
                         </tr>
                     @endforeach
                     </tbody>

@@ -23,8 +23,8 @@
                     <tbody class="table-border-bottom-0">
                     @foreach($reservations as $reservation)
                         <tr>
-                            <td>{{$reservation->services()->first()?->title}}</td>
-                            <td>
+                            <td data-th="خدمت">{{$reservation->services()->first()?->title}}</td>
+                            <td data-th="محصولات">
                                 @foreach($reservation->products as $key=>$product)
                                     @if ($key>0)
                                         {{"، "}}
@@ -32,8 +32,8 @@
                                     {{$product->title}}
                                 @endforeach
                             </td>
-                            <td>{{$reservation->user?->fullName}} {{$reservation->user && $reservation->user->car ? ("- ".$reservation->user->car->type?->title) : ""}}</td>
-                            <td>
+                            <td data-th="کاربر">{{$reservation->user?->fullName}} {{$reservation->user && $reservation->user->car ? ("- ".$reservation->user->car->type?->title) : ""}}</td>
+                            <td data-th="وضعیت">
                                 @if($reservation->status == "canceled")
                                     <span class="btn-label-warning">@lang('trs.res_status_canceled')</span>
                                 @elseif($reservation->status == "approved" && $reservation->time->end < \Carbon\Carbon::now()->addHour())
@@ -44,8 +44,8 @@
                                     ---
                                 @endif
                             </td>
-                            <td>{{number_format($reservation->price)}} @lang("trs.toman")</td>
-                            <td style="direction: ltr">
+                            <td data-th="هزینه">{{number_format($reservation->price)}} @lang("trs.toman")</td>
+                            <td data-th="تاریخ" style="direction: ltr">
                                 {{jdate(strtotime($reservation->time->start))->format("Y-n-j H:i")}}
                             </td>
                         </tr>
@@ -63,6 +63,15 @@
 @endsection
 
 @section('script')
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/fa.json',
+                },
+            });
+        });
+    </script>
 
     <script>
         function functionConfirm(msg, myYes, myNo) {

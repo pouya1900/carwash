@@ -8213,6 +8213,7 @@ html:not(.layout-footer-fixed) .content-wrapper {
 .avatar img {
     width: 100% !important;
     height: auto !important;
+    max-height: 100%;
 }
 
 .avatar .avatar-initial {
@@ -11780,6 +11781,7 @@ button.btn.btn-primary.btn-next, button.btn.btn-primary.btn-prev {
 
 span.titlescc {
     font-size: 25px;
+    margin-top: 15px;
     margin-bottom: 20px;
     display: block;
     font-weight: bold;
@@ -11848,6 +11850,7 @@ span.titlescc {
 
 .profile_main--avatar img {
     border-radius: 5px;
+    max-height: 150px;
 }
 
 .profile_main--name {
@@ -12433,7 +12436,7 @@ table.dataTable thead > tr > th {
 }
 
 .times_table_mines {
-    margin-top: 45%;
+    margin-top: 30px;
     color: #aa0000;
     font-size: 12px;
 }
@@ -13151,3 +13154,18 @@ table.dataTable thead > tr > th {
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
+
+.open_menu_side {
+    overflow-y: auto;
+}
+
+.open_menu_side::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+}
+
+.open_menu_side::-webkit-scrollbar-thumb {
+    background: var(--color1);
+}
+
+

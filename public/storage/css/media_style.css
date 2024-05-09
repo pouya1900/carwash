@@ -40,6 +40,59 @@
         left: 0;
         background: rgba(0, 0, 0, 0.6);
     }
+
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    .dataTables_filter {
+        margin-bottom: 10px;
+    }
+
+    tr {
+        padding: 5px;
+    }
+
+    td {
+        border: none;
+        position: relative;
+        padding-right: 30% !important;
+        border-radius: 5px;
+        white-space: normal;
+        min-height: 20px;
+    }
+
+    td:before {
+        position: absolute;
+        top: 6px;
+        right: 10px;
+        width: 30%;
+        padding-left: 10px;
+        white-space: nowrap;
+    }
+
+    td::before {
+        content: attr(data-th);
+    }
+
+    td .ulinlin li {
+        margin-bottom: 15px !important;
+    }
+
+    .table-responsive {
+        overflow-x: hidden;
+    }
+
+    .card-header {
+        font-size: 18px;
+    }
+
 }
 
 @media only screen and (min-width: 992px) {

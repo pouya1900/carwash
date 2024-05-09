@@ -6,60 +6,128 @@
 
 @section('content')
     <div class="card ticket">
-        <h5 class="card-header">@lang('trs.withdraws')</h5>
-        <div class="table-responsive text-nowrap">
-            @if ($carwash)
-                <p>خدمت دهنده : {{$carwash->fullName}}</p>
-            @endif
-            @if (count($deposits))
-                <table class="table txtcenter" style="width: 95%">
-                    <thead>
-                    <tr>
-                        <th>ردیف</th>
-                        <th>کارواش</th>
-                        <th>مبلغ</th>
-                        <th>وضعیت</th>
-                        <th>تاریخ</th>
-                        <th>بانک</th>
-                        <th>مدیریت</th>
-                    </tr>
-                    </thead>
-                    <tbody class="table-border-bottom-0">
-                    @foreach($deposits as $key=>$deposit)
+        @if (!$user)
+            <h5 class="card-header">@lang('trs.withdraws')</h5>
+            <div class="m-4">
+                <h6>لیست برداشت های کارواش ها</h6>
+            </div>
+            <div class="table-responsive text-nowrap">
+                @if ($carwash)
+                    <p>کارواش : {{$carwash->title}}</p>
+                @endif
+                @if (count($carwash_deposits))
+                    <table class="table txtcenter" style="width: 95%">
+                        <thead>
                         <tr>
-                            <td>{{$key+1}}</td>
-                            <td>{{$deposit->carwash?->fullName}}</td>
-                            <td>{{number_format($deposit->total)}} @lang("trs.toman")</td>
-                            <td>{{\App\Helper::turn_withdraw_status($deposit->status)}}</td>
-                            <td>{{jdate($deposit->created_at)->format('Y-m-d H:i')}}</td>
-                            <td>
-                                <ul>
-                                    <li>{{$deposit->bank?->name}}</li>
-                                    <li>{{$deposit->bank?->card}}</li>
-                                    <li>{{$deposit->bank?->shaba}}</li>
-                                </ul>
-                            </td>
-                            <td>
-                                @if ($deposit->status!="rejected")
-                                    <ul class="ulinlin fsize13">
-                                        <li class="mgright10"><a class="no_hover_a"
-                                                                 href="{{route('admin.deposit.edit',$deposit->id)}}">ویرایش</a>
-                                        </li>
-                                    </ul>
-                                @endif
-
-                            </td>
+                            <th>ردیف</th>
+                            <th>کارواش</th>
+                            <th>مبلغ</th>
+                            <th>وضعیت</th>
+                            <th>تاریخ</th>
+                            <th>بانک</th>
+                            <th>مدیریت</th>
                         </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            @else
-                <div class="nodata">
-                    <img src="storage/assets/siteContent/no_data_new1.png" alt="#" class="nodata_img">
-                    <p class="nodata-text">اطلاعاتی وجود ندارد</p>
-                </div>
-            @endif
-        </div>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                        @foreach($carwash_deposits as $key=>$deposit)
+                            <tr>
+                                <td data-th="ردیف">{{$key+1}}</td>
+                                <td data-th="کارواش">{{$deposit->depositable?->title}}</td>
+                                <td data-th="مبلغ">{{number_format($deposit->total)}} @lang("trs.toman")</td>
+                                <td data-th="وضعیت">{{\App\Helper::turn_withdraw_status($deposit->status)}}</td>
+                                <td data-th="تاریخ"
+                                    class="left-to-right">{{jdate($deposit->created_at)->format('Y-m-d H:i')}}</td>
+                                <td data-th="بانک">
+                                    <ul>
+                                        <li>{{$deposit->bank?->name}}</li>
+                                        <li>{{$deposit->bank?->card}}</li>
+                                        <li>{{$deposit->bank?->shaba}}</li>
+                                    </ul>
+                                </td>
+                                <td data-th="مدیریت">
+                                    @if ($deposit->status!="rejected")
+                                        <ul class="ulinlin fsize13">
+                                            <li class="mgright10"><a class="no_hover_a"
+                                                                     href="{{route('admin.deposit.edit',$deposit->id)}}">ویرایش</a>
+                                            </li>
+                                        </ul>
+                                    @endif
+
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                @else
+                    <div class="nodata">
+                        <img src="storage/assets/siteContent/no_data_new1.png" alt="#" class="nodata_img">
+                        <p class="nodata-text">اطلاعاتی وجود ندارد</p>
+                    </div>
+                @endif
+            </div>
+
+            <hr>
+        @endif
+        @if (!$carwash)
+            <div class="m-4">
+                <h6>لیست برداشت های کاربران</h6>
+            </div>
+            <div class="table-responsive text-nowrap">
+                @if ($user)
+                    <p>کاربر : {{$user->fullName}}</p>
+                @endif
+                @if (count($user_deposits))
+                    <table class="table txtcenter" style="width: 95%">
+                        <thead>
+                        <tr>
+                            <th>ردیف</th>
+                            <th>کاربر</th>
+                            <th>مبلغ</th>
+                            <th>وضعیت</th>
+                            <th>تاریخ</th>
+                            <th>بانک</th>
+                            <th>مدیریت</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                        @foreach($user_deposits as $key=>$deposit)
+                            <tr>
+                                <td data-th="ردیف">{{$key+1}}</td>
+                                <td data-th="کاربر">{{$deposit->depositable?->fullName}}</td>
+                                <td data-th="مبلغ">{{number_format($deposit->total)}} @lang("trs.toman")</td>
+                                <td data-th="وضعیت">{{\App\Helper::turn_withdraw_status($deposit->status)}}</td>
+                                <td data-th="تاریخ"
+                                    class="left-to-right">{{jdate($deposit->created_at)->format('Y-m-d H:i')}}</td>
+                                <td data-th="بانک">
+                                    <ul>
+                                        <li>{{$deposit->bank?->name}}</li>
+                                        <li>{{$deposit->bank?->card}}</li>
+                                        <li>{{$deposit->bank?->shaba}}</li>
+                                    </ul>
+                                </td>
+                                <td data-th="مدیریت">
+                                    @if ($deposit->status!="rejected")
+                                        <ul class="ulinlin fsize13">
+                                            <li class="mgright10"><a class="no_hover_a"
+                                                                     href="{{route('admin.deposit.edit',$deposit->id)}}">ویرایش</a>
+                                            </li>
+                                        </ul>
+                                    @endif
+
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                @else
+                    <div class="nodata">
+                        <img src="storage/assets/siteContent/no_data_new1.png" alt="#" class="nodata_img">
+                        <p class="nodata-text">اطلاعاتی وجود ندارد</p>
+                    </div>
+                @endif
+            </div>
+        @endif
+
     </div>
 @endsection
 

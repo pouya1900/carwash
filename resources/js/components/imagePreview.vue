@@ -2,7 +2,7 @@
     <div class="image-preview-container">
         <input type="hidden" :name="'deleted_image_'+name" :value="delete_value">
         <div class="row">
-            <div class="col-8 text-right">
+            <div class="col-4 text-right">
                 <label :for="name">
                     <span class="image_uploader_label">
                         انتخاب فایل
@@ -11,7 +11,7 @@
                 <input :name="name" type="file" :id="name" accept="image/*" hidden
                        @change="handleFileUpload( $event )"/>
             </div>
-            <div class="col-4">
+            <div class="col-8">
                 <div class="image_preview--body">
                     <img :src="source" :id="'image-preview-'+name" v-show="file != '' || source !=''">
 

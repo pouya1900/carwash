@@ -58,7 +58,6 @@ class FireBase
         $response = json_decode($result, true);
         curl_close($ch);
 
-        dd($result);
     }
 
 }

@@ -24,13 +24,13 @@
                                         <img src="{{$carwash->logo['paths']["standard"]}}" title="" alt="">
                                     </div>
                                 </div>
-                                <div class="col-8">
+                                <div class="col-6">
                                     <div class="profile_main--name">
                                         <p>{{$carwash->title}}</p>
                                         <p>{{$carwash->address}}</p>
                                     </div>
                                 </div>
-                                <div class="col-2">
+                                <div class="col-4">
                                     <p>{{$carwash->mobile}}</p>
                                 </div>
                             </div>

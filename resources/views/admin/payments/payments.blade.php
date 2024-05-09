@@ -9,7 +9,7 @@
         <h5 class="card-header">@lang('trs.payments')</h5>
         <div class="table-responsive text-nowrap">
             @if ($carwash)
-                <p>خدمت دهنده : {{$carwash->fullName}}</p>
+                <p>کارواش : {{$carwash->title}}</p>
             @elseif($user)
                 <p>کاربر : {{$user->fullName}}</p>
             @endif
@@ -20,9 +20,9 @@
                         <th>ردیف</th>
                         <th>کاربر</th>
                         <th>کارواش</th>
+                        <th>مبلغ کل</th>
                         <th>کیف پول</th>
                         <th>انلاین</th>
-                        <th>مبلغ کل</th>
                         <th>تاریخ</th>
                         <th>شماره پیگیری</th>
                         <th>وضعیت</th>
@@ -31,15 +31,16 @@
                     <tbody class="table-border-bottom-0">
                     @foreach($payments as $key=>$payment)
                         <tr>
-                            <td>{{$key+1}}</td>
-                            <td>{{$payment->user?->fullName}}</td>
-                            <td>{{$payment->reservation?->carwash?->fullName}}</td>
-                            <td>{{number_format($payment->wallet)}} @lang("trs.toman")</td>
-                            <td>{{number_format($payment->online)}} @lang("trs.toman")</td>
-                            <td>{{number_format($payment->total)}} @lang("trs.toman")</td>
-                            <td>{{jdate($payment->created_at)->format('Y-m-d')}}</td>
-                            <td>{{$payment->ref_id}}</td>
-                            <td>{{\App\Helper::turn_payment_status($payment->status)}}</td>
+                            <td data-th="ردیف">{{$key+1}}</td>
+                            <td data-th="کاربر">{{$payment->user?->fullName}}</td>
+                            <td data-th="کارواش">{{$payment->reservations->first() ? $payment->reservations->first()->carwash?->title : "- کیف پول -"}}</td>
+                            <td data-th="مبلغ کل">{{number_format($payment->total)}} @lang("trs.toman")</td>
+                            <td data-th="کیف پول">{{number_format($payment->wallet)}} @lang("trs.toman")</td>
+                            <td data-th="انلاین">{{number_format($payment->online)}} @lang("trs.toman")</td>
+                            <td data-th="تاریخ"
+                                class="left-to-right">{{jdate($payment->created_at)->format('Y-m-d H:i')}}</td>
+                            <td data-th="شماره پیگیری">{{$payment->ref_id}}</td>
+                            <td data-th="وضعیت">{{\App\Helper::turn_payment_status($payment->status)}}</td>
                         </tr>
                     @endforeach
                     </tbody>

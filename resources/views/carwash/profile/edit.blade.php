@@ -19,7 +19,7 @@
                     <form action="{{route('carwash_update')}}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row justify-content-around mg-b-10">
-                            <div class="col-12 col-lg-6">
+                            <div class="col-12 col-lg-6 mg-b-10">
                                 <div class="row">
                                     <div class="col-3">
                                         <div class="profile_main--avatar">

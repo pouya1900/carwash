@@ -57,15 +57,21 @@ class PaymentController extends Controller
         $admin = $this->request->admin;
 
         $carwash = $this->request->input('carwash');
+        $user = $this->request->input('user');
 
-        $deposits = Deposit::when($carwash, function ($q) use ($carwash) {
-            return $q->where('carwash_id', $carwash);
-        })->orderBy("created_at", "desc")->get();
+        $carwash_deposits = Deposit::when($carwash, function ($q) use ($carwash) {
+            return $q->where('depositable_id', $carwash);
+        })->where("depositable_type", Carwash::class)->orderBy("created_at", "desc")->get();
+
+        $user_deposits = Deposit::when($user, function ($q) use ($user) {
+            return $q->where('depositable_id', $user);
+        })->where("depositable_type", User::class)->orderBy("created_at", "desc")->get();
+
 
         $carwash = Carwash::find($carwash);
+        $user = User::find($user);
 
-        return view('admin.payments.deposits', compact('admin', 'deposits', 'carwash'));
-
+        return view('admin.payments.deposits', compact('admin', 'carwash_deposits', 'user_deposits', 'carwash', 'user'));
     }
 
     public function edit_deposit(Deposit $deposit)
