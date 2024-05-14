@@ -18,6 +18,7 @@ const app = createApp({});
 import login from './components/login.vue';
 import weekTimes from './components/weekTimes.vue';
 import timetable from './components/timetable.vue';
+import timetableMobile from './components/timetableMobile.vue';
 import changeAvatar from './components/changeAvatar.vue';
 import Uploader from './components/vue-media-upload.vue';
 import videoPreview from './components/videoPreview.vue';
@@ -27,6 +28,7 @@ import addService from './components/addService.vue';
 
 app.component('week-times', weekTimes);
 app.component('timetable', timetable);
+app.component('timetable-mobile', timetableMobile);
 app.component('change-avatar', changeAvatar);
 app.component('upload-media', Uploader);
 app.component('video-input-preview', videoPreview);

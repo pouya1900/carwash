@@ -41,25 +41,25 @@
         background: rgba(0, 0, 0, 0.6);
     }
 
-    thead tr {
+   .table-responsive thead tr {
         position: absolute;
         top: -9999px;
         left: -9999px;
     }
 
-    table, thead, tbody, th, td, tr {
+    .table-responsive table, .table-responsive thead, .table-responsive tbody, .table-responsive th, .table-responsive td, .table-responsive tr {
         display: block;
     }
 
-    .dataTables_filter {
+    .table-responsive .dataTables_filter {
         margin-bottom: 10px;
     }
 
-    tr {
+    .table-responsive tr {
         padding: 5px;
     }
 
-    td {
+    .table-responsive td {
         border: none;
         position: relative;
         padding-right: 30% !important;
@@ -68,7 +68,7 @@
         min-height: 20px;
     }
 
-    td:before {
+    .table-responsive td:before {
         position: absolute;
         top: 6px;
         right: 10px;
@@ -77,11 +77,11 @@
         white-space: nowrap;
     }
 
-    td::before {
+    .table-responsive td::before {
         content: attr(data-th);
     }
 
-    td .ulinlin li {
+    .table-responsive td .ulinlin li {
         margin-bottom: 15px !important;
     }
 
@@ -93,6 +93,24 @@
         font-size: 18px;
     }
 
+    .selected_div {
+        left: 0;
+        width: 50%;
+    }
+
+    .time_selected_label_description {
+        display: inline-block;
+        overflow: unset !important;
+        margin-right: 10px;
+    }
+
+    .time_selected_label_title {
+        display: inline-block;
+    }
+
+    .time_table_td_mobile {
+        width: 50%;
+    }
 }
 
 @media only screen and (min-width: 992px) {

@@ -1,80 +1,83 @@
 <template>
-    <div class="">
-        <span>زمان های کاری هفتگی</span><span class="time_table_helper time_table_helper_work"></span>
-        <span>زمان های رزرو شده</span><span class="time_table_helper time_table_helper_service"></span>
-        <span>زمان های تعطیلی شخصی</span><span class="time_table_helper time_table_helper_servant"></span>
-        <div class="panel_top_description">
-            <span class=""><i class="fa-regular fa-circle-question"></i>
-                شما می توانید با انتخاب و کشیدن یک بازه زمانی را در روز انتخاب کرده و ان را
-                برای خود برچسب گذاری کنید. بازه
-                های زمانی انتخاب شده که با رنگ <span class="time_table_helper time_table_helper_servant"></span> نشان
-                داده
-                می شوند به عنوان زمان تعطیلی شما محسوب شده و قابل رزرو برای کاربر نمی باشد.</span>
-        </div>
-    </div>
-    <div class="time_table_container">
 
-        <div class="time_table_body">
-            <table class="table-responsive table table-bordered">
-                <thead class="time_table_header">
-                <tr>
-                    <th>روز</th>
-                    <th v-for="(time,i) in 24" :id="'time'+i">
-                        {{ i }}
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="(day, index) in 10" :key="index" @mouseleave.prevent="outSelection(index)">
-                    <td :id="'day'+index">
-                        <div>
-                            <span>{{
-                                    new Intl.DateTimeFormat('fa-IR', {weekday: 'long'}).format(getDay(index))
-                                }}
+    <div class="res_times_tab_container">
+        <div class="owl-carousel" role="tablist">
+            <div v-for="(day, index) in 10"
+                 class="res_time_tab" :class="index==0 ? 'active' : ''"
+                 data-bs-toggle="tab" role="tab"
+                 :aria-controls="'res_pane'+index"
+                 :data-bs-target="'#res_pane'+index"
+                 :id="'res_tab'+index">
+                <div>
+                        <span>{{
+                                new Intl.DateTimeFormat('fa-IR', {weekday: 'long'}).format(new Date(getDay(index)))
+                            }}
                         </span>
-                        </div>
-                        <div>
-                            <span>
+                </div>
+                <div>
+                        <span>
                             {{
-                                    new Intl.DateTimeFormat('fa-IR', {
-                                        day: "numeric",
-                                        month: 'long'
-                                    }).format(getDay(index))
-                                }}
+                                new Intl.DateTimeFormat('fa-IR', {
+                                    day: "numeric",
+                                    month: 'long'
+                                }).format(new Date(getDay(index)))
+                            }}
                         </span>
-                        </div>
-                    </td>
-                    <td v-for="(time,i) in 24" class="time_span col"
-                        :class="this.isWorkTime(index,i) ? 'work_day_background' : ''"
-                        @mousedown.left.prevent="startSelection(i,index)"
-                        @mouseup.left.prevent="endSelection(i,index)"
-                        @mouseover.prevent="slideSelection(i,index)">
-                        <span v-show="this.isWorkTime(index,i)">.</span>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <div v-if="this.selectedRange" v-for="(item,index) in this.selectedRange"
-                 class="selected_div_container">
-                <div v-if="item" v-for="(item2,i) in item" class="selected_div" @click="openTime(index,i)"
-                     :class="item2.f ? 'selected_div_f' : '' , item2.type=='s' ? 'selected_div_user' : '' "
-                     :style="'width: '+getWidth(item2)[1]+'px; right: '+getWidth(item2)[0]+'px; top: '+getHeight(index)+'px;'">
-                    <div class="time_selected_label_title">
-                        <span>{{ item2.start }} تا {{ item2.end + 1 }}</span>
-                    </div>
-                    <div v-if="item2.users?.length" class="time_selected_label_description">
-                        <span>{{ item2.users.length }} رزرو</span>
-                    </div>
-                    <div v-else-if="item2.label" class="time_selected_label_description">
-                        <span>{{ item2.label }}</span>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="label_modal" tabindex="-1"
+    <div class="res_times_table_container">
+        <div v-for="(day, index) in 10" :id="'res_pane'+index" class="res_times_table tab-pane fade"
+             :class="index==0 ? 'show active' : ''"
+             role="tabpanel" :aria-labelledby="'res_tab'+index">
+
+            <div class="time_table_body" id="time_table_body_mobile">
+                <table class="table table-bordered">
+                    <thead class="time_table_header">
+
+                    <tr>
+                        <th>ساعت</th>
+                        <th>برنامه</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(time,i) in 24">
+                        <td class="time_table_td_mobile">{{ i }} <small> (از ساعت {{ i }} تا ساعت {{ i + 1 }})</small></td>
+                        <td :id="'time'+i" class="time_span time_table_td_mobile"
+                            @click.prevent="startSelection(i,index)"
+                            :class="this.isWorkTime(index,i) ? 'work_day_background' : ''">
+                            <span v-show="this.isWorkTime(index,i)">.</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div v-if="this.selectedRange && this.selectedRange[index]"
+                     class="selected_div_container">
+                    <div v-for="(item2,i) in this.selectedRange[index]" class="selected_div" @click="openTime(index,i)"
+                         :class="item2.f ? 'selected_div_f' : '' , item2.type=='s' ? 'selected_div_user' : '' "
+                         :style="'height: '+getHeight(item2)+'%;'+'top: '+getTop(item2.start)+'%;'">
+                        <div>
+                            <span class="time_selected_label_title">{{ item2.start }} تا {{ item2.end + 1 }}</span>
+
+                            <span v-if="item2.users?.length"
+                                  class="time_selected_label_description">{{ item2.users.length }} رزرو</span>
+
+                            <span v-else-if="item2.label" class="time_selected_label_description">{{
+                                    item2.label
+                                }}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="label_modal_mobile" tabindex="-1"
          aria-labelledby="label_modalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -114,7 +117,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="time_modal" tabindex="-1"
+    <div class="modal fade" id="time_modal_mobile" tabindex="-1"
          aria-labelledby="label_modalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -175,14 +178,22 @@
         </div>
     </div>
 
-
 </template>
 
 <script>
 export default {
     props: ['trs', 'days', 'schedule', 'url', 'csrf'],
     mounted() {
+        $('.owl-carousel').owlCarousel({
+            items: 3,
+            autoplay: false,
+            rtl: true,
+            rewind: false,
+            nav: true,
+        });
+
         this.setSelectRange();
+
     },
     data() {
         return {
@@ -254,22 +265,21 @@ export default {
             return x;
         },
         startSelection(time, index) {
-            this.selecting = true;
-            if (!this.selectedRange[index]) {
-                this.selectedRange[index] = [];
-            }
-            this.selectedRange[index].push({start: time, end: time, 'type': 's'});
-        },
-        slideSelection(time, index) {
-            if (this.selecting) {
-                this.selectedRange[index][this.selectedRange[index].length - 1].end = time;
+            if (!this.selecting) {
+                this.selecting = true;
+                if (!this.selectedRange[index]) {
+                    this.selectedRange[index] = [];
+                }
+                this.selectedRange[index].push({start: time, end: time, 'type': 's'});
+            } else {
+                this.endSelection(time, index);
             }
         },
         endSelection(time, index) {
             if (this.selecting) {
                 this.selectedRange[index][this.selectedRange[index].length - 1].end = time;
                 this.selectedIndex = index;
-                $("#label_modal").modal('show');
+                $("#label_modal_mobile").modal('show');
             }
 
             this.selecting = false;
@@ -319,25 +329,17 @@ export default {
             const d = new Date();
             return d.setDate(d.getDate() + index);
         },
-        getWidth(item2) {
-            let time = "#time" + item2.start;
-
-            let right = $(".time_table_body").width() - ($(time).offset().left + $(time).width());
-            let width = 0;
-            for (let i = item2.start; i <= item2.end; i++) {
-                let time = "#time" + i;
-                width += $(time).outerWidth();
-            }
-            return [right, width];
+        getTop(i) {
+            return (i + 1) * 4;
         },
-        getHeight(index) {
-            let day = "#day" + index;
-            return $(day).offset().top - $(".time_table_body").offset().top;
+        getHeight(item) {
+            console.log(item);
+            return (item.end - item.start + 1) * 4
         },
         openTime(index, i) {
             this.selectedTimeModal[0] = index;
             this.selectedTimeModal[1] = i;
-            $("#time_modal").modal('show');
+            $("#time_modal_mobile").modal('show');
         },
         removeLabel(index, i) {
             let url = this.selectedRange[index][i].remove_url;
@@ -357,122 +359,3 @@ export default {
     },
 };
 </script>
-<style>
-.time_span {
-    cursor: pointer;
-    text-align: center;
-}
-
-.time_container {
-    width: fit-content;
-    position: relative;
-}
-
-
-.time_table_body table td {
-    z-index: 9;
-    background: transparent;
-    position: relative;
-}
-
-.selected_div_container {
-}
-
-.selected_div {
-    height: 65px;
-    background: #497ee4a6;
-    position: absolute;
-    border: 1px solid #aaaaaa;
-    padding: 5px;
-    cursor: grab;
-}
-
-.selected_div_f {
-    z-index: 10;
-}
-
-.time_table_container {
-    max-height: 400px;
-    overflow-y: auto;
-}
-
-.time_table_body {
-    position: relative;
-}
-
-.time_table_container::-webkit-scrollbar {
-    width: 3px;
-    height: 3px;
-}
-
-.time_table_container::-webkit-scrollbar-thumb {
-    background: var(--color1);
-}
-
-.time_table_header {
-    position: sticky;
-    top: 0;
-    z-index: 11;
-}
-
-.time_selected_label_title {
-    font-size: 11px;
-}
-
-.time_selected_label_description {
-    overflow: hidden;
-    font-size: 11px;
-    position: relative;
-    height: 25px;
-
-}
-
-
-.time_selected_label_description span {
-    -webkit-transition: all 4s;
-    -moz-transition: all 4s;
-    -ms-transition: all 4s;
-    -o-transition: all 4s;
-    transition: all 4s;
-    -webkit-transition-timing-function: linear;
-    -moz-transition-timing-function: linear;
-    transition-timing-function: linear;
-    position: absolute;
-    white-space: nowrap;
-    transform: translateX(0);
-}
-
-.time_selected_label_description span:hover {
-    transform: translateX(calc(100% - 50px));
-}
-
-.work_day_background {
-    background: #327dd222 !important;
-}
-
-.selected_div_user {
-    background: #75797fbd !important;
-}
-
-.time_table_helper {
-    width: 15px;
-    height: 15px;
-    display: inline-block;
-    margin: 0 10px;
-    border-radius: 3px
-}
-
-.time_table_helper_service {
-    background: #497ee4a6;
-}
-
-.time_table_helper_servant {
-    background: #75797fbd;
-}
-
-.time_table_helper_work {
-    background: #327dd222;
-}
-
-
-</style>

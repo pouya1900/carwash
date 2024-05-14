@@ -58,7 +58,6 @@ class TimeController extends Controller
             ]);
             return redirect(route('carwash_times'))->with('message', trans('trs.changed_successfully'));
         } catch (\Exception $e) {
-            dd($e);
             return redirect()->back()->withErrors(['error' => trans('trs.changed_unsuccessfully')]);
         }
     }
