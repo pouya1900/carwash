@@ -62,6 +62,7 @@ Route::group(['middleware' => ['carwash.auth'], 'prefix' => '/carwash', 'namespa
 
     Route::get('/reservations', 'ReservationController@index')->name('carwash_reservations');
     Route::get('/reservations/show/{reservation}', 'ReservationController@show')->name('carwash_reservation_show');
+    Route::get('/reservations/update/{reservation}', 'ReservationController@update')->name('carwash_reservation_update');
 
 
     Route::get('/blogs', 'BlogController@index')->name('carwash_blogs');
@@ -99,6 +100,8 @@ Route::group(['middleware' => ['carwash.auth'], 'prefix' => '/carwash', 'namespa
     Route::get('/products/delete/{product}', 'ProductController@delete')->name('carwash_product_delete');
     Route::get('/products/images/{product}', 'ProductController@images')->name('carwash_product_images');
 
+    Route::get('/users', 'UserController@index')->name('carwash_users');
+
 });
 
 
@@ -132,6 +135,7 @@ Route::group(['middleware' => ['admin.auth'], 'prefix' => '/admin', 'namespace' 
 
     Route::get('/reservations', 'ReservationController@index')->name('admin.reservations')->middleware('admin.permission:reservation.*');
     Route::get('/reservations/show/{reservation}', 'ReservationController@show')->name('admin.reservation.show')->middleware('admin.permission:reservation.*');
+    Route::get('/reservations/update/{reservation}', 'ReservationController@update')->name('admin.reservation.update')->middleware('admin.permission:reservation.*');
 
 
     Route::get('/blogs', 'BlogController@index')->name('admin.blogs')->middleware('admin.permission:blog.*');

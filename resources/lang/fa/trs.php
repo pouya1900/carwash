@@ -236,6 +236,7 @@ return [
     "discount"                          => "تخفیف",
     "res_status_canceled"               => "لغو شده",
     "res_status_approved"               => "تایید شده",
+    "res_status_doing"                  => "درحال انجام",
     "res_status_finished"               => "تمام شده",
     "amount_is_more_than_balance"       => "مبلغ درخواستی بیشتر از موجودی شما است.",
     "new_withdraw"                      => "درخواست برداشت جدید",
@@ -247,5 +248,7 @@ return [
     "otp_should_send_in_two_minute"     => "محدودیت ارسال کد تایید در هر 2 دقیقه",
     "loading"                           => "در حال بارگذاری",
     "notifications"                     => "اطلاعیه ها",
+    "reservation_updated_successfully"  => "سفارش با موفقیت ویرایش شد.",
+    "understand"                        => "فهمیدم!",
 
 ];

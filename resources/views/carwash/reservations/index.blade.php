@@ -12,17 +12,20 @@
                 <table class="table txtcenter" style="width: 95%">
                     <thead>
                     <tr>
+                        <th>شماره</th>
                         <th>خدمت</th>
                         <th>محصولات</th>
                         <th>کاربر</th>
                         <th>وضعیت</th>
                         <th>هزینه</th>
                         <th>تاریخ</th>
+                        <th>مدیریت</th>
                     </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
                     @foreach($reservations as $reservation)
                         <tr>
+                            <td data-th="شماره">{{$reservation->id}}</td>
                             <td data-th="خدمت">{{$reservation->services()->first()?->title}}</td>
                             <td data-th="محصولات">
                                 @foreach($reservation->products as $key=>$product)
@@ -34,19 +37,21 @@
                             </td>
                             <td data-th="کاربر">{{$reservation->user?->fullName}} {{$reservation->user && $reservation->user->car ? ("- ".$reservation->user->car->type?->title) : ""}}</td>
                             <td data-th="وضعیت">
-                                @if($reservation->status == "canceled")
-                                    <span class="btn-label-warning">@lang('trs.res_status_canceled')</span>
-                                @elseif($reservation->status == "approved" && $reservation->time->end < \Carbon\Carbon::now()->addHour())
-                                    <span class="btn-label-success">@lang('trs.res_status_finished')</span>
-                                @elseif($reservation->status == "approved")
-                                    <span class="btn-label-info">@lang('trs.res_status_approved')</span>
-                                @else
-                                    ---
-                                @endif
+                                <span
+                                    class="{{\App\Helper::reservationStatusCSS($reservation->status)}}">{{\App\Helper::reservationStatus($reservation->status)}}</span>
                             </td>
                             <td data-th="هزینه">{{number_format($reservation->price)}} @lang("trs.toman")</td>
                             <td data-th="تاریخ" style="direction: ltr">
                                 {{jdate(strtotime($reservation->time->start))->format("Y-n-j H:i")}}
+                            </td>
+                            <td data-th="مدیریت">
+                                <ul class="ulinlin fsize13">
+                                    @if ($reservation->status=="doing")
+                                        <li class="mgright10"><a class="no_hover_a"
+                                                                 href="{{route('carwash_reservation_update',$reservation->id)}}">اتمام</a>
+                                        </li>
+                                    @endif
+                                </ul>
                             </td>
                         </tr>
                     @endforeach

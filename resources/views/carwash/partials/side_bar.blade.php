@@ -206,6 +206,15 @@
         </li>
         {{-- time --}}
 
+        {{--        users--}}
+        <li class="menu-item {{url()->current()==route('carwash_users') ? 'active' : ''}}">
+            <a href="{{route('carwash_users')}}" class="menu-link ">
+                <i class="menu-icon fa-solid fa-list"></i>
+                <div data-i18n="Dashboards">@lang('trs.users')</div>
+            </a>
+        </li>
+        {{--        users--}}
+
 
         <li class="menu-item">
             <a href="{{ route('logout') }}" class="menu-link">

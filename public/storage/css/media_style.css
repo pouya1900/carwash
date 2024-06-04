@@ -41,7 +41,7 @@
         background: rgba(0, 0, 0, 0.6);
     }
 
-   .table-responsive thead tr {
+    .table-responsive thead tr {
         position: absolute;
         top: -9999px;
         left: -9999px;
@@ -110,6 +110,10 @@
 
     .time_table_td_mobile {
         width: 50%;
+    }
+
+    .selectable_time {
+        box-shadow: inset 0 1px 5px var(--color1) !important;
     }
 }
 

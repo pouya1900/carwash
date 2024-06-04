@@ -34,6 +34,8 @@ class User extends Authenticatable implements JWTSubject
         'balance',
         'gift_balance',
         'firebase_token',
+        'lat',
+        'long',
     ];
 
     /**

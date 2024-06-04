@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\UpdateUserLocationRequest;
 use App\Http\Requests\Api\UpdateUserRequest;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\ReservationResource;
@@ -13,6 +14,7 @@ use App\Services\Payment\PaymentGateway;
 use App\Services\Payment\Zarinpal;
 use App\Traits\ResponseUtilsTrait;
 use App\Traits\UploadUtilsTrait;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class UsersController extends Controller
@@ -23,8 +25,14 @@ class UsersController extends Controller
     {
         try {
             $user = $this->request->user;
+
+            $reservation = $user->reservations()->wherein("status", ["approved", "doing"])->wherehas("time", function ($q) {
+                return $q->wherebetween("start", [Carbon::now()->subHours(2), Carbon::now()->addMinutes(30)]);
+            })->first();
+
             return $this->sendResponse([
-                "user" => new UserResource($user),
+                "user"        => new UserResource($user),
+                "reservation" => $reservation ? new ReservationResource($reservation) : null,
             ]);
         } catch (\Exception $e) {
             return $this->sendError(trans('messages.response.failed'));
@@ -158,5 +166,24 @@ class UsersController extends Controller
             return $this->sendError(trans('messages.response.failed'));
         }
     }
+
+    public function update_location(UpdateUserLocationRequest $request)
+    {
+        try {
+            $user = $this->request->user;
+
+            $user->update([
+                'lat'  => $request->input("lat"),
+                'long' => $request->input("long"),
+            ]);
+
+            return $this->sendResponse([
+                "user" => new UserResource($user),
+            ], trans("messages.crud.updatedModelSuccess"));
+        } catch (\Exception) {
+            return $this->sendError(trans('messages.response.failed'));
+        }
+    }
+
 
 }

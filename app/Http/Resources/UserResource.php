@@ -32,6 +32,8 @@ class UserResource extends JsonResource
             'ftm_token'             => $this->firebase_token ?? '',
             'image'                 => new ImageResource($this->avatar),
             'balance'               => $this->balance ?? 0,
+            'lat'                   => $this->lat ?? "",
+            'long'                  => $this->long ?? "",
             'giftBalance'           => $this->gift_balance ?? 0,
             'pendingGift'           => new GiftResource($this->gifts()->where("status", "pending")->first()),
             'completedGifts'        => GiftResource::collection($this->gifts()->where("status", "completed")->get()),

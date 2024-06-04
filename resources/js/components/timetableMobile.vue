@@ -44,10 +44,11 @@
                     </thead>
                     <tbody>
                     <tr v-for="(time,i) in 24">
-                        <td class="time_table_td_mobile">{{ i }} <small> (از ساعت {{ i }} تا ساعت {{ i + 1 }})</small></td>
+                        <td class="time_table_td_mobile">{{ i }} <small> (از ساعت {{ i }} تا ساعت {{ i + 1 }})</small>
+                        </td>
                         <td :id="'time'+i" class="time_span time_table_td_mobile"
                             @click.prevent="startSelection(i,index)"
-                            :class="this.isWorkTime(index,i) ? 'work_day_background' : ''">
+                            :class="this.isWorkTime(index,i) ? 'work_day_background' : '' , this.selecting && this.last_start <= i ? 'selectable_time' : '' ">
                             <span v-show="this.isWorkTime(index,i)">.</span>
                         </td>
                     </tr>
@@ -178,6 +179,29 @@
         </div>
     </div>
 
+    <div class="modal fade" id="time_select_info" tabindex="-1"
+         aria-labelledby="label_modalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>شروع بازه زمانی : ساعت {{ this.last_start }}</p>
+                    <p style="white-space: normal">برای انتخاب بازه زمانی روی ساعت بعدی کلیک کنید. برای انتخاب بازه 1 ساعته روی همان ساعت شروع کلیک
+                        کنید.</p>
+                    <div class="row justify-content-center">
+                        <div class="col-6">
+                            <button data-bs-dismiss="modal"
+                                    class="btn btn-alarm full-width">
+                                {{ trs.understand }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </template>
 
 <script>
@@ -207,6 +231,7 @@ export default {
             time_label: null,
             selectedIndex: null,
             selectedTimeModal: [],
+            last_start: null,
         };
     },
     methods: {
@@ -271,6 +296,8 @@ export default {
                     this.selectedRange[index] = [];
                 }
                 this.selectedRange[index].push({start: time, end: time, 'type': 's'});
+                this.last_start = time;
+                $("#time_select_info").modal('show');
             } else {
                 this.endSelection(time, index);
             }
@@ -281,7 +308,7 @@ export default {
                 this.selectedIndex = index;
                 $("#label_modal_mobile").modal('show');
             }
-
+            this.last_start = null;
             this.selecting = false;
         },
         submitLabel(index) {
@@ -314,7 +341,7 @@ export default {
 
         },
         cancelLabel() {
-            if (this.selectedIndex) {
+            if (this.selectedIndex != null) {
                 this.selectedRange[this.selectedIndex].pop();
             }
             this.selectedIndex = null;

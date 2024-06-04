@@ -24,6 +24,7 @@
                         <th>وضعیت</th>
                         <th>هزینه</th>
                         <th>تاریخ</th>
+                        <th>مدیریت</th>
                     </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
@@ -41,19 +42,21 @@
                             </td>
                             <td data-th="کاربر">{{$reservation->user?->fullName}} {{$reservation->user && $reservation->user->car ? ("- ".$reservation->user->car->type?->title) : ""}}</td>
                             <td data-th="وضعیت">
-                                @if($reservation->status == "canceled")
-                                    <span class="btn-label-warning">@lang('trs.res_status_canceled')</span>
-                                @elseif($reservation->status == "approved" && $reservation->time->end < \Carbon\Carbon::now()->addHour())
-                                    <span class="btn-label-success">@lang('trs.res_status_finished')</span>
-                                @elseif($reservation->status == "approved")
-                                    <span class="btn-label-info">@lang('trs.res_status_approved')</span>
-                                @else
-                                    ---
-                                @endif
+                                <span
+                                    class="{{\App\Helper::reservationStatusCSS($reservation->status)}}">{{\App\Helper::reservationStatus($reservation->status)}}</span>
                             </td>
                             <td data-th="هزینه">{{number_format($reservation->price)}} @lang("trs.toman")</td>
                             <td data-th="تاریخ" style="direction: ltr">
                                 {{jdate(strtotime($reservation->time->start))->format("Y-n-j H:i")}}
+                            </td>
+                            <td data-th="مدیریت">
+                                <ul class="ulinlin fsize13">
+                                    @if ($reservation->status=="doing" || $reservation->status=="approved")
+                                        <li class="mgright10"><a class="no_hover_a"
+                                                                 href="{{route('admin.reservation.update',$reservation->id)}}">اتمام</a>
+                                        </li>
+                                    @endif
+                                </ul>
                             </td>
                         </tr>
                     @endforeach

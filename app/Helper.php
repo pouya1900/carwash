@@ -248,4 +248,26 @@ class Helper
         };
     }
 
+    public static function reservationStatus($status)
+    {
+        return match ($status) {
+            "canceled" => trans('trs.res_status_canceled'),
+            "approved" => trans('trs.res_status_approved'),
+            "doing" => trans('trs.res_status_doing'),
+            "finished" => trans('trs.res_status_finished'),
+            default => trans('trs.unknown'),
+        };
+    }
+
+    public static function reservationStatusCSS($status)
+    {
+        return match ($status) {
+            "canceled" => "btn-label-warning",
+            "approved" => "btn-label-info",
+            "doing" => "btn-label-info",
+            "finished" => "btn-label-success",
+            default => "btn-label-info",
+        };
+    }
+
 }

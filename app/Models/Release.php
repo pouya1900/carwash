@@ -18,7 +18,7 @@ class Release extends Model
         "balance",
     ];
 
-    public function reserve(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function reservation(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Reservation::class, "reservation_id");
     }

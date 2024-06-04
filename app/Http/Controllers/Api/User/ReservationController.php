@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\User;
 
+use App\Events\SubmitNotificationEvent;
 use App\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ReservationResource;
@@ -18,6 +19,7 @@ use App\Services\Payment\Zarinpal;
 use App\Traits\ResponseUtilsTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Event;
 use Morilog\Jalali\Jalalian;
 
 class ReservationController extends Controller
@@ -316,4 +318,38 @@ class ReservationController extends Controller
             return $this->sendError(trans('messages.response.failed'));
         }
     }
+
+    public function update(Reservation $reservation)
+    {
+        try {
+            $user = $this->request->user;
+            $setting = Setting::first();
+
+            if ($reservation->status != "approved") {
+                return $this->sendError(trans('messages.reservation.cantUpdate'));
+            }
+
+            if ($reservation->user->id != $user->id) {
+                return $this->sendError(trans('messages.crud.illegalAccess'));
+            }
+
+            $reservation->update([
+                "status" => "doing",
+            ]);
+
+            $notification_message = "کاربر با شماره سفارش " . $reservation->id . "در کارواش حضور یافته و منتظر پذیرش می باشد.";
+
+            Event::dispatch(new SubmitNotificationEvent($notification_message, $reservation->carwash, 1));
+
+
+            return $this->sendResponse([
+                "reservation" => new ReservationResource($reservation),
+            ], trans('messages.reservation.updatedSuccessful'));
+
+        } catch (\Exception $e) {
+            return $this->sendError(trans('messages.response.failed'));
+        }
+    }
+
+
 }

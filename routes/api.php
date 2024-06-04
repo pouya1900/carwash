@@ -64,6 +64,9 @@ Route::group(['prefix' => 'user', 'middleware' => "jwtAuth", "namespace" => "Use
     Route::get('/payment/verify/{payment}', 'UsersController@verifyPayment')->name("verifyPayment");
     Route::get('/inactive', 'UsersController@inactive');
 
+    Route::post('/update-location', 'UsersController@update_location');
+
+
     Route::post('firebase/update', 'UsersController@firebaseUpdate');
 
     Route::get('/gifts/receive/{gift}', 'UsersController@receive_gift');
@@ -93,6 +96,8 @@ Route::group(['prefix' => 'user', 'middleware' => "jwtAuth", "namespace" => "Use
     Route::post('/reserve', 'ReservationController@reserve');
     Route::get('/reservation/cancel/{reservation}', 'ReservationController@cancel');
     Route::post('/reservation/score/{reservation}', 'ReservationController@score');
+
+    Route::get('/reservation/update/{reservation}', 'ReservationController@update');
 
 
     Route::get('/deposits', 'DepositController@index');
