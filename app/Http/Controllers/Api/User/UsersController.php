@@ -26,10 +26,13 @@ class UsersController extends Controller
         try {
             $user = $this->request->user;
 
-            $reservation = $user->reservations()->wherein("status", ["approved", "doing"])->wherehas("time", function ($q) {
-                return $q->wherebetween("start", [Carbon::now()->subHours(2), Carbon::now()->addMinutes(30)]);
-            })->first();
+//            $reservation = $user->reservations()->wherein("status", ["approved", "doing"])->wherehas("time", function ($q) {
+//                return $q->wherebetween("start", [Carbon::now()->subHours(2), Carbon::now()->addMinutes(30)]);
+//            })->first();
 
+            $reservation = $user->reservations()->selectRaw("reservations.*")->wherein("status", ["approved", "doing"])->wherehas("time", function ($q) {
+                return $q->where("start", ">", Carbon::now()->subHours(2));
+            })->join('time_tables', 'time_tables.reservation_id', 'reservations.id')->orderBy('time_tables.start', 'asc')->first();
             return $this->sendResponse([
                 "user"        => new UserResource($user),
                 "reservation" => $reservation ? new ReservationResource($reservation) : null,
