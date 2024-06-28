@@ -36,6 +36,7 @@
             </a>
         </li>
 
+
         <li class="menu-item {{url()->current()==route('admin.services') ? 'active' : ''}}">
             <a href="{{route('admin.services')}}" class="menu-link ">
                 <i class="menu-icon fa-solid fa-hands-bubbles"></i>
@@ -141,6 +142,28 @@
                     <a href="{{route('admin.admins')}}" class="menu-link">
                         <i class="fa-solid fa-users-gear"></i>
                         <div data-i18n="Vertical">@lang('trs.admins_list')</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="menu-item {{url()->current()==route('admin.base_services') || url()->current()==route('admin.base_service.create') ? 'active' : ''}}">
+            <a href="javascript:void(0)" class="menu-link menu-toggle">
+                <i class="menu-icon fa-solid fa-hands-bubbles"></i>
+                <div data-i18n="Layouts">@lang('trs.base_services')</div>
+            </a>
+
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="{{ route('admin.base_service.create') }}" class="menu-link">
+                        <i class="fa-solid fa-circle-plus"></i>
+                        <div data-i18n="Without menu">@lang('trs.add_service')</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{route('admin.base_services')}}" class="menu-link">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                        <div data-i18n="Vertical">@lang('trs.services_list')</div>
                     </a>
                 </li>
             </ul>

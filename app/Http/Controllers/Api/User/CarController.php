@@ -48,12 +48,17 @@ class CarController extends Controller
         try {
             $user = $this->request->user;
 
+            $plate = $request->input("plate");
 
             $car = $user->cars()->create([
-                "type_id"    => $request->input("type_id"),
-                "model_id"   => $request->input("model_id"),
-                "color_id"   => $request->input("color_id"),
-                "year"       => $request->input("year"),
+                "type_id"  => $request->input("type_id"),
+                "model_id" => $request->input("model_id"),
+                "color_id" => $request->input("color_id"),
+                "year"     => $request->input("year"),
+                "plate1"   => $plate[0],
+                "plate2"   => $plate[1],
+                "plate3"   => $plate[2],
+                "plate4"   => $plate[3],
             ]);
 
             $images_id = [$request->input("image_id")];
@@ -83,12 +88,18 @@ class CarController extends Controller
                 ]);
             }
 
+            $plate = $request->input("plate");
+
             $car->update([
                 "type_id"    => $request->input("type_id"),
                 "model_id"   => $request->input("model_id"),
                 "color_id"   => $request->input("color_id"),
                 "year"       => $request->input("year"),
                 "is_default" => $request->input("is_default"),
+                "plate1"     => $plate[0],
+                "plate2"     => $plate[1],
+                "plate3"     => $plate[2],
+                "plate4"     => $plate[3],
             ]);
 
 

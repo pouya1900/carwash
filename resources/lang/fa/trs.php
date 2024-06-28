@@ -250,5 +250,5 @@ return [
     "notifications"                     => "اطلاعیه ها",
     "reservation_updated_successfully"  => "سفارش با موفقیت ویرایش شد.",
     "understand"                        => "فهمیدم!",
-
+    "base_services"                     => "سرویس های پایه",
 ];

@@ -19,6 +19,7 @@
                         <th>وضعیت</th>
                         <th>هزینه</th>
                         <th>تاریخ</th>
+                        <th>پیگیری</th>
                         <th>مدیریت</th>
                     </tr>
                     </thead>
@@ -35,7 +36,7 @@
                                     {{$product->title}}
                                 @endforeach
                             </td>
-                            <td data-th="کاربر">{{$reservation->user?->fullName}} {{$reservation->user && $reservation->user->car ? ("- ".$reservation->user->car->type?->title) : ""}}</td>
+                            <td data-th="کاربر">{{$reservation->user && $reservation->user->car ? ($reservation->user->car->plate." - ".$reservation->user->car->type?->title) : ""}}</td>
                             <td data-th="وضعیت">
                                 <span
                                     class="{{\App\Helper::reservationStatusCSS($reservation->status)}}">{{\App\Helper::reservationStatus($reservation->status)}}</span>
@@ -44,6 +45,7 @@
                             <td data-th="تاریخ" style="direction: ltr">
                                 {{jdate(strtotime($reservation->time->start))->format("Y-n-j H:i")}}
                             </td>
+                            <td data-th="پیگیری">{{$reservation->token}}</td>
                             <td data-th="مدیریت">
                                 <ul class="ulinlin fsize13">
                                     @if ($reservation->status=="doing")

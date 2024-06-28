@@ -18,12 +18,12 @@ class ScoreResource extends JsonResource
     public function toArray($request)
     {
         return [
-            "user"      => new UserResource($this->reservation->user),
+            "user"      => new UserResource($this->reservation?->user),
             "carwashId" => $this->scorable->id,
             "score"     => $this->rate,
             "comment"   => $this->comment ?? "",
             "reply"     => $this->reply ?? "",
-            "service"   => new ServiceTitleResource($this->reservation->services()->first()),
+            "service"   => new ServiceTitleResource($this->reservation?->services()->first()),
             "createdAt" => $this->created_at?->format('Y-m-d H:i:s'),
         ];
 

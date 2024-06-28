@@ -93,10 +93,6 @@ class CarwashController extends Controller
                     return $q->wherehas("types", function ($q) use ($types_id) {
                         return $q->whereIn("type_id", $types_id);
                     });
-                })->with("services", function ($q) use ($types_id) {
-                    return $q->wherehas("types", function ($q) use ($types_id) {
-                        return $q->whereIn("type_id", $types_id);
-                    });
                 });
             })->when(!empty($is_discount), function ($q) use ($types_id, $date) {
                 return $q->wherehas("services", function ($q) use ($types_id) {
@@ -108,7 +104,14 @@ class CarwashController extends Controller
                 })->orwherehas("discounts", function ($q) use ($date) {
                     return $q->where("start", "<=", $date)->where("end", ">", $date)->where("value", ">", 0);
                 });
-            })->where("status", "accepted")->paginate($per_page);
+            })->where("status", "accepted")->with("services", function ($q) use ($types_id) {
+                return $q->when(!empty($types_id), function ($q) use ($types_id) {
+                    return $q->wherehas("types", function ($q) use ($types_id) {
+                        return $q->whereIn("type_id", $types_id);
+                    });
+                })->orderBy('is_main', 'desc')->orderBy('base_id', 'asc');
+            })->paginate($per_page);
+
 
             return $this->sendResponse([
                 "carwashes"  => CarwashResource::collection($carwashes),
@@ -121,6 +124,7 @@ class CarwashController extends Controller
                 ],
             ]);
         } catch (\Exception $e) {
+            dd($e);
             return $this->sendError(trans('messages.response.failed'));
         }
 
@@ -419,7 +423,7 @@ class CarwashController extends Controller
     {
         try {
 
-            $scores = $carwash->scores;
+            $scores = $carwash->scores()->whereHas('reservation')->get();
 
             return $this->sendResponse([
                 "scores" => ScoreResource::collection($scores),

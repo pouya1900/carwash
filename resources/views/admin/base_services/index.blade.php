@@ -9,46 +9,30 @@
     <div class="card ticket">
 
         <div class="card-body ">
-            @if ($carwash)
-                <p>کارواش : {{$carwash->title}}</p>
-                <p><a class="btn btn-secondary add_button_admin"
-                      href="{{route('admin.service.create',$carwash->id)}}">@lang('trs.add_new_service')</a></p>
-            @endif
             <div class="table-responsive text-nowrap">
                 @if (count($services))
                     <table id="example" class="table txtcenter table-striped" style="width:95%">
                         <thead>
                         <tr>
-                            <th>کارواش</th>
                             <th>عنوان</th>
-                            <th>ایتم ها</th>
-                            <th>قیمت</th>
-                            <th>تخفیف</th>
-                            <th>نوع</th>
-                            <th>وضعیت</th>
+                            <th>توضیحات</th>
                             <th>مدیریت</th>
                         </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
                         @foreach($services as $service)
                             <tr>
-                                <td data-th="کارواش">{{ $service->carwash?->title }}</td>
-                                <td data-th="عنوان">{{ $service->base?->title }}</td>
-                                <td data-th="ایتم ها">{{ $service->base?->itemText }}</td>
-                                <td data-th="قیمت">{{ number_format($service->price) }} تومان</td>
-                                <td data-th="تخفیف">{{ $service->discount }}</td>
-                                <td data-th="نوع">{{ $service->is_main ? "اصلی" : "فرعی" }}</td>
-                                <td data-th="وضعیت"
-                                    class="{{\App\Helper::serviceStatusCSS($service->status)}}">{{ \App\Helper::serviceStatus($service->status) }}</td>
+                                <td data-th="عنوان">{{ $service->title }}</td>
+                                <td data-th="توضیحات">{{ $service->description }}</td>
                                 <td data-th="مدیریت">
                                     <ul class="ulinlin fsize13">
                                         <li class="mgright10"><a class="no_hover_a"
-                                                                 href="{{route('admin.service.edit',$service->id)}}">ویرایش</a>
+                                                                 href="{{route('admin.base_service.edit',$service->id)}}">ویرایش</a>
                                         </li>
                                         <li>
                                             <button style="background:none;border: none;"
                                                     onclick='functionConfirm("آیا از حذف سرویس اطمینان دارید ؟", function yes() {
-                                                        window.location.replace("{{route('admin.service.delete',$service->id)}}");
+                                                        window.location.replace("{{route('admin.base_service.delete',$service->id)}}");
                                                         },
                                                         function no() {
                                                         });'>حذف

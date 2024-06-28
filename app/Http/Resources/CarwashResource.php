@@ -49,7 +49,7 @@ class CarwashResource extends JsonResource
             "message"            => $this->message ?? "",
             "type"               => $this->type ?? "",
             "logo"               => new ImageResource($this->logo),
-            "services"           => ServiceResource::collection($this->services()->orderBy('is_main', 'desc')->get()),
+            "services"           => ServiceResource::collection($this->services),
             "productsCount"      => $this->products->count(),
             'createdAt'          => $this->created_at?->format('Y-m-d H:i:s'),
             "isPromoted"         => $this->promoted ? 1 : 0,

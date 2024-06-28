@@ -126,6 +126,14 @@ Route::group(['middleware' => ['admin.auth'], 'prefix' => '/admin', 'namespace' 
     Route::post('/tickets/update/{ticket}', 'TicketController@update')->name('admin.ticket.update')->middleware('admin.permission:ticket.*');
     Route::get('/tickets/close/{ticket}', 'TicketController@close')->name('admin.ticket.close')->middleware('admin.permission:ticket.*');
 
+    Route::get('/base', 'BaseServiceController@index')->name('admin.base_services')->middleware('admin.permission:service.*');
+    Route::get('/base/create', 'BaseServiceController@create')->name('admin.base_service.create')->middleware('admin.permission:service.*');
+    Route::post('/base/store', 'BaseServiceController@store')->name('admin.base_service.store')->middleware('admin.permission:service.*');
+    Route::get('/base/edit/{service}', 'BaseServiceController@edit')->name('admin.base_service.edit')->middleware('admin.permission:service.*');
+    Route::post('/base/update/{service}', 'BaseServiceController@update')->name('admin.base_service.update')->middleware('admin.permission:service.*');
+    Route::get('/base/delete/{service}', 'BaseServiceController@remove')->name('admin.base_service.delete')->middleware('admin.permission:service.*');
+
+
     Route::get('/services/{carwash?}', 'ServiceController@services')->name('admin.services')->middleware('admin.permission:service.*');
     Route::get('/services/create/{carwash}', 'ServiceController@create')->name('admin.service.create')->middleware('admin.permission:service.*');
     Route::post('/services/store/{carwash}', 'ServiceController@store')->name('admin.service.store')->middleware('admin.permission:service.*');

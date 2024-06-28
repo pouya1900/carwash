@@ -11587,6 +11587,7 @@ ul.dfdf li {
 
 .ticket table td {
     background: #12212d;
+    white-space: normal;
 }
 
 .ticket table td .btn {
@@ -11610,6 +11611,7 @@ ul.dfdf li {
 
 .ticket table td ul {
     margin: 0;
+    min-width: max-content;
 }
 
 .ticket table td button {

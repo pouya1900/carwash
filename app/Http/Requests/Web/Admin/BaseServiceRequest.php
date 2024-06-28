@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Api;
+namespace App\Http\Requests\Web\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreCarRequest extends FormRequest
+class BaseServiceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,8 @@ class StoreCarRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "type_id"  => "required|exists:types,id",
-            "model_id" => "required|exists:car_models,id",
-            "color_id" => "required|exists:colors,id",
-            "year"     => "required",
-            "plate"    => "required|array",
+            "title"       => "required",
+            "description" => "required",
         ];
     }
 }

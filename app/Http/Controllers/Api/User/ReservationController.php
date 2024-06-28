@@ -33,7 +33,7 @@ class ReservationController extends Controller
 
             $per_page = $this->getPerPage();
 
-            $reservations = $user->reservations()->where("status", "!=", "created")->orderBy('created_at', 'desc')->paginate($per_page);
+            $reservations = $user->reservations()->where("status", "finished")->orderBy('created_at', 'desc')->paginate($per_page);
 
             return $this->sendResponse([
                 "reservations" => ReservationResource::collection($reservations),
@@ -75,18 +75,41 @@ class ReservationController extends Controller
             foreach ($this->request->input("reservations") as $item) {
 
                 $carwash_id = $item["carwashId"];
-                $car_id = $item["vehicleId"];
-                $type_id = $item["typeId"];
-                $service_id = $item["serviceId"];
-                $products_model = $item["products"];
+                $car_id = $item["vehicleId"] ?? null;
+                $plate = $item["plate"] ?? null;
+                $type_id = $item["typeId"] ?? null;
+                $service_id = $item["serviceId"] ?? null;
+                $products_model = $item["products"] ?? null;
                 $j_date = $item["date"];
                 $time = $item["time"];
+
+                if (!$car_id && !$plate) {
+                    return $this->sendError(trans('messages.reservation.car_or_plate_required'));
+                }
 
                 $carwash = Carwash::find($carwash_id);
                 $service = Service::find($service_id);
                 if (!$service) {
                     return $this->sendError(trans('messages.response.failed'));
                 }
+
+                if (!$car_id) {
+                    if (!$car = $user->cars()->where('plate1', $plate[0])->where('plate2', $plate[1])->where('plate3', $plate[2])->where('plate4', $plate[3])->first()) {
+                        $car = $user->cars()->create([
+                            "plate1" => $plate[0],
+                            "plate2" => $plate[1],
+                            "plate3" => $plate[2],
+                            "plate4" => $plate[3],
+                        ]);
+                    }
+                    $car_id = $car->id;
+                }
+
+                do {
+                    $token = rand(10000000, 99999999);
+                    $check_token = Reservation::where('token', $token)->first();
+                } while ($check_token);
+
                 $reservation = Reservation::create([
                     "carwash_id" => $carwash->id,
                     "user_id"    => $user->id,
@@ -95,6 +118,7 @@ class ReservationController extends Controller
                     "car_id"     => $car_id,
                     "type_id"    => $type_id,
                     "payment_id" => $payment->id,
+                    "token"      => $token,
                 ]);
 
 
@@ -116,46 +140,47 @@ class ReservationController extends Controller
 
 
                 $products_price = 0;
-                foreach ($products_model as $product_model) {
+                if ($products_model) {
+                    foreach ($products_model as $product_model) {
 
-                    $product = Product::find($product_model["id"]);
+                        $product = Product::find($product_model["id"]);
 
-                    if (!$product) {
-                        continue;
+                        if (!$product) {
+                            continue;
+                        }
+
+                        $lock_product = Lock_product::create([
+                            "carwash_id"  => $product->carwash_id,
+                            "product_id"  => $product->id,
+                            "title"       => $product->title,
+                            "description" => $product->description,
+                            "price"       => $product->price,
+                            "discount"    => $product->discount,
+                        ]);
+
+                        $logo = $product->logo["model"];
+                        $new_logo = $logo->replicate();
+                        $new_logo->created_at = Carbon::now();
+                        $new_logo->updated_at = Carbon::now();
+                        $new_logo->mediable_type = Lock_product::class;
+                        $new_logo->mediable_id = $lock_product->id;
+                        $new_logo->save();
+
+                        foreach ($product->images as $image) {
+                            $new_image = $image["model"]->replicate();
+                            $new_image->created_at = Carbon::now();
+                            $new_image->updated_at = Carbon::now();
+                            $new_image->mediable_type = Lock_product::class;
+                            $new_image->mediable_id = $lock_product->id;
+                            $new_image->save();
+                        }
+
+                        $reservation->products()->attach($lock_product, ["quantity" => $product_model["quantity"]]);
+
+                        $product_price = $lock_product->price * (1 - $lock_product->discount / 100);
+                        $products_price += $product_price * $product_model["quantity"];
                     }
-
-                    $lock_product = Lock_product::create([
-                        "carwash_id"  => $product->carwash_id,
-                        "product_id"  => $product->id,
-                        "title"       => $product->title,
-                        "description" => $product->description,
-                        "price"       => $product->price,
-                        "discount"    => $product->discount,
-                    ]);
-
-                    $logo = $product->logo["model"];
-                    $new_logo = $logo->replicate();
-                    $new_logo->created_at = Carbon::now();
-                    $new_logo->updated_at = Carbon::now();
-                    $new_logo->mediable_type = Lock_product::class;
-                    $new_logo->mediable_id = $lock_product->id;
-                    $new_logo->save();
-
-                    foreach ($product->images as $image) {
-                        $new_image = $image["model"]->replicate();
-                        $new_image->created_at = Carbon::now();
-                        $new_image->updated_at = Carbon::now();
-                        $new_image->mediable_type = Lock_product::class;
-                        $new_image->mediable_id = $lock_product->id;
-                        $new_image->save();
-                    }
-
-                    $reservation->products()->attach($lock_product, ["quantity" => $product_model["quantity"]]);
-
-                    $product_price = $lock_product->price * (1 - $lock_product->discount / 100);
-                    $products_price += $product_price * $product_model["quantity"];
                 }
-
                 $total_price = $products_price + $service_price;
 
                 $reservation->update([
@@ -252,6 +277,7 @@ class ReservationController extends Controller
                 "reservations" => ReservationResource::collection($reservations),
             ]);
         } catch (\Exception $e) {
+            dd($e);
             return $this->sendError(trans('messages.response.failed'));
         }
     }

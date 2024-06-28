@@ -16,7 +16,7 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        $x = $this->reservations()->where("status", "approved")->whereDoesntHave("score")->orderBy('id', 'desc')->first();
+        $x = $this->reservations()->where("status", "finished")->whereDoesntHave("score")->orderBy('id', 'desc')->first();
         $last_scorable_reserve = null;
         if ($x && $x->time?->start < Carbon::now()->subHours($x->services()->first()->time)) {
             $last_scorable_reserve = $x;

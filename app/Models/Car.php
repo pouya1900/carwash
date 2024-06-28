@@ -19,6 +19,10 @@ class Car extends Model
         "color_id",
         "year",
         "is_default",
+        "plate1",
+        "plate2",
+        "plate3",
+        "plate4",
     ];
 
     public function user()
@@ -74,6 +78,11 @@ class Car extends Model
     public function reservations()
     {
         return $this->hasMany(Reservation::class, "car_id");
+    }
+
+    public function getPlateAttribute()
+    {
+        return "ایران " . $this->plate1 . " " . $this->plate2 . " " . $this->plate3 . " " . $this->plate3;
     }
 
 }

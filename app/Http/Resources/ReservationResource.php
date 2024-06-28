@@ -35,6 +35,7 @@ class ReservationResource extends JsonResource
             "vehicle"   => new CarResource($this->car),
             "type"      => new TypeResource($this->type),
             "payment"   => new PaymentResource($this->payment),
+            "token"     => $this->token,
             'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
         ];
     }

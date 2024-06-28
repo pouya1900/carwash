@@ -10,8 +10,8 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('cars', function (Blueprint $table) {
-            $table->tinyInteger("is_default")->default(0)->after("year");
+        Schema::table('reservations', function (Blueprint $table) {
+            $table->string("token")->nullable()->after("notif");
         });
     }
 
@@ -20,8 +20,8 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('cars', function (Blueprint $table) {
-            $table->dropColumn("is_default");
+        Schema::table('reservations', function (Blueprint $table) {
+            $table->dropColumn("token");
         });
     }
 };

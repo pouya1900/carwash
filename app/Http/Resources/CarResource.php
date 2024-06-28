@@ -16,24 +16,28 @@ class CarResource extends JsonResource
     {
         return [
             "id"        => $this->id,
-            "type"      => [
+            "type"      => $this->type ? [
                 "id"    => $this->type->id,
                 "title" => $this->type->title,
-            ],
-            "brand"     => [
+            ] : null,
+            "brand"     => $this->model ? [
                 "id"    => $this->model->brand->id,
                 "title" => $this->model->brand->title,
-            ],
-            "model"     => [
+            ] : null,
+            "model"     => $this->model ? [
                 "id"    => $this->model->id,
                 "title" => $this->model->title,
-            ],
-            "color"     => [
+            ] : null,
+            "color"     => $this->color ? [
                 "id"    => $this->color->id,
                 "title" => $this->color->title,
-            ],
+            ] : null,
             "year"      => $this->year,
             "image"     => new ImageResource($this->image),
+            "plate1"    => $this->plate1,
+            "plate2"    => $this->plate2,
+            "plate3"    => $this->plate3,
+            "plate4"    => $this->plate4,
             "default"   => $this->is_default ? 1 : 0,
             'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
         ];
