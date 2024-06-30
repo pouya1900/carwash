@@ -96,10 +96,11 @@ class ReservationController extends Controller
                 if (!$car_id) {
                     if (!$car = $user->cars()->where('plate1', $plate[0])->where('plate2', $plate[1])->where('plate3', $plate[2])->where('plate4', $plate[3])->first()) {
                         $car = $user->cars()->create([
-                            "plate1" => $plate[0],
-                            "plate2" => $plate[1],
-                            "plate3" => $plate[2],
-                            "plate4" => $plate[3],
+                            "type_id" => $type_id,
+                            "plate1"  => $plate[0],
+                            "plate2"  => $plate[1],
+                            "plate3"  => $plate[2],
+                            "plate4"  => $plate[3],
                         ]);
                     }
                     $car_id = $car->id;
@@ -277,7 +278,6 @@ class ReservationController extends Controller
                 "reservations" => ReservationResource::collection($reservations),
             ]);
         } catch (\Exception $e) {
-            dd($e);
             return $this->sendError(trans('messages.response.failed'));
         }
     }
