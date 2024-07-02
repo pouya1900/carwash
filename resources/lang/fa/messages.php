@@ -13,6 +13,7 @@ return [
         'trashedModelSuccess'   => 'رکورد موردنظر با موفقیت به سطل زباله منتقل شد.',
         'unTrashedModelSuccess' => 'رکورد موردنظر با موفقیت بازیابی شد.',
         "illegalAccess"         => "شما دسترسی برای تغییر این رکورد را ندارید.",
+        "exist"                 => "رکورد مورد نظر قبلا ذخیره شده است.",
     ],
     'log'  => [
         'createdModelSuccessLog'      => 'success [create]',

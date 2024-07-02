@@ -50,6 +50,10 @@ class CarController extends Controller
 
             $plate = $request->input("plate");
 
+            if ($user->cars()->where('plate1', $plate["plate1"])->where('plate2', $plate["plate2"])->where('region', $plate["region"])->where('index', $plate["index"])->where('symbol', $plate["symbol"])->where('custom', $plate["custom"])->where('plate_type', $plate["type"])->first()) {
+                return $this->sendError(trans('messages.crud.exist'));
+            }
+
             $car = $user->cars()->create([
                 "type_id"    => $request->input("type_id"),
                 "model_id"   => $request->input("model_id"),
