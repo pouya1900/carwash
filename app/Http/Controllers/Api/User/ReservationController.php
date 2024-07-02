@@ -94,13 +94,16 @@ class ReservationController extends Controller
                 }
 
                 if (!$car_id) {
-                    if (!$car = $user->cars()->where('plate1', $plate[0])->where('plate2', $plate[1])->where('plate3', $plate[2])->where('plate4', $plate[3])->first()) {
+                    if (!$car = $user->cars()->where('plate1', $plate["plate1"])->where('plate2', $plate["plate2"])->where('region', $plate["region"])->where('index', $plate["index"])->where('symbol', $plate["symbol"])->where('custom', $plate["custom"])->where('type', $plate["type"])->first()) {
                         $car = $user->cars()->create([
                             "type_id" => $type_id,
-                            "plate1"  => $plate[0],
-                            "plate2"  => $plate[1],
-                            "plate3"  => $plate[2],
-                            "plate4"  => $plate[3],
+                            "region"  => $plate["region"],
+                            "index"   => $plate["index"],
+                            "plate1"  => $plate["plate1"],
+                            "plate2"  => $plate["plate2"],
+                            "symbol"  => $plate["symbol"],
+                            "custom"  => $plate["custom"],
+                            "type"    => $plate["type"],
                         ]);
                     }
                     $car_id = $car->id;

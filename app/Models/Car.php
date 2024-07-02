@@ -21,8 +21,11 @@ class Car extends Model
         "is_default",
         "plate1",
         "plate2",
-        "plate3",
-        "plate4",
+        "region",
+        "index",
+        "symbol",
+        "custom",
+        "type",
     ];
 
     public function user()
@@ -82,7 +85,16 @@ class Car extends Model
 
     public function getPlateAttribute()
     {
-        return "ایران " . $this->plate1 . " " . $this->plate2 . " " . $this->plate3 . " " . $this->plate3;
+        if ($this->type == "standard") {
+            return $this->region . " " . $this->index . " " . $this->plate1 . " " . $this->symbol . " " . $this->plate2;
+        }
+        if ($this->type == "motor") {
+            return $this->region . " " . $this->plate1 . " " . $this->plate2;
+        }
+        if ($this->type == "free") {
+            return $this->region . " " . $this->plate1;
+        }
+        return $this->custom;
     }
 
 }

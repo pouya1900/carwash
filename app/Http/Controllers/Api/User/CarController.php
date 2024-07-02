@@ -55,10 +55,13 @@ class CarController extends Controller
                 "model_id" => $request->input("model_id"),
                 "color_id" => $request->input("color_id"),
                 "year"     => $request->input("year"),
-                "plate1"   => $plate[0],
-                "plate2"   => $plate[1],
-                "plate3"   => $plate[2],
-                "plate4"   => $plate[3],
+                "region"   => $plate["region"],
+                "index"    => $plate["index"],
+                "plate1"   => $plate["plate1"],
+                "plate2"   => $plate["plate2"],
+                "symbol"   => $plate["symbol"],
+                "custom"   => $plate["custom"],
+                "type"     => $plate["type"],
             ]);
 
             $images_id = [$request->input("image_id")];
@@ -96,10 +99,13 @@ class CarController extends Controller
                 "color_id"   => $request->input("color_id"),
                 "year"       => $request->input("year"),
                 "is_default" => $request->input("is_default"),
-                "plate1"     => $plate[0],
-                "plate2"     => $plate[1],
-                "plate3"     => $plate[2],
-                "plate4"     => $plate[3],
+                "region"     => $plate["region"],
+                "index"      => $plate["index"],
+                "plate1"     => $plate["plate1"],
+                "plate2"     => $plate["plate2"],
+                "symbol"     => $plate["symbol"],
+                "custom"     => $plate["custom"],
+                "type"       => $plate["type"],
             ]);
 
 

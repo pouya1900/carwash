@@ -20,8 +20,11 @@ return new class extends Migration {
             $table->tinyInteger("is_default")->default(0);
             $table->string('plate1')->nullable();
             $table->string('plate2')->nullable();
-            $table->string('plate3')->nullable();
-            $table->string('plate4')->nullable();
+            $table->string('region')->nullable();
+            $table->string('index')->nullable();
+            $table->string('symbol')->nullable();
+            $table->string('custom')->nullable();
+            $table->enum("type", ["standard", "motor", "free", "custom"])->nullable();
             $table->timestamps();
         });
     }
