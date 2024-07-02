@@ -24,7 +24,7 @@ return new class extends Migration {
             $table->string('index')->nullable();
             $table->string('symbol')->nullable();
             $table->string('custom')->nullable();
-            $table->enum("type", ["standard", "motor", "free", "custom"])->nullable();
+            $table->enum("plate_type", ["standard", "motor", "free", "custom"])->nullable();
             $table->timestamps();
         });
     }

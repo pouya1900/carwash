@@ -41,7 +41,7 @@ class CarResource extends JsonResource
                 "plate2" => $this->plate2,
                 "symbol" => $this->symbol,
                 "custom" => $this->custom,
-                "type"   => $this->type,
+                "type"   => $this->plate_type,
             ],
             "default"   => $this->is_default ? 1 : 0,
             'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),

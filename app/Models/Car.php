@@ -25,7 +25,7 @@ class Car extends Model
         "index",
         "symbol",
         "custom",
-        "type",
+        "plate_type",
     ];
 
     public function user()
@@ -85,13 +85,13 @@ class Car extends Model
 
     public function getPlateAttribute()
     {
-        if ($this->type == "standard") {
+        if ($this->plate_type == "standard") {
             return $this->region . " " . $this->index . " " . $this->plate1 . " " . $this->symbol . " " . $this->plate2;
         }
-        if ($this->type == "motor") {
+        if ($this->plate_type == "motor") {
             return $this->region . " " . $this->plate1 . " " . $this->plate2;
         }
-        if ($this->type == "free") {
+        if ($this->plate_type == "free") {
             return $this->region . " " . $this->plate1;
         }
         return $this->custom;

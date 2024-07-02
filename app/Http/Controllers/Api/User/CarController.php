@@ -51,17 +51,17 @@ class CarController extends Controller
             $plate = $request->input("plate");
 
             $car = $user->cars()->create([
-                "type_id"  => $request->input("type_id"),
-                "model_id" => $request->input("model_id"),
-                "color_id" => $request->input("color_id"),
-                "year"     => $request->input("year"),
-                "region"   => $plate["region"],
-                "index"    => $plate["index"],
-                "plate1"   => $plate["plate1"],
-                "plate2"   => $plate["plate2"],
-                "symbol"   => $plate["symbol"],
-                "custom"   => $plate["custom"],
-                "type"     => $plate["type"],
+                "type_id"    => $request->input("type_id"),
+                "model_id"   => $request->input("model_id"),
+                "color_id"   => $request->input("color_id"),
+                "year"       => $request->input("year"),
+                "region"     => $plate["region"],
+                "index"      => $plate["index"],
+                "plate1"     => $plate["plate1"],
+                "plate2"     => $plate["plate2"],
+                "symbol"     => $plate["symbol"],
+                "custom"     => $plate["custom"],
+                "plate_type" => $plate["type"],
             ]);
 
             $images_id = [$request->input("image_id")];
@@ -105,7 +105,7 @@ class CarController extends Controller
                 "plate2"     => $plate["plate2"],
                 "symbol"     => $plate["symbol"],
                 "custom"     => $plate["custom"],
-                "type"       => $plate["type"],
+                "plate_type" => $plate["type"],
             ]);
 
 

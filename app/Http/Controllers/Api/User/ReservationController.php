@@ -94,16 +94,16 @@ class ReservationController extends Controller
                 }
 
                 if (!$car_id) {
-                    if (!$car = $user->cars()->where('plate1', $plate["plate1"])->where('plate2', $plate["plate2"])->where('region', $plate["region"])->where('index', $plate["index"])->where('symbol', $plate["symbol"])->where('custom', $plate["custom"])->where('type', $plate["type"])->first()) {
+                    if (!$car = $user->cars()->where('plate1', $plate["plate1"])->where('plate2', $plate["plate2"])->where('region', $plate["region"])->where('index', $plate["index"])->where('symbol', $plate["symbol"])->where('custom', $plate["custom"])->where('plate_type', $plate["type"])->first()) {
                         $car = $user->cars()->create([
-                            "type_id" => $type_id,
-                            "region"  => $plate["region"],
-                            "index"   => $plate["index"],
-                            "plate1"  => $plate["plate1"],
-                            "plate2"  => $plate["plate2"],
-                            "symbol"  => $plate["symbol"],
-                            "custom"  => $plate["custom"],
-                            "type"    => $plate["type"],
+                            "type_id"    => $type_id,
+                            "region"     => $plate["region"],
+                            "index"      => $plate["index"],
+                            "plate1"     => $plate["plate1"],
+                            "plate2"     => $plate["plate2"],
+                            "symbol"     => $plate["symbol"],
+                            "custom"     => $plate["custom"],
+                            "plate_type" => $plate["type"],
                         ]);
                     }
                     $car_id = $car->id;
@@ -281,6 +281,7 @@ class ReservationController extends Controller
                 "reservations" => ReservationResource::collection($reservations),
             ]);
         } catch (\Exception $e) {
+            dd($e);
             return $this->sendError(trans('messages.response.failed'));
         }
     }
