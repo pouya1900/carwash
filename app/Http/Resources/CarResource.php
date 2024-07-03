@@ -19,19 +19,19 @@ class CarResource extends JsonResource
             "type"      => $this->type ? [
                 "id"    => $this->type->id,
                 "title" => $this->type->title,
-            ] : null,
+            ] : [],
             "brand"     => $this->model ? [
                 "id"    => $this->model->brand->id,
                 "title" => $this->model->brand->title,
-            ] : null,
+            ] : [],
             "model"     => $this->model ? [
                 "id"    => $this->model->id,
                 "title" => $this->model->title,
-            ] : null,
+            ] : [],
             "color"     => $this->color ? [
                 "id"    => $this->color->id,
                 "title" => $this->color->title,
-            ] : null,
+            ] : [],
             "year"      => $this->year,
             "image"     => new ImageResource($this->image),
             "plate"     => [
