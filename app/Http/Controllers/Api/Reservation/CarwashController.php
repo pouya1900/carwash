@@ -124,7 +124,6 @@ class CarwashController extends Controller
                 ],
             ]);
         } catch (\Exception $e) {
-            dd($e);
             return $this->sendError(trans('messages.response.failed'));
         }
 

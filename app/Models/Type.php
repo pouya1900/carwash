@@ -51,4 +51,9 @@ class Type extends Model
         return $this->belongsToMany(Service::class, "service_type", "type_id", "service_id");
     }
 
+    public function brands()
+    {
+        return $this->belongsToMany(Brand::class, "type_brand", "type_id", "brand_id");
+    }
+
 }

@@ -51,5 +51,24 @@ class Brand extends Model
 
     }
 
+    public function types()
+    {
+        return $this->belongsToMany(Type::class, "type_brand", "brand_id", "type_id");
+    }
 
+    public function getTypeTextAttribute()
+    {
+        $types = $this->types;
+
+        $text = "";
+        foreach ($types as $key => $type) {
+            if ($key > 0) {
+                $text .= ", ";
+            }
+            $text .= $type->title;
+        }
+
+        return $text;
+
+    }
 }

@@ -13,6 +13,7 @@ class Car_model extends Model
 
     protected $fillable = [
         "brand_id",
+        "type_id",
         "title",
         "description",
     ];
@@ -20,6 +21,11 @@ class Car_model extends Model
     public function brand()
     {
         return $this->belongsTo(Brand::class, "brand_id");
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(Type::class, "type_id");
     }
 
     public function media()

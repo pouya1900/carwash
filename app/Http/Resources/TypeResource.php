@@ -19,6 +19,7 @@ class TypeResource extends JsonResource
             "title"       => $this->title,
             "description" => $this->description,
             "logo"        => new ImageResource($this->logo),
+            "brands"      => BrandResource::collection($this->brands),
         ];
     }
 }

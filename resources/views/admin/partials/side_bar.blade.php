@@ -124,6 +124,72 @@
             </ul>
         </li>
 
+        <li class="menu-item {{url()->current()==route('admin.types') || url()->current()==route('admin.type.create') ? 'active' : ''}}">
+            <a href="javascript:void(0)" class="menu-link menu-toggle">
+                <i class="menu-icon fa-solid fa-layer-group"></i>
+                <div data-i18n="Layouts">@lang('trs.types')</div>
+            </a>
+
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="{{ route('admin.type.create') }}" class="menu-link">
+                        <i class="fa-solid fa-circle-plus"></i>
+                        <div data-i18n="Without menu">@lang('trs.add_type')</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{route('admin.types')}}" class="menu-link">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                        <div data-i18n="Vertical">@lang('trs.types_list')</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="menu-item {{url()->current()==route('admin.brands') || url()->current()==route('admin.brand.create') ? 'active' : ''}}">
+            <a href="javascript:void(0)" class="menu-link menu-toggle">
+                <i class="menu-icon fa-solid fa-layer-group"></i>
+                <div data-i18n="Layouts">@lang('trs.brands')</div>
+            </a>
+
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="{{ route('admin.brand.create') }}" class="menu-link">
+                        <i class="fa-solid fa-circle-plus"></i>
+                        <div data-i18n="Without menu">@lang('trs.add_brand')</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{route('admin.brands')}}" class="menu-link">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                        <div data-i18n="Vertical">@lang('trs.brands_list')</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="menu-item {{url()->current()==route('admin.models') || url()->current()==route('admin.model.create') ? 'active' : ''}}">
+            <a href="javascript:void(0)" class="menu-link menu-toggle">
+                <i class="menu-icon fa-solid fa-layer-group"></i>
+                <div data-i18n="Layouts">@lang('trs.models')</div>
+            </a>
+
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="{{ route('admin.model.create') }}" class="menu-link">
+                        <i class="fa-solid fa-circle-plus"></i>
+                        <div data-i18n="Without menu">@lang('trs.add_model')</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{route('admin.models')}}" class="menu-link">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                        <div data-i18n="Vertical">@lang('trs.models_list')</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
 
         <li class="menu-item {{url()->current()==route('admin.admins') || url()->current()==route('admin.admin.create') ? 'active' : ''}}">
             <a href="javascript:void(0)" class="menu-link menu-toggle">

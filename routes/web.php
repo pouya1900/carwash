@@ -203,4 +203,27 @@ Route::group(['middleware' => ['admin.auth'], 'prefix' => '/admin', 'namespace' 
     Route::post('/categories/store', 'CategoryController@store')->name('admin.category.store')->middleware('admin.permission:category.*');
     Route::get('/categories/remove/{category}', 'CategoryController@remove')->name('admin.category.remove')->middleware('admin.permission:category.*');
 
+    Route::get('/types', 'CarTypeController@index')->name('admin.types')->middleware('admin.permission:car.*');
+    Route::get('/type/create', 'CarTypeController@create')->name('admin.type.create')->middleware('admin.permission:car.*');
+    Route::post('/type/store', 'CarTypeController@store')->name('admin.type.store')->middleware('admin.permission:car.*');
+    Route::get('/type/edit/{type}', 'CarTypeController@edit')->name('admin.type.edit')->middleware('admin.permission:car.*');
+    Route::post('/type/update/{type}', 'CarTypeController@update')->name('admin.type.update')->middleware('admin.permission:car.*');
+    Route::get('/type/delete/{type}', 'CarTypeController@remove')->name('admin.type.remove')->middleware('admin.permission:car.*');
+
+    Route::get('/brands', 'CarBrandController@index')->name('admin.brands')->middleware('admin.permission:car.*');
+    Route::get('/brand/create', 'CarBrandController@create')->name('admin.brand.create')->middleware('admin.permission:car.*');
+    Route::post('/brand/store', 'CarBrandController@store')->name('admin.brand.store')->middleware('admin.permission:car.*');
+    Route::get('/brand/edit/{brand}', 'CarBrandController@edit')->name('admin.brand.edit')->middleware('admin.permission:car.*');
+    Route::post('/brand/update/{brand}', 'CarBrandController@update')->name('admin.brand.update')->middleware('admin.permission:car.*');
+    Route::get('/brand/delete/{brand}', 'CarBrandController@remove')->name('admin.brand.remove')->middleware('admin.permission:car.*');
+
+
+    Route::get('/models', 'CarModelController@index')->name('admin.models')->middleware('admin.permission:car.*');
+    Route::get('/model/create', 'CarModelController@create')->name('admin.model.create')->middleware('admin.permission:car.*');
+    Route::post('/model/store', 'CarModelController@store')->name('admin.model.store')->middleware('admin.permission:car.*');
+    Route::get('/model/edit/{model}', 'CarModelController@edit')->name('admin.model.edit')->middleware('admin.permission:car.*');
+    Route::post('/model/update/{model}', 'CarModelController@update')->name('admin.model.update')->middleware('admin.permission:car.*');
+    Route::get('/model/delete/{model}', 'CarModelController@remove')->name('admin.model.remove')->middleware('admin.permission:car.*');
+
+
 });
