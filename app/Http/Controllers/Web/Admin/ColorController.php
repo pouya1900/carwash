@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Web\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\Admin\StoreColorRequest;
-use App\Models\color;
+use App\Models\Color;
 use App\Traits\UploadUtilsTrait;
 use Illuminate\Http\Request;
 
