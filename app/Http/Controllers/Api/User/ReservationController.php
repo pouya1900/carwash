@@ -281,7 +281,6 @@ class ReservationController extends Controller
                 "reservations" => ReservationResource::collection($reservations),
             ]);
         } catch (\Exception $e) {
-            dd($e);
             return $this->sendError(trans('messages.response.failed'));
         }
     }

@@ -23,12 +23,13 @@ class CarPropertyController extends Controller
         try {
 
             $types = Type::all();
+            $colors = Color::all();
 
             return $this->sendResponse([
                 "types"  => TypeResource::collection($types),
+                "colors" => ColorResource::collection($colors),
             ]);
         } catch (\Exception $e) {
-            dd($e);
             return $this->sendError(trans('messages.response.failed'));
         }
 

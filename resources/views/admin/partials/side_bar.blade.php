@@ -190,6 +190,28 @@
             </ul>
         </li>
 
+        <li class="menu-item {{url()->current()==route('admin.colors') || url()->current()==route('admin.color.create') ? 'active' : ''}}">
+            <a href="javascript:void(0)" class="menu-link menu-toggle">
+                <i class="menu-icon fa-solid fa-layer-group"></i>
+                <div data-i18n="Layouts">@lang('trs.colors')</div>
+            </a>
+
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="{{ route('admin.color.create') }}" class="menu-link">
+                        <i class="fa-solid fa-circle-plus"></i>
+                        <div data-i18n="Without menu">@lang('trs.add_color')</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{route('admin.colors')}}" class="menu-link">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                        <div data-i18n="Vertical">@lang('trs.colors_list')</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
 
         <li class="menu-item {{url()->current()==route('admin.admins') || url()->current()==route('admin.admin.create') ? 'active' : ''}}">
             <a href="javascript:void(0)" class="menu-link menu-toggle">

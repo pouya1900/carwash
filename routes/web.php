@@ -225,5 +225,12 @@ Route::group(['middleware' => ['admin.auth'], 'prefix' => '/admin', 'namespace' 
     Route::post('/model/update/{model}', 'CarModelController@update')->name('admin.model.update')->middleware('admin.permission:car.*');
     Route::get('/model/delete/{model}', 'CarModelController@remove')->name('admin.model.remove')->middleware('admin.permission:car.*');
 
+    Route::get('/colors', 'ColorController@index')->name('admin.colors')->middleware('admin.permission:car.*');
+    Route::get('/color/create', 'ColorController@create')->name('admin.color.create')->middleware('admin.permission:car.*');
+    Route::post('/color/store', 'ColorController@store')->name('admin.color.store')->middleware('admin.permission:car.*');
+    Route::get('/color/edit/{color}', 'ColorController@edit')->name('admin.color.edit')->middleware('admin.permission:car.*');
+    Route::post('/color/update/{color}', 'ColorController@update')->name('admin.color.update')->middleware('admin.permission:car.*');
+    Route::get('/color/delete/{color}', 'ColorController@remove')->name('admin.color.remove')->middleware('admin.permission:car.*');
+
 
 });

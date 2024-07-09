@@ -266,4 +266,9 @@ return [
     "add_model"                         => "افزودن مدل",
     "edit_model"                        => "ویرایش مدل",
     "new_model"                         => "مدل جدید",
+    "colors"                            => "رنگ ها",
+    "colors_list"                       => "لیست رنگ ها",
+    "add_color"                         => "افزودن رنگ",
+    "edit_color"                        => "ویرایش رنگ",
+    "new_color"                         => "رنگ جدید",
 ];
