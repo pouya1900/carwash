@@ -59,13 +59,13 @@ class CarController extends Controller
                 "model_id"   => $request->input("model_id"),
                 "color_id"   => $request->input("color_id"),
                 "year"       => $request->input("year"),
-                "region"     => $plate["region"],
-                "index"      => $plate["index"],
-                "plate1"     => $plate["plate1"],
-                "plate2"     => $plate["plate2"],
-                "symbol"     => $plate["symbol"],
-                "custom"     => $plate["custom"],
-                "plate_type" => $plate["type"],
+                "region"     => $plate["region"] ?? "",
+                "index"      => $plate["index"] ?? "",
+                "plate1"     => $plate["plate1"] ?? "",
+                "plate2"     => $plate["plate2"] ?? "",
+                "symbol"     => $plate["symbol"] ?? "",
+                "custom"     => $plate["custom"] ?? "",
+                "plate_type" => $plate["type"] ?? "",
             ]);
 
             $images_id = [$request->input("image_id")];
@@ -103,13 +103,13 @@ class CarController extends Controller
                 "color_id"   => $request->input("color_id"),
                 "year"       => $request->input("year"),
                 "is_default" => $request->input("is_default"),
-                "region"     => $plate["region"],
-                "index"      => $plate["index"],
-                "plate1"     => $plate["plate1"],
-                "plate2"     => $plate["plate2"],
-                "symbol"     => $plate["symbol"],
-                "custom"     => $plate["custom"],
-                "plate_type" => $plate["type"],
+                "region"     => $plate["region"] ?? "",
+                "index"      => $plate["index"] ?? "",
+                "plate1"     => $plate["plate1"] ?? "",
+                "plate2"     => $plate["plate2"] ?? "",
+                "symbol"     => $plate["symbol"] ?? "",
+                "custom"     => $plate["custom"] ?? "",
+                "plate_type" => $plate["type"] ?? "",
             ]);
 
 
