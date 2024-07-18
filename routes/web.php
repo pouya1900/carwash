@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/test','TestController@index');
+
 Route::get('/', 'Home\HomeController@index')->name("home");
 Route::get('/cronjob/notification/one_hour', 'Cronjob\ReservationController@send_notification_before_one_hour')->name("send_notification_before_one_hour");
 Route::post('/temp/upload', 'MediaController@tmp')->name('tmp_upload');
