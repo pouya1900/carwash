@@ -157,4 +157,27 @@ class CarController extends Controller
         }
     }
 
+    public function makeDefault(Car $car)
+    {
+        try {
+            $user = $this->request->user;
+
+            if ($user->id != $car->user->id) {
+                return $this->sendError(trans('messages.crud.illegalAccess'));
+            }
+
+            $user->cars()->update([
+                "is_default" => 0,
+            ]);
+
+            $car->update([
+                "is_default" => 1,
+            ]);
+
+            return $this->sendResponse([], trans("messages.crud.updatedModelSuccess"));
+        } catch (\Exception $e) {
+            return $this->sendError(trans('messages.response.failed'));
+        }
+    }
+
 }

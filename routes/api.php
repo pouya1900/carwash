@@ -81,6 +81,7 @@ Route::group(['prefix' => 'user', 'middleware' => "jwtAuth", "namespace" => "Use
     Route::post('/cars/update/{car}', 'CarController@update');
     Route::get('/cars/delete/{car}', 'CarController@delete');
     Route::get('/cars/clear', 'CarController@clearDefault');
+    Route::get('/cars/default/{car}', 'CarController@makeDefault');
 
     Route::get('/like/product/{product}', 'ActionController@like_product');
     Route::get('/like/carwash/{carwash}', 'ActionController@like_carwash');
