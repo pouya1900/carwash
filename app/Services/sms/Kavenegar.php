@@ -15,7 +15,7 @@ class Kavenegar
 
     public function otp($mobile, $token)
     {
-        $service_url = $this->base_address . "/verify/lookup.json" . "?receptor=$mobile&token=$token&template=send";
+        $service_url = $this->base_address . "/verify/lookup.json" . "?receptor=$mobile&token=$token&template=verify";
 
 
         $ch = curl_init();
